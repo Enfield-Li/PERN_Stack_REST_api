@@ -7,12 +7,14 @@ import { UpdatePostDto } from './dto/update-post.dto';
 export class PostService {
   constructor(private readonly prismaService: PrismaService) {}
 
-  create(createPostDto: CreatePostDto, creatorId: number) {
-    const { title, contents } = createPostDto;
+  async create(createPostDto: CreatePostDto, userId: number) {
+    const { title, content } = createPostDto;
 
-    return this.prismaService.post.create({
-      data: { title, contents, creatorId },
+    const createdPost = await this.prismaService.post.create({
+      data: { title, content, userId },
     });
+
+    return createdPost;
   }
 
   findAll() {

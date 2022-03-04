@@ -8,7 +8,7 @@ export class CreatePostDto {
   title: string;
 
   @ApiProperty({ nullable: true })
-  contents?: string;
+  content?: string;
 }
 
 export class PostRO {

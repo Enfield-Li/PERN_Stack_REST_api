@@ -27,6 +27,7 @@ export class UserService {
       const user = await this.prismaService.user.create({
         data: { email, username, password },
       });
+      console.log('createdUser: ', user);
 
       req.session.userId = user.id;
       return { user: this.buildUserRO(user) };
