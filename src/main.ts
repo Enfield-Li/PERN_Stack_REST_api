@@ -2,9 +2,12 @@ import { ValidationPipe } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { AppModule } from './app.module';
+import { sessionConfig } from './config/sessionConfig';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
+
+  app.use(sessionConfig);
 
   app.useGlobalPipes(new ValidationPipe());
 

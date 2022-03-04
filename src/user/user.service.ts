@@ -1,26 +1,105 @@
 import { Injectable } from '@nestjs/common';
-import { CreateUserDto } from './dto/create-user.dto';
+import { user } from '@prisma/client';
+import { PrismaService } from 'src/config/prisma.service';
+import {
+  CreateUserDto,
+  LoginUserDto,
+  ResError,
+  UserRO,
+} from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
+import argon2 from 'argon2';
+import { Request } from 'express';
 
 @Injectable()
 export class UserService {
-  create(createUserDto: CreateUserDto) {
-    return 'This action adds a new user';
+  constructor(private readonly prismaService: PrismaService) {}
+
+  async createUser(
+    userCreateInput: CreateUserDto,
+    req: Request,
+  ): Promise<UserRO> {
+    let { email, username, password } = userCreateInput;
+    // password = await argon2.hash(password);
+
+    try {
+      const user = await this.prismaService.user.create({
+        data: { email, username, password },
+      });
+
+      req.session.userId = user.id;
+      return { user: this.buildUserRO(user) };
+    } catch {
+      return { errors: this.buildErrorRo('usernameOrEmail') };
+    }
   }
 
-  findAll() {
-    return `This action returns all user`;
+  async loginUser(loginUserDto: LoginUserDto, req: Request): Promise<UserRO> {
+    const { usernameOrEmail, password } = loginUserDto;
+    const user = await this.findUser(usernameOrEmail);
+    if (!user) return { errors: this.buildErrorRo('UsernameOrEmail') };
+
+    const passwordIsValid = user.password === password;
+    if (!passwordIsValid) return { errors: this.buildErrorRo('password') };
+
+    req.session.userId = user.id;
+    return { user: this.buildUserRO(user) };
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} user`;
+  private async findUser(usernameOrEmail: string): Promise<user> {
+    const user = usernameOrEmail.includes('@')
+      ? await this.prismaService.user.findUnique({
+          where: { email: usernameOrEmail },
+        })
+      : await this.prismaService.user.findUnique({
+          where: { username: usernameOrEmail },
+        });
+
+    return user;
   }
 
-  update(id: number, updateUserDto: UpdateUserDto) {
-    return `This action updates a #${id} user`;
+  async me(id: number): Promise<UserRO> {
+    const user = await this.prismaService.user.findUnique({
+      where: { id },
+    });
+
+    return { user: this.buildUserRO(user) };
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} user`;
+  async updateUser(id: number, updateUserDto: UpdateUserDto): Promise<UserRO> {
+    const user = await this.prismaService.user.findUnique({ where: { id } });
+
+    const { username, email, password } = updateUserDto;
+
+    if (username) user.username = username;
+    if (email) user.email = email;
+    if (password) user.password = password;
+
+    const returnedUser = await this.prismaService.user.update({
+      where: { id },
+      data: {
+        username,
+        email,
+        password,
+      },
+    });
+
+    return { user: this.buildUserRO(returnedUser) };
+  }
+
+  async deleteUser(id: number) {
+    await this.prismaService.user.delete({ where: { id } });
+
+    return true;
+  }
+
+  private buildUserRO(user: user) {
+    const { username, createdAt, email } = user;
+
+    return { createdAt, username, email };
+  }
+
+  private buildErrorRo(field: string): ResError {
+    return { field: field, message: `Invalid ${field}` };
   }
 }
