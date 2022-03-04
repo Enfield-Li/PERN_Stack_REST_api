@@ -8,32 +8,36 @@ datasource db {
 }
 
 model user {
-  id              Int               @id(map: "PK_cace4a159ff9f2512dd42373760") @default(autoincrement())
-  createdAt       DateTime          @default(now()) @db.Timestamp(6)
-  updatedAt       DateTime          @default(now()) @db.Timestamp(6)
-  username        String            @unique(map: "UQ_78a916df40e02a9deb1c4b75edb") @db.VarChar
-  email           String            @unique(map: "UQ_e12875dfb3b1d92d7d7c5377e22") @db.VarChar
-  password        String            @db.VarChar
-  post            post[]
-  post_activities post_activities[]
+  id           Int            @id() @default(autoincrement())
+  createdAt    DateTime       @default(now()) @db.Timestamp(6)
+  updatedAt    DateTime       @default(now()) @db.Timestamp(6)
+  username     String         @unique() @db.VarChar
+  email        String         @unique() @db.VarChar
+  password     String         @db.VarChar
+  postAmounts  Int            @default(0)
+  post         post[]
+  interactions interactions[]
+  comments     comments[]
 }
 
 model post {
-  id              Int               @id(map: "PK_be5fda3aac270b134ff9c21cdee") @default(autoincrement())
-  createdAt       DateTime          @default(now()) @db.Timestamp(6)
-  updatedAt       DateTime          @default(now()) @db.Timestamp(6)
-  title           String            @db.VarChar
-  contents        String            @db.VarChar
-  creatorId       Int
-  votePoints      Int               @default(0)
-  likePoints      Int               @default(0)
-  confusedPoints  Int               @default(0)
-  laughPoints     Int               @default(0)
-  user            user              @relation(fields: [creatorId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "FK_9e91e6a24261b66f53971d3f96b")
-  post_activities post_activities[]
+  id             Int            @id() @default(autoincrement())
+  createdAt      DateTime       @default(now()) @db.Timestamp(6)
+  updatedAt      DateTime       @default(now()) @db.Timestamp(6)
+  title          String         @db.VarChar
+  content        String?        @db.VarChar
+  uesrId         Int
+  voteCount      Int            @default(0)
+  votePoints     Int            @default(0)
+  likePoints     Int            @default(0)
+  confusedPoints Int            @default(0)
+  laughPoints    Int            @default(0)
+  user           user           @relation(fields: [uesrId], references: [id], onDelete: Cascade, onUpdate: NoAction)
+  interactions   interactions[]
+  comments       comments[]
 }
 
-model post_activities {
+model interactions {
   voteStatus     Boolean?
   likeStatus     Boolean?
   laughStatus    Boolean?
@@ -41,10 +45,20 @@ model post_activities {
   createdAt      DateTime @default(now()) @db.Timestamp(6)
   userId         Int
   postId         Int
-  post           post     @relation(fields: [postId], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "FK_1ffb342c6346a08b326c65bc4d4")
-  user           user     @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "FK_6ed1afcda9326a3eb2174acf99e")
+  post           post     @relation(fields: [postId], references: [id], onDelete: Cascade, onUpdate: NoAction)
+  user           user     @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: NoAction)
 
-  @@id([userId, postId], map: "PK_34e0c2a9d20f7d9f114087e66ff")
+  @@unique([userId, postId])
 }
 
-
+model comments {
+  id           Int      @id @default(autoincrement())
+  createdAt    DateTime @default(now()) @db.Timestamp(6)
+  updatedAt    DateTime @default(now()) @db.Timestamp(6)
+  comment_text String   @db.VarChar
+  parentId     Int?
+  userId       Int
+  postId       Int
+  post         post     @relation(fields: [postId], references: [id], onDelete: Cascade, onUpdate: NoAction)
+  user         user     @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: NoAction)
+}

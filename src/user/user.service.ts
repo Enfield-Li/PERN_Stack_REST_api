@@ -4,7 +4,8 @@ import { PrismaService } from 'src/config/prisma.service';
 import {
   CreateUserDto,
   LoginUserDto,
-  ResError,
+  ResUserError,
+  ResUser,
   UserRO,
 } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
@@ -58,6 +59,10 @@ export class UserService {
     return user;
   }
 
+  // async findUserAndPostAmount(): Promise<ResUser> {
+
+  // }
+
   async me(id: number): Promise<UserRO> {
     const user = await this.prismaService.user.findUnique({
       where: { id },
@@ -99,7 +104,7 @@ export class UserService {
     return { createdAt, username, email };
   }
 
-  private buildErrorRo(field: string): ResError {
+  private buildErrorRo(field: string): ResUserError {
     return { field: field, message: `Invalid ${field}` };
   }
 }

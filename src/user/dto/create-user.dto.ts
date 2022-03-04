@@ -36,7 +36,7 @@ export class ResUser {
   createdAt: Date;
 }
 
-export class ResError {
+export class ResUserError {
   @ApiProperty()
   field: string;
 
@@ -49,5 +49,5 @@ export class UserRO {
   user?: ResUser;
 
   @ApiProperty({ nullable: true })
-  errors?: ResError;
+  errors?: ResUserError;
 }
