@@ -11,7 +11,7 @@ const VoteSection: React.FC<VoteSectionProps> = ({ post }) => {
 
   let path = "";
   if (location.pathname.includes("post")) {
-    path = `post/${post.postId}`;
+    path = `post/${post.id}`;
   }
 
   return (

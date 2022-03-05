@@ -24,7 +24,7 @@ export default function PostReducer(state: PostState, action: PostActionType) {
     case DELETE_POST: {
       return {
         ...state,
-        posts: state.posts.filter((post) => post.postId !== action.payload),
+        posts: state.posts.filter((post) => post.id !== action.payload),
       };
     }
     case EDIT_CURRENT_POST: {

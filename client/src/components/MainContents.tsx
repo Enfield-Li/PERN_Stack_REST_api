@@ -19,14 +19,14 @@ const MainContents: React.FC<MainContentsProps> = ({}) => {
 
       {state.posts.length > 0 ? (
         state.posts.map((post) => (
-          <div className="card my-3 " key={post.postId}>
+          <div className="card my-3 " key={post.id}>
             <div className="card-body">
               <div className="d-flex justify-content-between">
                 <div className="d-flex justify-content-between">
                   <VoteSection post={post} />
 
                   <Link
-                    to={`/post/${post.postId}`}
+                    to={`/post/${post.id}`}
                     style={{ color: "black", textDecoration: "none" }}
                   >
                     <div

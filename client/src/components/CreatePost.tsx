@@ -24,7 +24,7 @@ const CreatePost: React.FC<CreatePostProps> = ({}) => {
       initialValues={{ title: "", content: "" }}
       onSubmit={async (values) => {
         const res = await createPost(dispatch, values);
-        if (res) navigate(`/post/${res.postId}`, { replace: true });
+        if (res) navigate(`/post/${res.id}`, { replace: true });
       }}
       validationSchema={validationSchema}
     >

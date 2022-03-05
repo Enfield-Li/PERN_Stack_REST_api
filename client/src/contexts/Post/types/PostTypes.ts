@@ -16,10 +16,17 @@ export const postInitialState: PostState = {
 };
 
 export type Post = {
+  id: number;
+  createdAt: Date;
+  updatedAt: Date;
   title: string;
-  content: string;
-  createdAt: string;
-  postId: number;
+  content: string | null;
+  userId: number;
+  viewCount: number;
+  votePoints: number;
+  likePoints: number;
+  confusedPoints: number;
+  laughPoints: number;
 };
 
 export type CreatePostType = {
