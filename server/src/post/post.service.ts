@@ -47,7 +47,8 @@ export class PostService {
     if (cursor)
       return this.prismaService.post.findMany({
         take, // default take 10
-        cursor: { id: cursor },
+        skip: 1,
+        cursor: {  }, // id
         orderBy: { createdAt: 'desc' },
       });
 

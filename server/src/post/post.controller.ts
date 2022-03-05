@@ -38,7 +38,10 @@ export class PostController {
     required: false,
   })
   @Get('get-all-posts')
-  findAll(@Query('take') take?: number, @Query('cursor') cursor?: number) {
+  findAll(
+    @Query('take') take: string = '10',
+    @Query('cursor') cursor?: number,
+  ) {
     return this.postService.findPaginatedPost(+take, +cursor);
   }
 
