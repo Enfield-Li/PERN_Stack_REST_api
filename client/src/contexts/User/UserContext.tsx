@@ -1,10 +1,10 @@
 import { createContext } from "react";
-import { GlobalState, ActionType } from "./types/UserTypes";
+import { UserState, UserActionType } from "./types/UserTypes";
 import { initialState } from "./types/UserTypes";
 
-const GlobalContext = createContext<{
-  state: GlobalState;
-  dispatch: React.Dispatch<ActionType>;
+const UserContext = createContext<{
+  state: UserState;
+  dispatch: React.Dispatch<UserActionType>;
 }>({ state: initialState, dispatch: () => {} });
 
-export default GlobalContext;
+export default UserContext;

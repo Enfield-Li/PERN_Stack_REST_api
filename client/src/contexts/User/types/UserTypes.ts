@@ -1,19 +1,16 @@
 import {
-  ADD_POST,
-  DELETE_POST,
-  FETCH_ALL_POSTS,
   LOGIN_USER,
   LOGOUT_USER,
-  SET_CURRENT_POST,
 } from "../../constant";
+import { AddPost, SetPost, DeletePost, FetchPaginatedPosts } from "../../Post/types/PostTypes";
 
-export type GlobalState = {
+export type UserState = {
   user: User | null;
   posts: Post[];
   currentPost: Post | null;
 };
 
-export const initialState: GlobalState = {
+export const initialState: UserState = {
   user: null,
   posts: [],
   currentPost: null,
@@ -60,33 +57,13 @@ export type ResUserError = {
 };
 
 // history
-export type ActionType =
+export type UserActionType =
   | AddPost
   | SetPost
   | DeletePost
   | FetchPaginatedPosts
   | LoginUser
   | LogoutUser;
-
-type AddPost = {
-  type: typeof ADD_POST;
-  payload: Post;
-};
-
-type FetchPaginatedPosts = {
-  type: typeof FETCH_ALL_POSTS;
-  payload: Post[];
-};
-
-type SetPost = {
-  type: typeof SET_CURRENT_POST;
-  payload: Post;
-};
-
-type DeletePost = {
-  type: typeof DELETE_POST;
-  payload: number;
-};
 
 type LoginUser = {
   type: typeof LOGIN_USER;
@@ -96,3 +73,5 @@ type LoginUser = {
 type LogoutUser = {
   type: typeof LOGOUT_USER;
 };
+
+

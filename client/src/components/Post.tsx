@@ -1,6 +1,7 @@
 import React, { useEffect } from "react";
 import { useParams } from "react-router-dom";
-import { fetchSinglePost, useGlobal } from "../contexts/User/actions/UserAction";
+import { useGlobal } from "../contexts/User/actions/UserAction";
+import { fetchSinglePost } from "../contexts/Post/actions/PostAction";
 import ContentPlaceholder from "./layout/ContentPlaceholder";
 import VoteSection from "./nested-Components/voteSection";
 

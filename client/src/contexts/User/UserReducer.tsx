@@ -6,9 +6,9 @@ import {
   LOGOUT_USER,
   SET_CURRENT_POST,
 } from "../constant";
-import { GlobalState, ActionType } from "./types/UserTypes";
+import { UserState, UserActionType } from "./types/UserTypes";
 
-export default function GlobalReducer(state: GlobalState, action: ActionType) {
+export default function GlobalReducer(state: UserState, action: UserActionType) {
   console.log("reducer called");
   switch (action.type) {
     case FETCH_ALL_POSTS: {

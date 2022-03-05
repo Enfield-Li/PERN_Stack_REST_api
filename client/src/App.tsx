@@ -6,7 +6,8 @@ import MainContents from "./components/MainContents";
 import Navbar from "./components/Navbar";
 import PostDataType from "./components/Post";
 import Register from "./components/register";
-import { fetchAllPosts, me, useGlobal } from "./contexts/User/actions/UserAction";
+import { me, useGlobal } from "./contexts/User/actions/UserAction";
+import { fetchAllPosts } from "./contexts/Post/actions/PostAction";
 import { FETCH_ALL_POSTS } from "./contexts/constant";
 
 function App() {

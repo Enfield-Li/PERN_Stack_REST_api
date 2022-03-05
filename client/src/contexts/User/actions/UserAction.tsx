@@ -1,31 +1,26 @@
 import { useContext } from "react";
-import GlobalContext from "../UserContext";
+import UserContext from "../UserContext";
 import {
-  ActionType,
-  CreatePostType,
-  GlobalState,
-  Post,
+  UserActionType,
+  UserState,
   User,
   UserCredential,
   UserRegister,
   UserRO,
 } from "../types/UserTypes";
 import {
-  ADD_POST,
-  DELETE_POST,
   LOGIN_USER,
   LOGOUT_USER,
-  SET_CURRENT_POST,
 } from "../../constant";
 import axios from "axios";
 
-export const useGlobal = (): [GlobalState, React.Dispatch<ActionType>] => {
-  const { state, dispatch } = useContext(GlobalContext);
+export const useGlobal = (): [UserState, React.Dispatch<UserActionType>] => {
+  const { state, dispatch } = useContext(UserContext);
   return [state, dispatch];
 };
 
 export async function registerUser(
-  dispatch: React.Dispatch<ActionType>,
+  dispatch: React.Dispatch<UserActionType>,
   userCredential: UserRegister
 ) {
   const res = await axios.post<User>(
@@ -40,7 +35,7 @@ export async function registerUser(
 }
 
 export async function loginUser(
-  dispatch: React.Dispatch<ActionType>,
+  dispatch: React.Dispatch<UserActionType>,
   userCredential: UserCredential
 ) {
   try {
@@ -61,7 +56,7 @@ export async function loginUser(
   }
 }
 
-export async function me(dispatch: React.Dispatch<ActionType>) {
+export async function me(dispatch: React.Dispatch<UserActionType>) {
   const res = await axios.get<UserRO>("http://localhost:3119/user/me", {
     withCredentials: true,
   });
@@ -73,7 +68,7 @@ export async function me(dispatch: React.Dispatch<ActionType>) {
   });
 }
 
-export async function logout(dispatch: React.Dispatch<ActionType>) {
+export async function logout(dispatch: React.Dispatch<UserActionType>) {
   dispatch({
     type: LOGOUT_USER,
   });
@@ -82,90 +77,4 @@ export async function logout(dispatch: React.Dispatch<ActionType>) {
   });
 }
 
-export function setCurrentPost(
-  dispatch: React.Dispatch<ActionType>,
-  currentPost: Post
-) {
-  dispatch({
-    type: SET_CURRENT_POST,
-    payload: currentPost,
-  });
-}
 
-export const fetchAllPosts = async () => {
-  console.log("fetchPosts...");
-  const res = await axios.get<Post[]>(
-    "http://localhost:3119/post/paginated-posts"
-  );
-  return res.data;
-};
-
-export const fetchSinglePost = async (
-  dispatch: React.Dispatch<ActionType>,
-  id: number
-) => {
-  const res = await axios.get<Post>(`http://localhost:3119/post/${id}`);
-  console.log("fetchPost...");
-
-  dispatch({
-    type: SET_CURRENT_POST,
-    payload: res.data,
-  });
-};
-
-export async function createPost(
-  dispatch: React.Dispatch<ActionType>,
-  post: CreatePostType
-) {
-  try {
-    const res = await axios.post<Post>(
-      "http://localhost:3119/post/create-post",
-      post
-    );
-
-    dispatch({
-      type: ADD_POST,
-      payload: res.data,
-    });
-    return res.data;
-  } catch (err) {
-    console.log(err);
-    return false;
-  }
-}
-
-export async function deletePost(
-  dispatch: React.Dispatch<ActionType>,
-  id: number
-) {
-  await axios.delete(`http://localhost:3119/post/delete/${id}`);
-
-  console.log("onDelete...");
-
-  dispatch({
-    type: DELETE_POST,
-    payload: id,
-  });
-}
-
-// const setCurrentText = useCallback(
-//   (currentField) => {
-//     console.log("setCurrentText");
-//     dispatch({
-//       type: "UPDATE_TEXT",
-//       payload: currentField,
-//     });
-//   },
-//   [state.current.text]
-// );
-
-// const setCurrentText = useMemo(
-//   (currentField) => {
-//     console.log("setCurrentText");
-//     dispatch({
-//       type: "UPDATE_TEXT",
-//       payload: currentField,
-//     });
-//   },
-//   [state.current.text]
-// );

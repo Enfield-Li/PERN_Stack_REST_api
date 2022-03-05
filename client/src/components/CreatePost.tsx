@@ -1,7 +1,8 @@
 import { Formik } from "formik";
 import React from "react";
 import { useNavigate } from "react-router-dom";
-import { createPost, useGlobal } from "../contexts/User/actions/UserAction";
+import { useGlobal } from "../contexts/User/actions/UserAction";
+import { createPost } from "../contexts/Post/actions/PostAction";
 import FormWrapper from "./nested-Components/FormWrapper";
 import InputWrapper from "./nested-Components/InputWrapper";
 
