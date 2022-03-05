@@ -4,6 +4,7 @@ import React, { InputHTMLAttributes } from "react";
 export type InputWrapperProps = InputHTMLAttributes<HTMLInputElement> & {
   label: string;
   name: string;
+  required?: boolean;
   type?: "password" | "email";
   textarea?: boolean;
 };
@@ -12,6 +13,7 @@ const InputWrapper: React.FC<InputWrapperProps> = ({
   label,
   textarea,
   type,
+  required = true,
   ...props
 }) => {
   const [field, { error }] = useField(props);
@@ -22,9 +24,10 @@ const InputWrapper: React.FC<InputWrapperProps> = ({
         {label}:
       </label>
       <InputType
-        required={true}
+        required={required}
         type={type ? type : "text"}
         className="form-control"
+        placeholder={required ? "" : "Optional"}
         id={field.name}
         {...field}
         aria-describedby="textHelp"

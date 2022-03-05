@@ -35,21 +35,20 @@ export async function loginUser(
   dispatch: React.Dispatch<UserActionType>,
   userCredential: UserCredential
 ) {
-  try {
-    const res = await axios.put<UserRO>(
-      "http://localhost:3119/user/login",
-      userCredential,
-      { withCredentials: true } // !!! important !!!
-    );
+  const res = await axios.put<UserRO>(
+    "http://localhost:3119/user/login",
+    userCredential,
+    { withCredentials: true } // !!! important !!!
+  );
 
+  if (res.data.user) {
     dispatch({
       type: LOGIN_USER,
       payload: res.data.user,
     });
-    return true;
-  } catch (err) {
-    console.log(err);
-    return false;
+  } else if (res.data.errors) {
+    console.log(res.data.errors);
+    return res.data.errors;
   }
 }
 

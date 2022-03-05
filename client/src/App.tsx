@@ -17,17 +17,17 @@ function App() {
   const [postState, postDispatch] = usePost();
 
   useEffect(() => {
-    const getPosts = async () => {
+    const run = async () => {
       await me(userDispatch);
-      const res = await fetchAllPosts();
+      const postsRes = await fetchAllPosts();
 
       postDispatch({
         type: FETCH_ALL_POSTS,
-        payload: res,
+        payload: postsRes,
       });
     };
 
-    getPosts();
+    run();
   }, []);
 
   return (

@@ -50,7 +50,7 @@ export class UserController {
   @Get('/me')
   @ApiCreatedResponse({ type: UserRO })
   findOne(@Req() req: Request) {
-    if (!req.session.userId) throw new HttpException('Invalid credential', 401);
+    if (!req.session.userId) return;
 
     return this.userService.me(req.session.userId);
   }
