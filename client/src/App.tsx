@@ -6,20 +6,22 @@ import MainContents from "./components/MainContents";
 import Navbar from "./components/Navbar";
 import PostDataType from "./components/Post";
 import Register from "./components/register";
-import { me, useGlobal } from "./contexts/User/actions/UserAction";
-import { fetchAllPosts } from "./contexts/Post/actions/PostAction";
+import { me, useUser } from "./contexts/User/actions/UserAction";
+import { fetchAllPosts, usePost } from "./contexts/Post/actions/PostAction";
 import { FETCH_ALL_POSTS } from "./contexts/constant";
 
 function App() {
   const location = useLocation();
 
-  const [state, dispatch] = useGlobal();
+  const [userState, userDispatch] = useUser();
+  const [postState, postDispatch] = usePost();
+
   useEffect(() => {
     const getPosts = async () => {
-      await me(dispatch);
+      await me(userDispatch);
       const res = await fetchAllPosts();
 
-      dispatch({
+      postDispatch({
         type: FETCH_ALL_POSTS,
         payload: res,
       });

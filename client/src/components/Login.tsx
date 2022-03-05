@@ -1,14 +1,14 @@
 import { Formik } from "formik";
 import React from "react";
 import { useNavigate } from "react-router-dom";
-import { loginUser, useGlobal } from "../contexts/User/actions/UserAction";
+import { loginUser, useUser } from "../contexts/User/actions/UserAction";
 import FormWrapper from "./nested-Components/FormWrapper";
 import InputWrapper from "./nested-Components/InputWrapper";
 
 interface LoginProps {}
 
 const Login: React.FC<LoginProps> = ({}) => {
-  const [state, dispatch] = useGlobal();
+  const [state, dispatch] = useUser();
   const navigate = useNavigate();
 
   return (

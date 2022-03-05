@@ -4,14 +4,17 @@ import App from "./App";
 import reportWebVitals from "./reportWebVitals";
 import { BrowserRouter } from "react-router-dom";
 import UserProvider from "./contexts/User/UserState";
+import PostProvider from "./contexts/Post/PostState";
 
 ReactDOM.render(
   <BrowserRouter>
-    <UserProvider>
-      <React.StrictMode>
-        <App />
-      </React.StrictMode>
-    </UserProvider>
+    <PostProvider>
+      <UserProvider>
+        <React.StrictMode>
+          <App />
+        </React.StrictMode>
+      </UserProvider>
+    </PostProvider>
   </BrowserRouter>,
   document.getElementById("root")
 );

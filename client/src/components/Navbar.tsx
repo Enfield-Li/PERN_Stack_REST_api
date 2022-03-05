@@ -1,11 +1,12 @@
 import React from "react";
 import { Link, Route, Routes } from "react-router-dom";
-import { logout, useGlobal } from "../contexts/User/actions/UserAction";
+import { logout, useUser } from "../contexts/User/actions/UserAction";
 
 interface navbarProps {}
 
 const Navbar: React.FC<navbarProps> = ({}) => {
-  const [{ user }, dispatch] = useGlobal();
+  const [{ user }, dispatch] = useUser();
+  console.log("user: ", user);
 
   let userProfile = user ? (
     <div className="dropdown">

@@ -1,14 +1,14 @@
 import { Formik } from "formik";
 import React from "react";
 import { useNavigate } from "react-router-dom";
-import { registerUser, useGlobal } from "../contexts/User/actions/UserAction";
+import { registerUser, useUser } from "../contexts/User/actions/UserAction";
 import FormWrapper from "./nested-Components/FormWrapper";
 import InputWrapper from "./nested-Components/InputWrapper";
 
 interface RegisterProps {}
 
 const Register: React.FC<RegisterProps> = ({}) => {
-  const [state, dispatch] = useGlobal();
+  const [state, dispatch] = useUser();
   const navigate = useNavigate();
 
   return (

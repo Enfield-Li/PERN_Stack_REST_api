@@ -1,14 +1,13 @@
 import React, { useEffect } from "react";
 import { useParams } from "react-router-dom";
-import { useGlobal } from "../contexts/User/actions/UserAction";
-import { fetchSinglePost } from "../contexts/Post/actions/PostAction";
+import { fetchSinglePost, usePost } from "../contexts/Post/actions/PostAction";
 import ContentPlaceholder from "./layout/ContentPlaceholder";
 import VoteSection from "./nested-Components/voteSection";
 
 interface PostProps {}
 
 const Post: React.FC<PostProps> = ({}) => {
-  const [{ currentPost: postData }, dispatch] = useGlobal();
+  const [{ currentPost: postData }, dispatch] = usePost();
   const { id } = useParams();
 
   useEffect(() => {

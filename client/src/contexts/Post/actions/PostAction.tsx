@@ -1,16 +1,21 @@
-import {
-  UserActionType,
-  CreatePostType, Post
-} from "../../User/types/UserTypes";
-import {
-  ADD_POST,
-  DELETE_POST, SET_CURRENT_POST
-} from "../../constant";
+import { ADD_POST, DELETE_POST, SET_CURRENT_POST } from "../../constant";
 import axios from "axios";
+import {
+  CreatePostType,
+  Post,
+  PostActionType,
+  PostState,
+} from "../types/PostTypes";
+import PostContext from "../PostContext";
+import { useContext } from "react";
 
+export const usePost = (): [PostState, React.Dispatch<PostActionType>] => {
+  const { state, dispatch } = useContext(PostContext);
+  return [state, dispatch];
+};
 
 export function setCurrentPost(
-  dispatch: React.Dispatch<UserActionType>,
+  dispatch: React.Dispatch<PostActionType>,
   currentPost: Post
 ) {
   dispatch({
@@ -28,7 +33,7 @@ export const fetchAllPosts = async () => {
 };
 
 export const fetchSinglePost = async (
-  dispatch: React.Dispatch<UserActionType>,
+  dispatch: React.Dispatch<PostActionType>,
   id: number
 ) => {
   const res = await axios.get<Post>(`http://localhost:3119/post/${id}`);
@@ -41,7 +46,7 @@ export const fetchSinglePost = async (
 };
 
 export async function createPost(
-  dispatch: React.Dispatch<UserActionType>,
+  dispatch: React.Dispatch<PostActionType>,
   post: CreatePostType
 ) {
   try {
@@ -62,7 +67,7 @@ export async function createPost(
 }
 
 export async function deletePost(
-  dispatch: React.Dispatch<UserActionType>,
+  dispatch: React.Dispatch<PostActionType>,
   id: number
 ) {
   await axios.delete(`http://localhost:3119/post/delete/${id}`);

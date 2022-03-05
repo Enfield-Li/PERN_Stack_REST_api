@@ -1,11 +1,11 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
-import { useGlobal } from "../../contexts/User/actions/UserAction";
+import { useUser } from "../../contexts/User/actions/UserAction";
 
 interface searchBarProps {}
 
 const CreatePostArea: React.FC<searchBarProps> = ({}) => {
-  const [{ user }] = useGlobal();
+  const [{ user }] = useUser();
   const navigate = useNavigate();
 
   return (

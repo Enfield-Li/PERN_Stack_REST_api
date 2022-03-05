@@ -1,31 +1,17 @@
+import { LOGIN_USER, LOGOUT_USER } from "../../constant";
 import {
-  LOGIN_USER,
-  LOGOUT_USER,
-} from "../../constant";
-import { AddPost, SetPost, DeletePost, FetchPaginatedPosts } from "../../Post/types/PostTypes";
+  AddPost,
+  SetPost,
+  DeletePost,
+  FetchPaginatedPosts,
+} from "../../Post/types/PostTypes";
 
 export type UserState = {
   user: User | null;
-  posts: Post[];
-  currentPost: Post | null;
 };
 
-export const initialState: UserState = {
+export const userInitialState: UserState = {
   user: null,
-  posts: [],
-  currentPost: null,
-};
-
-export type Post = {
-  title: string;
-  content: string;
-  createdAt: string;
-  postId: number;
-};
-
-export type CreatePostType = {
-  title: string;
-  content: string;
 };
 
 export type UserCredential = {
@@ -56,14 +42,7 @@ export type ResUserError = {
   message: string;
 };
 
-// history
-export type UserActionType =
-  | AddPost
-  | SetPost
-  | DeletePost
-  | FetchPaginatedPosts
-  | LoginUser
-  | LogoutUser;
+export type UserActionType = LoginUser | LogoutUser;
 
 type LoginUser = {
   type: typeof LOGIN_USER;
@@ -73,5 +52,3 @@ type LoginUser = {
 type LogoutUser = {
   type: typeof LOGOUT_USER;
 };
-
-

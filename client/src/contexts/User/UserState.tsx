@@ -1,6 +1,6 @@
-import GlobalReducer from "./UserReducer";
+import UserReducer from "./UserReducer";
 import { useReducer } from "react";
-import { initialState } from "./types/UserTypes";
+import { userInitialState } from "./types/UserTypes";
 import UserContext from "./UserContext";
 
 interface ProviderType {
@@ -8,7 +8,7 @@ interface ProviderType {
 }
 
 export default function UserProvider({ children }: ProviderType) {
-  const [state, dispatch] = useReducer(GlobalReducer, initialState);
+  const [state, dispatch] = useReducer(UserReducer, userInitialState);
 
   return (
     <UserContext.Provider

@@ -1,9 +1,37 @@
 import {
   ADD_POST,
   DELETE_POST,
-  FETCH_ALL_POSTS, SET_CURRENT_POST
+  FETCH_ALL_POSTS,
+  SET_CURRENT_POST,
 } from "../../constant";
-import { Post } from "../../User/types/UserTypes";
+
+export type PostState = {
+  posts: Post[];
+  currentPost: Post | null;
+};
+
+export const postInitialState: PostState = {
+  posts: [],
+  currentPost: null,
+};
+
+export type Post = {
+  title: string;
+  content: string;
+  createdAt: string;
+  postId: number;
+};
+
+export type CreatePostType = {
+  title: string;
+  content: string;
+};
+
+export type PostActionType =
+  | AddPost
+  | SetPost
+  | DeletePost
+  | FetchPaginatedPosts;
 
 export type AddPost = {
   type: typeof ADD_POST;

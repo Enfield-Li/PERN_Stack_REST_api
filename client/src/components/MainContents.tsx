@@ -1,6 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import { useGlobal } from "../contexts/User/actions/UserAction";
+import { usePost } from "../contexts/Post/actions/PostAction";
+import { useUser } from "../contexts/User/actions/UserAction";
 import ContentPlaceholder from "./layout/ContentPlaceholder";
 import CreatePostArea from "./layout/CreatePostArea";
 import PostCardSection from "./nested-Components/PostCardSection";
@@ -9,7 +10,7 @@ import VoteSection from "./nested-Components/voteSection";
 interface MainContentsProps {}
 
 const MainContents: React.FC<MainContentsProps> = ({}) => {
-  const [state, dispatch] = useGlobal();
+  const [state, dispatch] = usePost();
 
   return (
     <div>

@@ -1,4 +1,4 @@
-import { Post } from "../../contexts/User/types/UserTypes";
+import { Post } from "../../contexts/Post/types/PostTypes";
 
 interface PostCardSectionProps {
   post: Post;

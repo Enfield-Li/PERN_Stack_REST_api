@@ -8,33 +8,9 @@ import {
 } from "../constant";
 import { UserState, UserActionType } from "./types/UserTypes";
 
-export default function GlobalReducer(state: UserState, action: UserActionType) {
+export default function UserReducer(state: UserState, action: UserActionType) {
   console.log("reducer called");
   switch (action.type) {
-    case FETCH_ALL_POSTS: {
-      return {
-        ...state,
-        posts: action.payload,
-      };
-    }
-    case ADD_POST: {
-      return {
-        ...state,
-        posts: [action.payload, ...state.posts],
-      };
-    }
-    case DELETE_POST: {
-      return {
-        ...state,
-        posts: state.posts.filter((post) => post.postId !== action.payload),
-      };
-    }
-    case SET_CURRENT_POST: {
-      return {
-        ...state,
-        currentPost: action.payload,
-      };
-    }
     case LOGIN_USER: {
       return {
         ...state,

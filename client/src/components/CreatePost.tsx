@@ -1,15 +1,14 @@
 import { Formik } from "formik";
 import React from "react";
 import { useNavigate } from "react-router-dom";
-import { useGlobal } from "../contexts/User/actions/UserAction";
-import { createPost } from "../contexts/Post/actions/PostAction";
+import { createPost, usePost } from "../contexts/Post/actions/PostAction";
 import FormWrapper from "./nested-Components/FormWrapper";
 import InputWrapper from "./nested-Components/InputWrapper";
 
 interface CreatePostProps {}
 
 const CreatePost: React.FC<CreatePostProps> = ({}) => {
-  const [state, dispatch] = useGlobal();
+  const [state, dispatch] = usePost();
   const navigate = useNavigate();
 
   return (

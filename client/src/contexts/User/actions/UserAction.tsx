@@ -8,13 +8,10 @@ import {
   UserRegister,
   UserRO,
 } from "../types/UserTypes";
-import {
-  LOGIN_USER,
-  LOGOUT_USER,
-} from "../../constant";
+import { LOGIN_USER, LOGOUT_USER } from "../../constant";
 import axios from "axios";
 
-export const useGlobal = (): [UserState, React.Dispatch<UserActionType>] => {
+export const useUser = (): [UserState, React.Dispatch<UserActionType>] => {
   const { state, dispatch } = useContext(UserContext);
   return [state, dispatch];
 };
@@ -23,14 +20,14 @@ export async function registerUser(
   dispatch: React.Dispatch<UserActionType>,
   userCredential: UserRegister
 ) {
-  const res = await axios.post<User>(
+  const res = await axios.post<UserRO>(
     "http://localhost:3119/user/register",
     userCredential
   );
 
   dispatch({
     type: LOGIN_USER,
-    payload: res.data,
+    payload: res.data.user,
   });
 }
 
@@ -39,7 +36,7 @@ export async function loginUser(
   userCredential: UserCredential
 ) {
   try {
-    const res = await axios.put<User>(
+    const res = await axios.put<UserRO>(
       "http://localhost:3119/user/login",
       userCredential,
       { withCredentials: true } // !!! important !!!
@@ -47,7 +44,7 @@ export async function loginUser(
 
     dispatch({
       type: LOGIN_USER,
-      payload: res.data,
+      payload: res.data.user,
     });
     return true;
   } catch (err) {
@@ -60,7 +57,7 @@ export async function me(dispatch: React.Dispatch<UserActionType>) {
   const res = await axios.get<UserRO>("http://localhost:3119/user/me", {
     withCredentials: true,
   });
-  console.log("res.data: ", res.data);
+  console.log("res.data.user: ", res.data.user);
 
   dispatch({
     type: LOGIN_USER,
@@ -76,5 +73,3 @@ export async function logout(dispatch: React.Dispatch<UserActionType>) {
     withCredentials: true,
   });
 }
-
-
