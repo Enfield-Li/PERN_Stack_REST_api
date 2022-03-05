@@ -12,7 +12,17 @@ export class CreatePostDto {
 }
 
 export class PostRO {
+  @ApiProperty()
   title: string;
-  contents: string;
+  @ApiProperty()
+  content: string;
+  @ApiProperty()
   createdAt: Date;
+}
+
+export class CursorAndTake {
+  @ApiProperty({ nullable: true, default: 10 })
+  take?: number = 10;
+  @ApiProperty({ nullable: true })
+  cursor?: number;
 }

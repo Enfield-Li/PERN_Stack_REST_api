@@ -9,8 +9,8 @@ import {
   UserRO,
 } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
-import argon2 from 'argon2';
 import { Request } from 'express';
+// import argon2 from 'argon2';
 
 @Injectable()
 export class UserService {
@@ -27,7 +27,6 @@ export class UserService {
       const user = await this.prismaService.user.create({
         data: { email, username, password },
       });
-      console.log('createdUser: ', user);
 
       req.session.userId = user.id;
       return { user: this.buildUserRO(user) };
