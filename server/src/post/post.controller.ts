@@ -26,7 +26,7 @@ export class PostController {
   create(@Body() createPostDto: CreatePostDto, @Req() req: Request) {
     if (!req.session.userId) throw new HttpException('Not authenticated', 401);
 
-    return this.postService.create(createPostDto, req.session.userId);
+    return this.postService.createPost(createPostDto, req.session.userId);
   }
 
   @ApiQuery({
@@ -36,18 +36,20 @@ export class PostController {
   @ApiQuery({
     name: 'cursor',
     required: false,
+    type: Date,
   })
   @Get('paginated-posts')
   findAll(
+    @Req() req: Request,
     @Query('take') take: string = '10',
-    @Query('cursor') cursor?: number,
+    @Query('cursor') cursor?: Date,
   ) {
-    return this.postService.findPaginatedPost(+take, +cursor);
+    return this.postService.getPaginatedPost(req.session.userId, +take, cursor);
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.postService.findOne(+id);
+  findOne(@Req() req: Request, @Param('id') id: string) {
+    return this.postService.getOnePost(req.session.userId, +id);
   }
 
   @Patch('update/:id')

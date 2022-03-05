@@ -36,6 +36,7 @@ export const fetchSinglePost = async (
   dispatch: React.Dispatch<PostActionType>,
   id: number
 ) => {
+  console.log("post ID: ", id);
   const res = await axios.get<Post>(`http://localhost:3119/post/${id}`);
   console.log("fetchPost...");
 

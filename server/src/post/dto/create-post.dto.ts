@@ -1,4 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
+import { post, user } from '@prisma/client';
 import { IsNotEmpty, MinLength } from 'class-validator';
 
 export class CreatePostDto {
@@ -11,18 +12,21 @@ export class CreatePostDto {
   content?: string;
 }
 
-export class PostRO {
-  @ApiProperty()
-  title: string;
-  @ApiProperty()
-  content: string;
-  @ApiProperty()
-  createdAt: Date;
-}
-
 export class CursorAndTake {
   @ApiProperty({ nullable: true, default: 10 })
   take?: number = 10;
   @ApiProperty({ nullable: true })
   cursor?: number;
+}
+
+export class PostRO {
+  // @ApiProperty()
+  // user: { username: user['username'] };
+  @ApiProperty()
+  post: post;
+}
+
+export class PaginatedPost {
+  posts: post[];
+  hasMore: Boolean;
 }

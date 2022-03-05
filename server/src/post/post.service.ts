@@ -1,13 +1,14 @@
 import { Injectable } from '@nestjs/common';
+import { post } from '@prisma/client';
 import { PrismaService } from 'src/config/prisma.service';
-import { CreatePostDto, PostRO } from './dto/create-post.dto';
+import { CreatePostDto, PaginatedPost, PostRO } from './dto/create-post.dto';
 import { UpdatePostDto } from './dto/update-post.dto';
 
 @Injectable()
 export class PostService {
   constructor(private readonly prismaService: PrismaService) {}
 
-  async create(createPostDto: CreatePostDto, userId: number): Promise<PostRO> {
+  async createPost(createPostDto: CreatePostDto, userId: number): Promise<PostRO> {
     const { title, content } = createPostDto;
 
     // create post & create relevant interactions
@@ -21,6 +22,9 @@ export class PostService {
         interactions: {
           create: { userId, voteStatus: true, likeStatus: true },
         },
+      },
+      include: {
+        user: { select: { username: true } },
       },
     });
 
@@ -40,26 +44,54 @@ export class PostService {
     ]);
 
     // createdPost returns [post, user]
-    return createdPost[0];
+    return { post: createdPost[0] };
+    // return {
+    //   user: createdPost[0].user,
+    //   posts: { ...createdPost[0] },
+    // };
   }
 
-  async findPaginatedPost(take: number = 2, cursor?: number) {
-    if (cursor)
-      return this.prismaService.post.findMany({
-        take, // default take 10
-        skip: 1,
-        cursor: { id: cursor }, // id
-        orderBy: { createdAt: 'desc' },
-      });
+  async getPaginatedPost(
+    userId: number,
+    take: number = 10,
+    cursor?: Date,
+  ): Promise<PaginatedPost> {
+    const takeLimit = Math.min(25, take);
+    const takeLimitPlusOne = takeLimit + 1;
 
-    return this.prismaService.post.findMany({
-      take, // default take 10
+    const posts = await this.prismaService.post.findMany({
+      take: takeLimitPlusOne,
+      skip: cursor ? 1 : undefined,
       orderBy: { createdAt: 'desc' },
+      cursor: cursor ? { createdAt: cursor } : undefined,
+      include: {
+        user: {
+          select: {
+            username: true,
+            interactions: userId ? { where: { userId } } : false,
+          },
+        },
+      },
     });
+
+    return {
+      posts: posts.slice(0, takeLimit),
+      hasMore: posts.length === takeLimitPlusOne,
+    };
   }
 
-  findOne(id: number) {
-    return this.prismaService.post.findUnique({ where: { id } });
+  getOnePost(userId: number, postId: number): Promise<post> {
+    return this.prismaService.post.findUnique({
+      where: { id: postId },
+      include: {
+        user: {
+          select: {
+            username: true,
+            interactions: userId ? { where: { userId, postId } } : false,
+          },
+        },
+      },
+    });
   }
 
   update(id: number, updatePostDto: UpdatePostDto) {
