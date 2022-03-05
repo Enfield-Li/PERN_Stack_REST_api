@@ -16,8 +16,8 @@ const MainContents: React.FC<MainContentsProps> = ({}) => {
       <CreatePostArea />
 
       {state.posts.length > 0 ? (
-        state.posts.map((post) => (
-          <div className="card my-3 " key={post.postId}>
+        state.posts.map((post, index) => (
+          <div className="card my-3 " key={index}>
             <div className="card-body">
               <div className="d-flex justify-content-between">
                 <div className="d-flex justify-content-between">

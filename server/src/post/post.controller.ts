@@ -37,7 +37,7 @@ export class PostController {
     name: 'cursor',
     required: false,
   })
-  @Get('get-all-posts')
+  @Get('paginated-posts')
   findAll(
     @Query('take') take: string = '10',
     @Query('cursor') cursor?: number,
@@ -50,12 +50,12 @@ export class PostController {
     return this.postService.findOne(+id);
   }
 
-  @Patch('update-post/:id')
+  @Patch('update/:id')
   update(@Param('id') id: string, @Body() updatePostDto: UpdatePostDto) {
     return this.postService.update(+id, updatePostDto);
   }
 
-  @Delete('delete-post/:id')
+  @Delete('delete/:id')
   remove(@Param('id') id: string) {
     return this.postService.remove(+id);
   }

@@ -15,6 +15,7 @@ const Login: React.FC<LoginProps> = ({}) => {
     <Formik
       initialValues={{ usernameOrEmail: "", password: "" }}
       onSubmit={async (values) => {
+        console.log(values);
         const res = await loginUser(dispatch, values);
         if (res) navigate("/");
       }}

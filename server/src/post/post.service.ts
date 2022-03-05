@@ -17,7 +17,7 @@ export class PostService {
         content,
         userId,
         votePoints: 1, // self voted when creating post
-        likePoints: 1, // self liked when creating post
+        // likePoints: 1, // self liked when creating post
         interactions: {
           create: { userId, voteStatus: true, likeStatus: true },
         },
@@ -48,7 +48,7 @@ export class PostService {
       return this.prismaService.post.findMany({
         take, // default take 10
         skip: 1,
-        cursor: {  }, // id
+        cursor: { id: cursor }, // id
         orderBy: { createdAt: 'desc' },
       });
 

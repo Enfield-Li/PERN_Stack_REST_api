@@ -6,8 +6,6 @@ interface navbarProps {}
 
 const Navbar: React.FC<navbarProps> = ({}) => {
   const [{ user }, dispatch] = useGlobal();
-  // console.log("user: ", user);
-  // console.log("user type: ", typeof user);
 
   let userProfile = user ? (
     <div className="dropdown">

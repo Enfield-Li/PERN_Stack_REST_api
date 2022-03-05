@@ -8,6 +8,7 @@ import {
   User,
   UserCredential,
   UserRegister,
+  UserRO,
 } from "../types/GlobalType";
 import {
   ADD_POST,
@@ -28,7 +29,7 @@ export async function registerUser(
   userCredential: UserRegister
 ) {
   const res = await axios.post<User>(
-    "http://localhost:3017/user/register",
+    "http://localhost:3119/user/register",
     userCredential
   );
 
@@ -44,7 +45,7 @@ export async function loginUser(
 ) {
   try {
     const res = await axios.put<User>(
-      "http://localhost:3017/user/login",
+      "http://localhost:3119/user/login",
       userCredential,
       { withCredentials: true } // !!! important !!!
     );
@@ -61,13 +62,14 @@ export async function loginUser(
 }
 
 export async function me(dispatch: React.Dispatch<ActionType>) {
-  const res = await axios.get<User>("http://localhost:3017/user/me", {
+  const res = await axios.get<UserRO>("http://localhost:3119/user/me", {
     withCredentials: true,
   });
+  console.log("res.data: ", res.data);
 
   dispatch({
     type: LOGIN_USER,
-    payload: res.data,
+    payload: res.data.user,
   });
 }
 
@@ -75,7 +77,7 @@ export async function logout(dispatch: React.Dispatch<ActionType>) {
   dispatch({
     type: LOGOUT_USER,
   });
-  await axios.get("http://localhost:3017/user/logout", {
+  await axios.get("http://localhost:3119/user/logout", {
     withCredentials: true,
   });
 }
@@ -92,7 +94,9 @@ export function setCurrentPost(
 
 export const fetchAllPosts = async () => {
   console.log("fetchPosts...");
-  const res = await axios.get<Post[]>("http://localhost:3017/post");
+  const res = await axios.get<Post[]>(
+    "http://localhost:3119/post/paginated-posts"
+  );
   return res.data;
 };
 
@@ -100,7 +104,7 @@ export const fetchSinglePost = async (
   dispatch: React.Dispatch<ActionType>,
   id: number
 ) => {
-  const res = await axios.get<Post>(`http://localhost:3017/post/${id}`);
+  const res = await axios.get<Post>(`http://localhost:3119/post/${id}`);
   console.log("fetchPost...");
 
   dispatch({
@@ -114,7 +118,10 @@ export async function createPost(
   post: CreatePostType
 ) {
   try {
-    const res = await axios.post<Post>("http://localhost:3017/post", post);
+    const res = await axios.post<Post>(
+      "http://localhost:3119/post/create-post",
+      post
+    );
 
     dispatch({
       type: ADD_POST,
@@ -131,7 +138,7 @@ export async function deletePost(
   dispatch: React.Dispatch<ActionType>,
   id: number
 ) {
-  await axios.delete(`http://localhost:3017/post/${id}`);
+  await axios.delete(`http://localhost:3119/post/delete/${id}`);
 
   console.log("onDelete...");
 

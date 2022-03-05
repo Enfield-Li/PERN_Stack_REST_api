@@ -8,12 +8,20 @@ import {
   Delete,
   Req,
   HttpException,
+  Res,
+  Put,
 } from '@nestjs/common';
 import { UserService } from './user.service';
 import { CreateUserDto, LoginUserDto, UserRO } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
-import { ApiCreatedResponse, ApiResponse, ApiTags } from '@nestjs/swagger';
-import { Request } from 'express';
+import {
+  ApiCreatedResponse,
+  ApiOkResponse,
+  ApiResponse,
+  ApiTags,
+} from '@nestjs/swagger';
+import { Request, Response } from 'express';
+import { COOKIE_NAME } from 'src/config/constants';
 
 @ApiTags('User')
 @Controller('user')
@@ -29,12 +37,13 @@ export class UserController {
     return this.userService.createUser(createUserDto, req);
   }
 
-  @Post('/login')
+  @Put('/login')
   @ApiCreatedResponse({ type: UserRO })
   async login(
     @Body() loginUserDto: LoginUserDto,
     @Req() req: Request,
   ): Promise<UserRO> {
+    console.log(loginUserDto);
     return this.userService.loginUser(loginUserDto, req);
   }
 
@@ -46,7 +55,7 @@ export class UserController {
     return this.userService.me(req.session.userId);
   }
 
-  @Patch('/update/:id')
+  @Patch('/update-user/:id')
   @ApiCreatedResponse({ type: UserRO })
   update(@Req() req: Request, @Body() updateUserDto: UpdateUserDto) {
     if (!req.session.userId) throw new HttpException('Invalid credential', 401);
@@ -54,7 +63,23 @@ export class UserController {
     return this.userService.updateUser(req.session.userId, updateUserDto);
   }
 
-  @Delete('/delete/:id')
+  @Get('/logout')
+  @ApiOkResponse({ type: Boolean })
+  logout(@Req() req: Request, @Res() res: Response) {
+    return new Promise((resolve) =>
+      req.session.destroy((err) => {
+        res.clearCookie(COOKIE_NAME);
+        if (err) {
+          console.error(err);
+          resolve(false);
+          return;
+        }
+        resolve(true);
+      }),
+    );
+  }
+
+  @Delete('/delete-user/:id')
   @ApiResponse({ type: Boolean })
   remove(@Req() req: Request) {
     if (!req.session.userId) throw new HttpException('Invalid credential', 401);

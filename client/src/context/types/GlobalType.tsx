@@ -49,11 +49,21 @@ export type User = {
   createdAt: string;
 };
 
+export type UserRO = {
+  user: User;
+  errors: ResUserError;
+};
+
+export type ResUserError = {
+  field: string;
+  message: string;
+};
+
 // history
 export type ActionType =
   | AddPost
   | SetPost
-  | DeleteTask
+  | DeletePost
   | FetchAllPosts
   | LoginUser
   | LogoutUser;
@@ -73,7 +83,7 @@ type SetPost = {
   payload: Post;
 };
 
-type DeleteTask = {
+type DeletePost = {
   type: typeof DELETE_POST;
   payload: number;
 };

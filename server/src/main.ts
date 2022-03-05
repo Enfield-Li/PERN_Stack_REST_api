@@ -3,9 +3,17 @@ import { NestFactory } from '@nestjs/core';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { AppModule } from './app.module';
 import { sessionConfig } from './config/sessionConfig';
+var cors = require('cors');
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
+
+  app.use(
+    cors({
+      origin: ['http://localhost:3118', 'http://localhost:3119'],
+      credentials: true,
+    }),
+  );
 
   app.use(sessionConfig);
 
