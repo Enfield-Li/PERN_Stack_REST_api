@@ -8,7 +8,7 @@ import PostDataType from "./components/Post";
 import Register from "./components/register";
 import { me, useUser } from "./contexts/User/actions/UserAction";
 import { fetchAllPosts, usePost } from "./contexts/Post/actions/PostAction";
-import { FETCH_ALL_POSTS } from "./contexts/constant";
+import { FETCH_PAGINATED_POSTS } from "./contexts/constant";
 
 function App() {
   const location = useLocation();
@@ -22,7 +22,7 @@ function App() {
       const postsRes = await fetchAllPosts();
 
       postDispatch({
-        type: FETCH_ALL_POSTS,
+        type: FETCH_PAGINATED_POSTS,
         payload: postsRes,
       });
     };

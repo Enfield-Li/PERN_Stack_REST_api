@@ -1,21 +1,21 @@
 import {
-  ADD_POST,
+  CREATE_POST,
   DELETE_POST,
-  FETCH_ALL_POSTS,
-  SET_CURRENT_POST,
+  FETCH_PAGINATED_POSTS,
+  EDIT_CURRENT_POST,
 } from "../constant";
 import { PostActionType, PostState } from "./types/PostTypes";
 
 export default function PostReducer(state: PostState, action: PostActionType) {
   console.log("reducer called");
   switch (action.type) {
-    case FETCH_ALL_POSTS: {
+    case FETCH_PAGINATED_POSTS: {
       return {
         ...state,
         posts: action.payload,
       };
     }
-    case ADD_POST: {
+    case CREATE_POST: {
       return {
         ...state,
         posts: [action.payload, ...state.posts],
@@ -27,7 +27,7 @@ export default function PostReducer(state: PostState, action: PostActionType) {
         posts: state.posts.filter((post) => post.postId !== action.payload),
       };
     }
-    case SET_CURRENT_POST: {
+    case EDIT_CURRENT_POST: {
       return {
         ...state,
         currentPost: action.payload,

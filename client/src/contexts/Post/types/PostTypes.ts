@@ -1,8 +1,8 @@
 import {
-  ADD_POST,
+  CREATE_POST,
   DELETE_POST,
-  FETCH_ALL_POSTS,
-  SET_CURRENT_POST,
+  FETCH_PAGINATED_POSTS,
+  EDIT_CURRENT_POST,
 } from "../../constant";
 
 export type PostState = {
@@ -34,15 +34,15 @@ export type PostActionType =
   | FetchPaginatedPosts;
 
 export type AddPost = {
-  type: typeof ADD_POST;
+  type: typeof CREATE_POST;
   payload: Post;
 };
 export type FetchPaginatedPosts = {
-  type: typeof FETCH_ALL_POSTS;
+  type: typeof FETCH_PAGINATED_POSTS;
   payload: Post[];
 };
 export type SetPost = {
-  type: typeof SET_CURRENT_POST;
+  type: typeof EDIT_CURRENT_POST;
   payload: Post;
 };
 export type DeletePost = {

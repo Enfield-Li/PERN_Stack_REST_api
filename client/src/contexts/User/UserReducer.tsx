@@ -1,10 +1,10 @@
 import {
-  ADD_POST,
+  CREATE_POST,
   DELETE_POST,
-  FETCH_ALL_POSTS,
+  FETCH_PAGINATED_POSTS,
   LOGIN_USER,
   LOGOUT_USER,
-  SET_CURRENT_POST,
+  EDIT_CURRENT_POST,
 } from "../constant";
 import { UserState, UserActionType } from "./types/UserTypes";
 

@@ -1,4 +1,4 @@
-import { ADD_POST, DELETE_POST, SET_CURRENT_POST } from "../../constant";
+import { CREATE_POST, DELETE_POST, EDIT_CURRENT_POST } from "../../constant";
 import axios from "axios";
 import {
   CreatePostType,
@@ -19,7 +19,7 @@ export function setCurrentPost(
   currentPost: Post
 ) {
   dispatch({
-    type: SET_CURRENT_POST,
+    type: EDIT_CURRENT_POST,
     payload: currentPost,
   });
 }
@@ -41,7 +41,7 @@ export const fetchSinglePost = async (
   console.log("fetchPost...");
 
   dispatch({
-    type: SET_CURRENT_POST,
+    type: EDIT_CURRENT_POST,
     payload: res.data,
   });
 };
@@ -57,7 +57,7 @@ export async function createPost(
     );
 
     dispatch({
-      type: ADD_POST,
+      type: CREATE_POST,
       payload: res.data,
     });
     return res.data;
