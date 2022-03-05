@@ -6,8 +6,8 @@ import MainContents from "./components/MainContents";
 import Navbar from "./components/Navbar";
 import PostDataType from "./components/Post";
 import Register from "./components/register";
-import { fetchAllPosts, me, useGlobal } from "./context/actions/action";
-import { FETCH_ALL_POSTS } from "./context/types/constant";
+import { fetchAllPosts, me, useGlobal } from "./contexts/User/actions/UserAction";
+import { FETCH_ALL_POSTS } from "./contexts/constant";
 
 function App() {
   const location = useLocation();

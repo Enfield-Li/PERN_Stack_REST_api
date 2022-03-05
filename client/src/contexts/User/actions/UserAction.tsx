@@ -1,5 +1,5 @@
 import { useContext } from "react";
-import GlobalContext from "../GlobalContext";
+import GlobalContext from "../UserContext";
 import {
   ActionType,
   CreatePostType,
@@ -9,14 +9,14 @@ import {
   UserCredential,
   UserRegister,
   UserRO,
-} from "../types/GlobalType";
+} from "../types/UserTypes";
 import {
   ADD_POST,
   DELETE_POST,
   LOGIN_USER,
   LOGOUT_USER,
   SET_CURRENT_POST,
-} from "../types/constant";
+} from "../../constant";
 import axios from "axios";
 
 export const useGlobal = (): [GlobalState, React.Dispatch<ActionType>] => {

@@ -5,7 +5,7 @@ import {
   LOGIN_USER,
   LOGOUT_USER,
   SET_CURRENT_POST,
-} from "./constant";
+} from "../../constant";
 
 export type GlobalState = {
   user: User | null;
@@ -64,7 +64,7 @@ export type ActionType =
   | AddPost
   | SetPost
   | DeletePost
-  | FetchAllPosts
+  | FetchPaginatedPosts
   | LoginUser
   | LogoutUser;
 
@@ -73,7 +73,7 @@ type AddPost = {
   payload: Post;
 };
 
-type FetchAllPosts = {
+type FetchPaginatedPosts = {
   type: typeof FETCH_ALL_POSTS;
   payload: Post[];
 };

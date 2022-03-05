@@ -1,4 +1,3 @@
-import { GlobalState, ActionType } from "./types/GlobalType";
 import {
   ADD_POST,
   DELETE_POST,
@@ -6,7 +5,8 @@ import {
   LOGIN_USER,
   LOGOUT_USER,
   SET_CURRENT_POST,
-} from "./types/constant";
+} from "../constant";
+import { GlobalState, ActionType } from "./types/UserTypes";
 
 export default function GlobalReducer(state: GlobalState, action: ActionType) {
   console.log("reducer called");

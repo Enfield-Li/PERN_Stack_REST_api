@@ -3,7 +3,7 @@ import ReactDOM from "react-dom";
 import App from "./App";
 import reportWebVitals from "./reportWebVitals";
 import { BrowserRouter } from "react-router-dom";
-import GlobalProvider from "./context/GlobalState";
+import GlobalProvider from "./contexts/User/UserState";
 
 ReactDOM.render(
   <BrowserRouter>

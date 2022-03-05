@@ -1,6 +1,6 @@
 import React from "react";
 import { useLocation } from "react-router-dom";
-import { Post } from "../../context/types/GlobalType";
+import { Post } from "../../contexts/User/types/UserTypes";
 
 interface VoteSectionProps {
   post: Post;

@@ -1,6 +1,6 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
-import { useGlobal } from "../../context/actions/action";
+import { useGlobal } from "../../contexts/User/actions/UserAction";
 
 interface searchBarProps {}
 

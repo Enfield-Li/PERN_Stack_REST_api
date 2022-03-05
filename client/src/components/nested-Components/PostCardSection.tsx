@@ -1,4 +1,4 @@
-import { Post } from "../../context/types/GlobalType";
+import { Post } from "../../contexts/User/types/UserTypes";
 
 interface PostCardSectionProps {
   post: Post;

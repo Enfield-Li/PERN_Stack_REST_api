@@ -1,6 +1,6 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import { useGlobal } from "../context/actions/action";
+import { useGlobal } from "../contexts/User/actions/UserAction";
 import ContentPlaceholder from "./layout/ContentPlaceholder";
 import CreatePostArea from "./layout/CreatePostArea";
 import PostCardSection from "./nested-Components/PostCardSection";

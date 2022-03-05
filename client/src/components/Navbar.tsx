@@ -1,6 +1,6 @@
 import React from "react";
 import { Link, Route, Routes } from "react-router-dom";
-import { logout, useGlobal } from "../context/actions/action";
+import { logout, useGlobal } from "../contexts/User/actions/UserAction";
 
 interface navbarProps {}
 

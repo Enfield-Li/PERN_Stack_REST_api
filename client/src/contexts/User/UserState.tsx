@@ -1,7 +1,7 @@
-import GlobalContext from "./GlobalContext";
-import GlobalReducer from "./GlobalReducer";
+import GlobalReducer from "./UserReducer";
 import { useReducer } from "react";
-import { initialState } from "./types/GlobalType";
+import { initialState } from "./types/UserTypes";
+import GlobalContext from "./UserContext";
 
 interface ProviderType {
   children: React.ReactNode;
