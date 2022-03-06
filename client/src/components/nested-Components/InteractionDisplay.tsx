@@ -6,6 +6,7 @@ interface InteractionDisplayProps {
 
 const InteractionDisplay: React.FC<InteractionDisplayProps> = ({ post }) => {
   const userInteractions = post.user.interactions;
+  console.log(userInteractions?.likeStatus);
 
   return (
     <div className="d-flex">

@@ -103,9 +103,9 @@ export class PostService {
 
     // no interactions without loged in
     else {
-      posts.forEach((post) => {
-        postAndInteractions = posts;
-      });
+      for (let i = 0; i < posts.length - 1; i++) {
+        postAndInteractions.push(posts[i]);
+      }
     }
 
     return {
@@ -114,20 +114,26 @@ export class PostService {
     };
   }
 
-  async getOnePost(userId: number, postId: number): Promise<post> {
+  async fetchOnePost(
+    userId: number,
+    postId: number,
+  ): Promise<PostAndInteractions> {
     const post = await this.prismaService.post.findUnique({
       where: { id: postId },
       include: {
         user: {
           select: {
             username: true,
-            interactions: userId ? { where: { userId, postId } } : false,
           },
         },
       },
     });
 
-    return post;
+    const interactions = await this.prismaService.interactions.findUnique({
+      where: { userId_postId: { userId, postId } },
+    });
+
+    return { ...post, user: { ...post.user, interactions } };
   }
 
   update(id: number, updatePostDto: UpdatePostDto) {

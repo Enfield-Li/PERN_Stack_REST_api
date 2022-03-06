@@ -37,7 +37,6 @@ export class PostController {
       createPostDto,
       req.session.userId,
     );
-    console.log('post: ', post);
     return post;
   }
 
@@ -63,8 +62,7 @@ export class PostController {
   @ApiCreatedResponse({ type: PostAndInteractions })
   @Get('single-post/:id')
   findOne(@Req() req: Request, @Param('id') id: string) {
-    console.log(id);
-    return this.postService.getOnePost(req.session.userId, +id);
+    return this.postService.fetchOnePost(req.session.userId, +id);
   }
 
   @ApiQuery({

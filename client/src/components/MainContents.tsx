@@ -58,9 +58,9 @@ const MainContents: React.FC<MainContentsProps> = ({}) => {
             className="btn btn-primary"
             onClick={() => {
               fetchPaginatedPosts(
+                postDispatch,
                 posts.postAndInteractions[posts.postAndInteractions.length - 1]
-                  .createdAt,
-                postDispatch
+                  .createdAt
               );
             }}
           >

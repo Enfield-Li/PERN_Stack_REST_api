@@ -56,7 +56,6 @@ export async function me(dispatch: React.Dispatch<UserActionType>) {
   const res = await axios.get<UserRO>("http://localhost:3119/user/me", {
     withCredentials: true,
   });
-  console.log("res.data.user: ", res.data.user);
 
   dispatch({
     type: LOGIN_USER,

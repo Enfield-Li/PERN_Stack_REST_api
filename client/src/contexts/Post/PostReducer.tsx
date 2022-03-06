@@ -4,7 +4,6 @@ import {
   FETCH_PAGINATED_POSTS,
   EDIT_CURRENT_POST,
 } from "../constant";
-import { fetchPaginatedPosts } from "./actions/PostAction";
 import { PostActionType, PostState } from "./types/PostTypes";
 
 export default function PostReducer(state: PostState, action: PostActionType) {

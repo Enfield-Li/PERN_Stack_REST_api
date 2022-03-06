@@ -4,6 +4,7 @@ import {
   FETCH_PAGINATED_POSTS,
   EDIT_CURRENT_POST,
 } from "../../constant";
+import { Interactions } from "../../Interactions/types/InteractionsTypes";
 
 export type PostState = {
   paginatedPosts: PaginatedPost;
@@ -34,18 +35,8 @@ export type PostAndInteractions = {
   laughPoints: number;
   user: {
     username: string;
-    interactions?: interactions;
+    interactions?: Interactions;
   };
-};
-
-type interactions = {
-  voteStatus: boolean | null;
-  likeStatus: boolean | null;
-  laughStatus: boolean | null;
-  confusedStatus: boolean | null;
-  createdAt: Date;
-  userId: number;
-  postId: number;
 };
 
 export type CreatePostType = {

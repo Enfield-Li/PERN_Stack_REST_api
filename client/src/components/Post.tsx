@@ -19,6 +19,8 @@ const Post: React.FC<PostProps> = ({}) => {
     fetch();
   }, [id]);
 
+  console.log("postData: ", postData);
+
   return (
     <>
       {postData ? (

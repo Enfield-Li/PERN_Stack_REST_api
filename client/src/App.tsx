@@ -18,16 +18,12 @@ function App() {
 
   const [userState, userDispatch] = useUser();
   const [postState, postDispatch] = usePost();
+  console.log("posts: ", postState);
 
   useEffect(() => {
     const fetchPostsAndMe = async () => {
       await me(userDispatch);
-      const postsRes = await fetchPaginatedPosts();
-
-      postDispatch({
-        type: FETCH_PAGINATED_POSTS,
-        payload: postsRes,
-      });
+      await fetchPaginatedPosts(postDispatch);
     };
 
     fetchPostsAndMe();

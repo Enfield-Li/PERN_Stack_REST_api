@@ -31,13 +31,24 @@ export function setCurrentPost(
 }
 
 export const fetchPaginatedPosts = async (
-  cursor?: Date,
-  dispatch?: React.Dispatch<PostActionType>
+  dispatch: React.Dispatch<PostActionType>,
+  cursor?: Date
 ) => {
   console.log("fetchPosts...");
-  if (cursor && dispatch) {
+  if (cursor) {
     const res = await axios.get<PaginatedPost>(
-      `http://localhost:3119/post/paginated-posts?cursor=${cursor}`
+      `http://localhost:3119/post/paginated-posts?cursor=${cursor}`,
+      { withCredentials: true }
+    );
+
+    dispatch({
+      type: FETCH_PAGINATED_POSTS,
+      payload: res.data,
+    });
+  } else {
+    const res = await axios.get<PaginatedPost>(
+      "http://localhost:3119/post/paginated-posts",
+      { withCredentials: true }
     );
 
     dispatch({
@@ -45,12 +56,6 @@ export const fetchPaginatedPosts = async (
       payload: res.data,
     });
   }
-
-  const res = await axios.get<PaginatedPost>(
-    "http://localhost:3119/post/paginated-posts"
-  );
-
-  return res.data;
 };
 
 export const fetchSinglePost = async (
@@ -59,7 +64,10 @@ export const fetchSinglePost = async (
 ) => {
   console.log("post ID: ", id);
   const res = await axios.get<PostAndInteractions>(
-    `http://localhost:3119/post/single-post/${id}`
+    `http://localhost:3119/post/single-post/${id}`,
+    {
+      withCredentials: true,
+    }
   );
   console.log("fetchPost...");
 

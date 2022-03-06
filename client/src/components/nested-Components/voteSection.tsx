@@ -17,14 +17,18 @@ const VoteSection: React.FC<VoteSectionProps> = ({ post }) => {
   return (
     <div className="me-3">
       <button
-        className={`bi bi-caret-up btn`}
+        className={`bi bi-caret-up btn ${
+          post.user.interactions?.voteStatus === true ? "bg-info" : ""
+        }`}
         onClick={async () => {
           console.log(post);
         }}
       />
       <div className="text-center">{post.votePoints}</div>
       <button
-        className={`bi bi-caret-down btn`}
+        className={`bi bi-caret-down btn  ${
+          post.user.interactions?.voteStatus === false ? "bg-danger" : ""
+        }`}
         onClick={async () => {
           console.log(post);
           // if (data?.me === null) {
