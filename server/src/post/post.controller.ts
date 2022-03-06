@@ -10,6 +10,7 @@ import {
   BadRequestException,
   HttpException,
   Query,
+  Put,
 } from '@nestjs/common';
 import { PostService } from './post.service';
 import {
@@ -62,7 +63,31 @@ export class PostController {
   @ApiCreatedResponse({ type: PostAndInteractions })
   @Get('single-post/:id')
   findOne(@Req() req: Request, @Param('id') id: string) {
+    console.log(id);
     return this.postService.getOnePost(req.session.userId, +id);
+  }
+
+  @ApiQuery({
+    name: 'value',
+    type: Boolean,
+  })
+  @ApiQuery({
+    name: 'field',
+    enum: ['vote', 'like', 'laugh', 'confused'],
+  })
+  @Put('vote/:id')
+  votings(
+    @Param('id') id: string,
+    @Query('value') value: string,
+    @Query('field') field: 'vote' | 'like' | 'laugh' | 'confused',
+    @Req() req: Request,
+  ) {
+    this.postService.votePost(
+      +id,
+      req.session.userId,
+      value === 'true' ? true : value === 'false' ? false : null,
+      field,
+    );
   }
 
   @ApiCreatedResponse({ type: PostAndInteractions })
