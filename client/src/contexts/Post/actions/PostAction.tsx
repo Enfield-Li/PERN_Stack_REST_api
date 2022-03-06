@@ -2,6 +2,7 @@ import { CREATE_POST, DELETE_POST, EDIT_CURRENT_POST } from "../../constant";
 import axios from "axios";
 import {
   CreatePostType,
+  PaginatedPost,
   Post,
   PostActionType,
   PostState,
@@ -24,9 +25,9 @@ export function setCurrentPost(
   });
 }
 
-export const fetchAllPosts = async () => {
+export const fetchPaginatedPosts = async () => {
   console.log("fetchPosts...");
-  const res = await axios.get<Post[]>(
+  const res = await axios.get<PaginatedPost>(
     "http://localhost:3119/post/paginated-posts"
   );
   return res.data;
@@ -60,6 +61,8 @@ export async function createPost(
       type: CREATE_POST,
       payload: res.data,
     });
+
+    // return field/errors
     return res.data;
   } catch (err) {
     console.log(err);

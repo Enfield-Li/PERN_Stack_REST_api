@@ -6,13 +6,18 @@ import {
 } from "../../constant";
 
 export type PostState = {
-  posts: Post[];
+  paginatedPosts: PaginatedPost;
   currentPost: Post | null;
 };
 
 export const postInitialState: PostState = {
-  posts: [],
+  paginatedPosts: { hasMore: null, posts: [] },
   currentPost: null,
+};
+
+export type PaginatedPost = {
+  posts: Post[];
+  hasMore: boolean | null;
 };
 
 export type Post = {
@@ -46,7 +51,7 @@ export type AddPost = {
 };
 export type FetchPaginatedPosts = {
   type: typeof FETCH_PAGINATED_POSTS;
-  payload: Post[];
+  payload: PaginatedPost;
 };
 export type SetPost = {
   type: typeof EDIT_CURRENT_POST;

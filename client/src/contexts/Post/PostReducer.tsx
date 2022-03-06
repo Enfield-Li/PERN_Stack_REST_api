@@ -12,21 +12,32 @@ export default function PostReducer(state: PostState, action: PostActionType) {
     case FETCH_PAGINATED_POSTS: {
       return {
         ...state,
-        posts: action.payload,
+        paginatedPosts: action.payload,
       };
     }
+
     case CREATE_POST: {
       return {
         ...state,
-        posts: [action.payload, ...state.posts],
+        popaginatedPostssts: {
+          ...state.paginatedPosts,
+          posts: [action.payload, ...state.paginatedPosts.posts],
+        },
       };
     }
+
     case DELETE_POST: {
       return {
         ...state,
-        posts: state.posts.filter((post) => post.id !== action.payload),
+        paginatedPosts: {
+          ...state.paginatedPosts,
+          posts: state.paginatedPosts.posts.filter(
+            (post) => post.id !== action.payload
+          ),
+        },
       };
     }
+
     case EDIT_CURRENT_POST: {
       return {
         ...state,

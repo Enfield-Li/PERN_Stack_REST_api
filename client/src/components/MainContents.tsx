@@ -11,14 +11,14 @@ interface MainContentsProps {}
 
 const MainContents: React.FC<MainContentsProps> = ({}) => {
   const [state, dispatch] = usePost();
-  console.log("post: ", state.posts);
+  console.log("post: ", state.paginatedPosts);
 
   return (
     <div>
       <CreatePostArea />
 
-      {state.posts.length > 0 ? (
-        state.posts.map((post) => (
+      {state.paginatedPosts.posts.length > 0 ? (
+        state.paginatedPosts.posts.map((post) => (
           <div className="card my-3 " key={post.id}>
             <div className="card-body">
               <div className="d-flex justify-content-between">
