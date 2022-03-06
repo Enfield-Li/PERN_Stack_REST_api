@@ -7,7 +7,10 @@ import Navbar from "./components/Navbar";
 import PostDataType from "./components/Post";
 import Register from "./components/register";
 import { me, useUser } from "./contexts/User/actions/UserAction";
-import { fetchPaginatedPosts, usePost } from "./contexts/Post/actions/PostAction";
+import {
+  fetchPaginatedPosts,
+  usePost,
+} from "./contexts/Post/actions/PostAction";
 import { FETCH_PAGINATED_POSTS } from "./contexts/constant";
 
 function App() {
@@ -17,7 +20,7 @@ function App() {
   const [postState, postDispatch] = usePost();
 
   useEffect(() => {
-    const run = async () => {
+    const fetchPostsAndMe = async () => {
       await me(userDispatch);
       const postsRes = await fetchPaginatedPosts();
 
@@ -27,7 +30,7 @@ function App() {
       });
     };
 
-    run();
+    fetchPostsAndMe();
   }, []);
 
   return (
