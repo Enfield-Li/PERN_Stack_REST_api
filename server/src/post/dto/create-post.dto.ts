@@ -19,25 +19,30 @@ export class CursorAndTake {
   cursor?: number;
 }
 
-export class PostRO {
-  // @ApiProperty()
-  // user: { username: user['username'] };
-  @ApiProperty()
-  post: post;
-}
-
 export class PostAndInteractions {
+  @ApiProperty()
   id: number;
+  @ApiProperty()
   createdAt: Date;
+  @ApiProperty()
   updatedAt: Date;
+  @ApiProperty()
   title: string;
+  @ApiProperty()
   content: string | null;
+  @ApiProperty()
   userId: number;
+  @ApiProperty()
   viewCount: number;
+  @ApiProperty()
   votePoints: number;
+  @ApiProperty()
   likePoints: number;
+  @ApiProperty()
   confusedPoints: number;
+  @ApiProperty()
   laughPoints: number;
+  @ApiProperty()
   user: {
     username: string;
     interactions?: interactions;

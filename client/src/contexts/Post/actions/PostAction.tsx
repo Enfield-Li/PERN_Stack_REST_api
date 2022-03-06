@@ -79,13 +79,14 @@ export async function createPost(
       post,
       { withCredentials: true }
     );
+    console.log(res.data);
 
     dispatch({
       type: CREATE_POST,
       payload: res.data,
     });
 
-    // return field/errors
+    // return created post data
     return res.data;
   } catch (err) {
     console.log(err);

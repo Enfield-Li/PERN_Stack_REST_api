@@ -26,9 +26,12 @@ export default function PostReducer(state: PostState, action: PostActionType) {
     case CREATE_POST: {
       return {
         ...state,
-        popaginatedPostssts: {
+        paginatedPosts: {
           ...state.paginatedPosts,
-          posts: [action.payload, ...state.paginatedPosts.postAndInteractions],
+          postAndInteractions: [
+            action.payload,
+            ...state.paginatedPosts.postAndInteractions,
+          ],
         },
       };
     }

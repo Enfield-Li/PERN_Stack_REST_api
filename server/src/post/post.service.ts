@@ -5,7 +5,6 @@ import {
   CreatePostDto,
   PaginatedPost,
   PostAndInteractions,
-  PostRO,
 } from './dto/create-post.dto';
 import { UpdatePostDto } from './dto/update-post.dto';
 
@@ -16,7 +15,7 @@ export class PostService {
   async createPost(
     createPostDto: CreatePostDto,
     userId: number,
-  ): Promise<PostRO> {
+  ): Promise<PostAndInteractions> {
     const { title, content } = createPostDto;
 
     // create post & create relevant interactions
@@ -26,7 +25,7 @@ export class PostService {
         content,
         userId,
         votePoints: 1, // self voted when creating post
-        // likePoints: 1, // self liked when creating post
+        likePoints: 1, // self liked when creating post
         interactions: {
           create: { userId, voteStatus: true, likeStatus: true },
         },
@@ -52,7 +51,7 @@ export class PostService {
     ]);
 
     // createdPost returns [post, user]
-    return { post: createdPost[0] };
+    return createdPost[0];
     // return {
     //   user: createdPost[0].user,
     //   posts: { ...createdPost[0] },
@@ -115,8 +114,8 @@ export class PostService {
     };
   }
 
-  getOnePost(userId: number, postId: number): Promise<post> {
-    return this.prismaService.post.findUnique({
+  async getOnePost(userId: number, postId: number): Promise<post> {
+    const post = await this.prismaService.post.findUnique({
       where: { id: postId },
       include: {
         user: {
@@ -127,6 +126,8 @@ export class PostService {
         },
       },
     });
+
+    return post;
   }
 
   update(id: number, updatePostDto: UpdatePostDto) {

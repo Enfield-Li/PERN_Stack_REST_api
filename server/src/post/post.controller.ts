@@ -16,7 +16,7 @@ import {
   CreatePostDto,
   CursorAndTake,
   PaginatedPost,
-  PostRO,
+  PostAndInteractions,
 } from './dto/create-post.dto';
 import { UpdatePostDto } from './dto/update-post.dto';
 import { Request } from 'express';
@@ -28,11 +28,16 @@ export class PostController {
   constructor(private readonly postService: PostService) {}
 
   @Post('create-post')
-  @ApiCreatedResponse({ type: PostRO })
-  create(@Body() createPostDto: CreatePostDto, @Req() req: Request) {
+  @ApiCreatedResponse({ type: PostAndInteractions })
+  async create(@Body() createPostDto: CreatePostDto, @Req() req: Request) {
     if (!req.session.userId) throw new HttpException('Not authenticated', 401);
 
-    return this.postService.createPost(createPostDto, req.session.userId);
+    const post = await this.postService.createPost(
+      createPostDto,
+      req.session.userId,
+    );
+    console.log('post: ', post);
+    return post;
   }
 
   @ApiQuery({
@@ -54,13 +59,13 @@ export class PostController {
     return this.postService.getPaginatedPost(req.session.userId, +take, cursor);
   }
 
-  @ApiCreatedResponse({ type: PostRO })
+  @ApiCreatedResponse({ type: PostAndInteractions })
   @Get('single-post/:id')
   findOne(@Req() req: Request, @Param('id') id: string) {
     return this.postService.getOnePost(req.session.userId, +id);
   }
 
-  @ApiCreatedResponse({ type: PostRO })
+  @ApiCreatedResponse({ type: PostAndInteractions })
   @Patch('update/:id')
   update(@Param('id') id: string, @Body() updatePostDto: UpdatePostDto) {
     return this.postService.update(+id, updatePostDto);
