@@ -1,7 +1,7 @@
-import { Post } from "../../contexts/Post/types/PostTypes";
+import { PostAndInteractions } from "../../contexts/Post/types/PostTypes";
 
 interface PostCardSectionProps {
-  post: Post;
+  post: PostAndInteractions;
 }
 
 const PostCardSection: React.FC<PostCardSectionProps> = ({ post }) => {

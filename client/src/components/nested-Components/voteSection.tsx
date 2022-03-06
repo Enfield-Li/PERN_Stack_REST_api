@@ -1,9 +1,9 @@
 import React from "react";
 import { useLocation } from "react-router-dom";
-import { Post } from "../../contexts/Post/types/PostTypes";
+import { PostAndInteractions } from "../../contexts/Post/types/PostTypes";
 
 interface VoteSectionProps {
-  post: Post;
+  post: PostAndInteractions;
 }
 
 const VoteSection: React.FC<VoteSectionProps> = ({ post }) => {

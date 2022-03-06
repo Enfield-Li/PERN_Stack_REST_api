@@ -1,9 +1,14 @@
-import { CREATE_POST, DELETE_POST, EDIT_CURRENT_POST } from "../../constant";
+import {
+  CREATE_POST,
+  DELETE_POST,
+  EDIT_CURRENT_POST,
+  FETCH_PAGINATED_POSTS,
+} from "../../constant";
 import axios from "axios";
 import {
   CreatePostType,
   PaginatedPost,
-  Post,
+  PostAndInteractions,
   PostActionType,
   PostState,
 } from "../types/PostTypes";
@@ -17,7 +22,7 @@ export const usePost = (): [PostState, React.Dispatch<PostActionType>] => {
 
 export function setCurrentPost(
   dispatch: React.Dispatch<PostActionType>,
-  currentPost: Post
+  currentPost: PostAndInteractions
 ) {
   dispatch({
     type: EDIT_CURRENT_POST,
@@ -25,11 +30,26 @@ export function setCurrentPost(
   });
 }
 
-export const fetchPaginatedPosts = async () => {
+export const fetchPaginatedPosts = async (
+  cursor?: Date,
+  dispatch?: React.Dispatch<PostActionType>
+) => {
   console.log("fetchPosts...");
+  if (cursor && dispatch) {
+    const res = await axios.get<PaginatedPost>(
+      `http://localhost:3119/post/paginated-posts?cursor=${cursor}`
+    );
+
+    dispatch({
+      type: FETCH_PAGINATED_POSTS,
+      payload: res.data,
+    });
+  }
+
   const res = await axios.get<PaginatedPost>(
     "http://localhost:3119/post/paginated-posts"
   );
+
   return res.data;
 };
 
@@ -38,7 +58,9 @@ export const fetchSinglePost = async (
   id: number
 ) => {
   console.log("post ID: ", id);
-  const res = await axios.get<Post>(`http://localhost:3119/post/${id}`);
+  const res = await axios.get<PostAndInteractions>(
+    `http://localhost:3119/post/${id}`
+  );
   console.log("fetchPost...");
 
   dispatch({
@@ -52,7 +74,7 @@ export async function createPost(
   post: CreatePostType
 ) {
   try {
-    const res = await axios.post<Post>(
+    const res = await axios.post<PostAndInteractions>(
       "http://localhost:3119/post/create-post",
       post
     );

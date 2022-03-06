@@ -4,6 +4,7 @@ import {
   FETCH_PAGINATED_POSTS,
   EDIT_CURRENT_POST,
 } from "../constant";
+import { fetchPaginatedPosts } from "./actions/PostAction";
 import { PostActionType, PostState } from "./types/PostTypes";
 
 export default function PostReducer(state: PostState, action: PostActionType) {
@@ -12,7 +13,13 @@ export default function PostReducer(state: PostState, action: PostActionType) {
     case FETCH_PAGINATED_POSTS: {
       return {
         ...state,
-        paginatedPosts: action.payload,
+        paginatedPosts: {
+          postAndInteractions: [
+            ...state.paginatedPosts.postAndInteractions,
+            ...action.payload.postAndInteractions,
+          ],
+          hasMore: action.payload.hasMore,
+        },
       };
     }
 
@@ -21,7 +28,7 @@ export default function PostReducer(state: PostState, action: PostActionType) {
         ...state,
         popaginatedPostssts: {
           ...state.paginatedPosts,
-          posts: [action.payload, ...state.paginatedPosts.posts],
+          posts: [action.payload, ...state.paginatedPosts.postAndInteractions],
         },
       };
     }
@@ -31,7 +38,7 @@ export default function PostReducer(state: PostState, action: PostActionType) {
         ...state,
         paginatedPosts: {
           ...state.paginatedPosts,
-          posts: state.paginatedPosts.posts.filter(
+          posts: state.paginatedPosts.postAndInteractions.filter(
             (post) => post.id !== action.payload
           ),
         },

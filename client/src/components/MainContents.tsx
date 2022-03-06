@@ -1,6 +1,9 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import { usePost } from "../contexts/Post/actions/PostAction";
+import {
+  fetchPaginatedPosts,
+  usePost,
+} from "../contexts/Post/actions/PostAction";
 import { useUser } from "../contexts/User/actions/UserAction";
 import ContentPlaceholder from "./layout/ContentPlaceholder";
 import CreatePostArea from "./layout/CreatePostArea";
@@ -10,15 +13,15 @@ import VoteSection from "./nested-Components/voteSection";
 interface MainContentsProps {}
 
 const MainContents: React.FC<MainContentsProps> = ({}) => {
-  const [state, dispatch] = usePost();
-  console.log("post: ", state.paginatedPosts);
+  const [postState, postDispatch] = usePost();
+  const posts = postState.paginatedPosts;
 
   return (
     <div>
       <CreatePostArea />
 
-      {state.paginatedPosts.posts.length > 0 ? (
-        state.paginatedPosts.posts.map((post) => (
+      {posts.postAndInteractions.length > 0 ? (
+        posts.postAndInteractions.map((post) => (
           <div className="card my-3 " key={post.id}>
             <div className="card-body">
               <div className="d-flex justify-content-between">
@@ -47,6 +50,23 @@ const MainContents: React.FC<MainContentsProps> = ({}) => {
           <ContentPlaceholder />
         </div>
       )}
+
+      <div className="d-flex justify-content-center">
+        {posts.hasMore ? (
+          <button
+            className="btn btn-primary"
+            onClick={() => {
+              fetchPaginatedPosts(
+                posts.postAndInteractions[posts.postAndInteractions.length - 1]
+                  .createdAt,
+                postDispatch
+              );
+            }}
+          >
+            More Posts
+          </button>
+        ) : null}
+      </div>
     </div>
   );
 };

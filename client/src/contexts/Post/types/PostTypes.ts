@@ -7,20 +7,20 @@ import {
 
 export type PostState = {
   paginatedPosts: PaginatedPost;
-  currentPost: Post | null;
+  currentPost: PostAndInteractions | null;
 };
 
 export const postInitialState: PostState = {
-  paginatedPosts: { hasMore: null, posts: [] },
+  paginatedPosts: { hasMore: null, postAndInteractions: [] },
   currentPost: null,
 };
 
 export type PaginatedPost = {
-  posts: Post[];
+  postAndInteractions: PostAndInteractions[];
   hasMore: boolean | null;
 };
 
-export type Post = {
+export type PostAndInteractions = {
   id: number;
   createdAt: Date;
   updatedAt: Date;
@@ -32,6 +32,20 @@ export type Post = {
   likePoints: number;
   confusedPoints: number;
   laughPoints: number;
+  user: {
+    username: string;
+    interactions?: interactions;
+  };
+};
+
+type interactions = {
+  voteStatus: boolean | null;
+  likeStatus: boolean | null;
+  laughStatus: boolean | null;
+  confusedStatus: boolean | null;
+  createdAt: Date;
+  userId: number;
+  postId: number;
 };
 
 export type CreatePostType = {
@@ -47,16 +61,19 @@ export type PostActionType =
 
 export type AddPost = {
   type: typeof CREATE_POST;
-  payload: Post;
+  payload: PostAndInteractions;
 };
+
 export type FetchPaginatedPosts = {
   type: typeof FETCH_PAGINATED_POSTS;
   payload: PaginatedPost;
 };
+
 export type SetPost = {
   type: typeof EDIT_CURRENT_POST;
-  payload: Post;
+  payload: PostAndInteractions;
 };
+
 export type DeletePost = {
   type: typeof DELETE_POST;
   payload: number;
