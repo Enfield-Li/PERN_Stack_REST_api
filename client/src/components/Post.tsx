@@ -2,6 +2,8 @@ import React, { useEffect } from "react";
 import { useParams } from "react-router-dom";
 import { fetchSinglePost, usePost } from "../contexts/Post/actions/PostAction";
 import ContentPlaceholder from "./layout/ContentPlaceholder";
+import InteractionDisplay from "./nested-Components/InteractionDisplay";
+import PostCreatorInfo from "./nested-Components/PostCreatorInfo";
 import VoteSection from "./nested-Components/voteSection";
 
 interface PostProps {}
@@ -27,15 +29,12 @@ const Post: React.FC<PostProps> = ({}) => {
                 <div className="d-flex">
                   <VoteSection post={postData} />
                   <div>
-                    {/* <PostCreatorInfo
-                      creator={postData.Post.creator}
-                      createdAt={postData.Post.createdAt}
-                    /> */}
+                    <PostCreatorInfo post={postData} />
                     <h3 className="my-2">{postData.title}</h3>
                     <p className="card-text mb-3 text-muted me-2 fs-5">
                       {postData.content}
                     </p>
-                    {/* <InteractionDisplay post={postData.Post} /> */}
+                    <InteractionDisplay post={postData} />
                   </div>
                 </div>
                 {/* <EditSection post={postData.Post} /> */}

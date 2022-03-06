@@ -4,10 +4,10 @@ import {
   fetchPaginatedPosts,
   usePost,
 } from "../contexts/Post/actions/PostAction";
-import { useUser } from "../contexts/User/actions/UserAction";
 import ContentPlaceholder from "./layout/ContentPlaceholder";
 import CreatePostArea from "./layout/CreatePostArea";
 import PostCardSection from "./nested-Components/PostCardSection";
+import PostCreatorInfo from "./nested-Components/PostCreatorInfo";
 import VoteSection from "./nested-Components/voteSection";
 
 interface MainContentsProps {}
@@ -32,6 +32,7 @@ const MainContents: React.FC<MainContentsProps> = ({}) => {
                     to={`/post/${post.id}`}
                     style={{ color: "black", textDecoration: "none" }}
                   >
+                    <PostCreatorInfo post={post} />
                     <div
                       className="d-flex flex-column justify-content-between"
                       style={{ color: "gray" }}
