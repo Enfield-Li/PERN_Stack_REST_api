@@ -1,4 +1,5 @@
 import { PostAndInteractions } from "../../contexts/Post/types/PostTypes";
+import InteractionDisplay from "./InteractionDisplay";
 
 interface PostCardSectionProps {
   post: PostAndInteractions;
@@ -17,7 +18,7 @@ const PostCardSection: React.FC<PostCardSectionProps> = ({ post }) => {
 
       {/* text */}
       <p className="card-text mt-1 fs-5">{post.content}</p>
-      {/* <InteractionDisplay post={post} /> */}
+      <InteractionDisplay post={post} />
     </div>
   );
 };

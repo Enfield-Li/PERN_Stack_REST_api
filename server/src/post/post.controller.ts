@@ -12,10 +12,15 @@ import {
   Query,
 } from '@nestjs/common';
 import { PostService } from './post.service';
-import { CreatePostDto, CursorAndTake } from './dto/create-post.dto';
+import {
+  CreatePostDto,
+  CursorAndTake,
+  PaginatedPost,
+  PostRO,
+} from './dto/create-post.dto';
 import { UpdatePostDto } from './dto/update-post.dto';
 import { Request } from 'express';
-import { ApiQuery, ApiTags } from '@nestjs/swagger';
+import { ApiCreatedResponse, ApiQuery, ApiTags } from '@nestjs/swagger';
 
 @ApiTags('Post')
 @Controller('post')
@@ -23,6 +28,7 @@ export class PostController {
   constructor(private readonly postService: PostService) {}
 
   @Post('create-post')
+  @ApiCreatedResponse({ type: PostRO })
   create(@Body() createPostDto: CreatePostDto, @Req() req: Request) {
     if (!req.session.userId) throw new HttpException('Not authenticated', 401);
 
@@ -38,6 +44,7 @@ export class PostController {
     required: false,
     type: Date,
   })
+  @ApiCreatedResponse({ type: PaginatedPost })
   @Get('paginated-posts')
   findAll(
     @Req() req: Request,
@@ -47,16 +54,19 @@ export class PostController {
     return this.postService.getPaginatedPost(req.session.userId, +take, cursor);
   }
 
-  @Get(':id')
+  @ApiCreatedResponse({ type: PostRO })
+  @Get('single-post/:id')
   findOne(@Req() req: Request, @Param('id') id: string) {
     return this.postService.getOnePost(req.session.userId, +id);
   }
 
+  @ApiCreatedResponse({ type: PostRO })
   @Patch('update/:id')
   update(@Param('id') id: string, @Body() updatePostDto: UpdatePostDto) {
     return this.postService.update(+id, updatePostDto);
   }
 
+  @ApiCreatedResponse({ type: Boolean })
   @Delete('delete/:id')
   remove(@Param('id') id: string) {
     return this.postService.remove(+id);

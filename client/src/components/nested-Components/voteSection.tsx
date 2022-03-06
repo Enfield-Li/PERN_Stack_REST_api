@@ -18,16 +18,15 @@ const VoteSection: React.FC<VoteSectionProps> = ({ post }) => {
     <div className="me-3">
       <button
         className={`bi bi-caret-up btn`}
-        disabled={!post}
         onClick={async () => {
           console.log(post);
         }}
       />
-      <div className="text-center">11</div>
+      <div className="text-center">{post.votePoints}</div>
       <button
         className={`bi bi-caret-down btn`}
-        disabled={!post}
         onClick={async () => {
+          console.log(post);
           // if (data?.me === null) {
           //   // router.replace(`/login?next=${path}`);
           //   router.push("/login");

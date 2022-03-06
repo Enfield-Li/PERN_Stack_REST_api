@@ -59,7 +59,7 @@ export const fetchSinglePost = async (
 ) => {
   console.log("post ID: ", id);
   const res = await axios.get<PostAndInteractions>(
-    `http://localhost:3119/post/${id}`
+    `http://localhost:3119/post/single-post/${id}`
   );
   console.log("fetchPost...");
 
@@ -76,7 +76,8 @@ export async function createPost(
   try {
     const res = await axios.post<PostAndInteractions>(
       "http://localhost:3119/post/create-post",
-      post
+      post,
+      { withCredentials: true }
     );
 
     dispatch({

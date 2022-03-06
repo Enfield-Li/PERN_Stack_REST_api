@@ -44,6 +44,8 @@ export class PostAndInteractions {
   };
 }
 export class PaginatedPost {
+  @ApiProperty()
   postAndInteractions: PostAndInteractions[];
+  @ApiProperty()
   hasMore: Boolean;
 }

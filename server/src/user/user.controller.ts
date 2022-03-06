@@ -43,7 +43,6 @@ export class UserController {
     @Body() loginUserDto: LoginUserDto,
     @Req() req: Request,
   ): Promise<UserRO> {
-    console.log(loginUserDto);
     return this.userService.loginUser(loginUserDto, req);
   }
 
