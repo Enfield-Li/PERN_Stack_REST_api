@@ -1,4 +1,4 @@
- 仿Reddit的一个全栈 web app
+ 仿Reddit的一个全栈 web app (REST api)
     
     (reddit 官网: https://www.reddit.com/) 
 
