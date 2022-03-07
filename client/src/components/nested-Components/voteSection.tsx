@@ -21,7 +21,6 @@ const VoteSection: React.FC<VoteSectionProps> = ({ post }) => {
           post.user.interactions?.voteStatus === true ? "bg-info" : ""
         }`}
         onClick={async () => {
-          console.log(post);
         }}
       />
       <div className="text-center">{post.votePoints}</div>
@@ -30,7 +29,6 @@ const VoteSection: React.FC<VoteSectionProps> = ({ post }) => {
           post.user.interactions?.voteStatus === false ? "bg-danger" : ""
         }`}
         onClick={async () => {
-          console.log(post);
           // if (data?.me === null) {
           //   // router.replace(`/login?next=${path}`);
           //   router.push("/login");

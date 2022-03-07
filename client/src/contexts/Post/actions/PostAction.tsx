@@ -25,6 +25,7 @@ export function setCurrentPost(
   dispatch: React.Dispatch<PostActionType>,
   currentPost: PostAndInteractions
 ) {
+  console.log("set current post...");
   dispatch({
     type: EDIT_CURRENT_POST,
     payload: currentPost,
@@ -35,7 +36,7 @@ export const fetchPaginatedPosts = async (
   dispatch: React.Dispatch<PostActionType>,
   cursor?: Date
 ) => {
-  console.log("fetchPosts...");
+  console.log("fetchPaginatedPosts...");
   if (cursor) {
     const res = await axios.get<PaginatedPost>(
       `http://localhost:3119/post/paginated-posts?cursor=${cursor}`,
@@ -60,6 +61,7 @@ export const fetchPaginatedPosts = async (
 };
 
 export const clearCache = (dispatch: React.Dispatch<PostActionType>) => {
+  console.log("clear cache...")
   dispatch({
     type: CLEAR_CACHE,
   });
@@ -69,14 +71,13 @@ export const fetchSinglePost = async (
   dispatch: React.Dispatch<PostActionType>,
   id: number
 ) => {
-  console.log("post ID: ", id);
+  console.log("fetchSinglePost...");
   const res = await axios.get<PostAndInteractions>(
     `http://localhost:3119/post/single-post/${id}`,
     {
       withCredentials: true,
     }
   );
-  console.log("fetchPost...");
 
   dispatch({
     type: EDIT_CURRENT_POST,
@@ -88,6 +89,7 @@ export async function createPost(
   dispatch: React.Dispatch<PostActionType>,
   post: CreatePostType
 ) {
+  console.log("create post...");
   try {
     const res = await axios.post<PostAndInteractions>(
       "http://localhost:3119/post/create-post",
@@ -113,6 +115,7 @@ export async function deletePost(
   dispatch: React.Dispatch<PostActionType>,
   id: number
 ) {
+  console.log("delete post...");
   await axios.delete(`http://localhost:3119/post/delete/${id}`);
 
   console.log("onDelete...");

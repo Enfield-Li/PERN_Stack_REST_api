@@ -9,16 +9,18 @@ import { PostActionType, PostState } from "./types/PostTypes";
 import produce from "immer";
 
 export default function PostReducer(state: PostState, action: PostActionType) {
-  console.log("reducer called");
+  console.log("post reducer called");
   switch (action.type) {
     case CLEAR_CACHE: {
-      console.log("clear cache");
+      console.log("CLEAR_CACHE reducer here");
       return produce(state, (draftState) => {
         draftState.paginatedPosts.postAndInteractions = [];
       });
     }
 
     case FETCH_PAGINATED_POSTS: {
+      console.log("FETCH_PAGINATED_POSTS reducer here");
+
       return produce(state, (draftState) => {
         draftState.paginatedPosts.hasMore = action.payload.hasMore;
         draftState.paginatedPosts.postAndInteractions.push(
@@ -28,21 +30,10 @@ export default function PostReducer(state: PostState, action: PostActionType) {
     }
 
     case CREATE_POST: {
+      console.log("CREATE_POST reducer here");
       return produce(state, (draftState) => {
         draftState.paginatedPosts.postAndInteractions.push(action.payload);
       });
-      // console.log("action.payload in reducer: ", action.payload);
-
-      // return {
-      //   ...state,
-      //   paginatedPosts: {
-      //     ...state.paginatedPosts,
-      //     postAndInteractions: [
-      //       action.payload,
-      //       ...state.paginatedPosts.postAndInteractions,
-      //     ],
-      //   },
-      // };
     }
 
     case DELETE_POST: {

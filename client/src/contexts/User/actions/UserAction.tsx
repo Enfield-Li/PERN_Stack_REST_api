@@ -20,6 +20,7 @@ export async function registerUser(
   dispatch: React.Dispatch<UserActionType>,
   userCredential: UserRegister
 ) {
+  console.log("register User...");
   const res = await axios.post<UserRO>(
     "http://localhost:3119/user/register",
     userCredential
@@ -35,6 +36,8 @@ export async function loginUser(
   dispatch: React.Dispatch<UserActionType>,
   userCredential: UserCredential
 ) {
+  console.log("login User...");
+
   const res = await axios.put<UserRO>(
     "http://localhost:3119/user/login",
     userCredential,
@@ -47,12 +50,12 @@ export async function loginUser(
       payload: res.data.user,
     });
   } else if (res.data.errors) {
-    console.log(res.data.errors);
     return res.data.errors;
   }
 }
 
 export async function me(dispatch: React.Dispatch<UserActionType>) {
+  console.log("me...");
   const res = await axios.get<UserRO>("http://localhost:3119/user/me", {
     withCredentials: true,
   });
@@ -64,6 +67,7 @@ export async function me(dispatch: React.Dispatch<UserActionType>) {
 }
 
 export async function logout(dispatch: React.Dispatch<UserActionType>) {
+  console.log("logout...");
   dispatch({
     type: LOGOUT_USER,
   });

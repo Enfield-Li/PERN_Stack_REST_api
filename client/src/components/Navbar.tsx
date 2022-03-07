@@ -12,7 +12,6 @@ interface navbarProps {}
 const Navbar: React.FC<navbarProps> = ({}) => {
   const [, postDispatch] = usePost();
   const [{ user }, userDispatch] = useUser();
-  console.log("user: ", user);
 
   let userProfile = user ? (
     <div className="dropdown">
