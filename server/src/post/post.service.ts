@@ -138,12 +138,14 @@ export class PostService {
     return { ...post, user: { ...post.user, interactions } };
   }
 
-  update(id: number, updatePostDto: UpdatePostDto) {
+  async update(id: number, updatePostDto: UpdatePostDto) {
     return `This action updates a #${id} post`;
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} post`;
+  async deletePost(id: number): Promise<Boolean> {
+    await this.prismaService.post.delete({ where: { id } });
+
+    return true;
   }
 
   async votePost(

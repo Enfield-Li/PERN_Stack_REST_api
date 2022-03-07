@@ -4,6 +4,10 @@ import {
   FETCH_PAGINATED_POSTS,
   CURRENT_POST,
   CLEAR_CACHE,
+  VOTE_POST,
+  LIKE_POST,
+  LAUGHE_POST,
+  CONFUSE_POST,
 } from "../../constant";
 import { Interactions } from "../../Interactions/types/InteractionsTypes";
 
@@ -50,7 +54,11 @@ export type PostActionType =
   | SetPost
   | DeletePost
   | FetchPaginatedPosts
-  | ClearCache;
+  | ClearCache
+  | VotePost
+  | LikePost
+  | ConfusePost
+  | LaughPost;
 
 export type AddPost = {
   type: typeof CREATE_POST;
@@ -74,4 +82,24 @@ export type DeletePost = {
 
 export type ClearCache = {
   type: typeof CLEAR_CACHE;
+};
+
+export type VotePost = {
+  type: typeof VOTE_POST;
+  payload: { id: number; value: boolean };
+};
+
+export type LikePost = {
+  type: typeof LIKE_POST;
+  payload: number;
+};
+
+export type LaughPost = {
+  type: typeof LAUGHE_POST;
+  payload: number;
+};
+
+export type ConfusePost = {
+  type: typeof CONFUSE_POST;
+  payload: number;
 };

@@ -1,5 +1,6 @@
 import { useNavigate } from "react-router-dom";
 import {
+  deletePost,
   interactWithPost,
   usePost,
 } from "../../contexts/Post/actions/PostAction";
@@ -97,7 +98,10 @@ const EditSection: React.FC<EditSectionProps> = ({ post }) => {
           <span
             role="button"
             className="mt-2 text-decoration-none"
-            onClick={async () => {}}
+            onClick={() => {
+              deletePost(postDispatch, post.id);
+              return;
+            }}
           >
             <i className="bi bi-trash3"></i>
           </span>

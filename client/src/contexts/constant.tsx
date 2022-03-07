@@ -5,3 +5,7 @@ export const FETCH_PAGINATED_POSTS = "fetch_Paginated_Posts";
 export const LOGIN_USER = "login_User";
 export const CLEAR_CACHE = "clear_Cache";
 export const LOGOUT_USER = "logout_User";
+export const VOTE_POST = "votes";
+export const LIKE_POST = "likes";
+export const LAUGHE_POST = "laughes";
+export const CONFUSE_POST = "confuses";

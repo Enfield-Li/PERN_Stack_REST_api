@@ -58,13 +58,16 @@ export class PostController {
     @Req() req: Request,
     @Query('take') take: string = '10',
     @Query('cursor') cursor?: Date,
-  ) {
+  ): Promise<PaginatedPost> {
     return this.postService.getPaginatedPost(req.session.userId, +take, cursor);
   }
 
   @ApiCreatedResponse({ type: PostAndInteractions })
   @Get('single-post/:id')
-  findOne(@Req() req: Request, @Param('id') id: string) {
+  findOne(
+    @Req() req: Request,
+    @Param('id') id: string,
+  ): Promise<PostAndInteractions> {
     return this.postService.fetchOnePost(req.session.userId, +id);
   }
 
@@ -83,7 +86,7 @@ export class PostController {
     @Query('value') value: string,
     @Query('field') field: 'vote' | 'like' | 'laugh' | 'confused',
     @Req() req: Request,
-  ) {
+  ): Promise<Boolean> {
     console.log(req.session.userId);
 
     return this.postService.votePost(
@@ -96,15 +99,18 @@ export class PostController {
 
   @ApiCreatedResponse({ type: PostAndInteractions })
   @Patch('update/:id')
-  update(@Param('id') id: string, @Body() updatePostDto: UpdatePostDto) {
+  update(
+    @Param('id') id: string,
+    @Body() updatePostDto: UpdatePostDto,
+  ): Promise<String> {
     return this.postService.update(+id, updatePostDto);
   }
 
   @ApiOkResponse({ type: Boolean })
   @Delete('delete/:id')
-  remove(@Req() req: Request, @Param('id') id: string) {
+  remove(@Req() req: Request, @Param('id') id: string): Promise<Boolean> {
     if (!req.session.userId) throw new HttpException('Not authenticated', 401);
 
-    return this.postService.remove(+id);
+    return this.postService.deletePost(+id);
   }
 }

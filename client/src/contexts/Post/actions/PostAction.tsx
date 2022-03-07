@@ -4,6 +4,10 @@ import {
   DELETE_POST,
   CURRENT_POST,
   FETCH_PAGINATED_POSTS,
+  VOTE_POST,
+  CONFUSE_POST,
+  LAUGHE_POST,
+  LIKE_POST,
 } from "../../constant";
 import axios from "axios";
 import {
@@ -27,10 +31,38 @@ export async function interactWithPost(
   value: boolean,
   field: "vote" | "like" | "laugh" | "confused"
 ) {
-  const res = await axios.get<boolean>(
+  await axios.get<boolean>(
     `http://localhost:3119/post/interact/${id}?value=${value}&field=${field}`,
     { withCredentials: true }
   );
+
+  if (field === "vote") {
+    dispatch({
+      type: VOTE_POST,
+      payload: { id, value },
+    });
+  }
+
+  if (field === "like") {
+    dispatch({
+      type: LIKE_POST,
+      payload: id,
+    });
+  }
+
+  if (field === "laugh") {
+    dispatch({
+      type: LAUGHE_POST,
+      payload: id,
+    });
+  }
+
+  if (field === "confused") {
+    dispatch({
+      type: CONFUSE_POST,
+      payload: id,
+    });
+  }
 }
 
 export function setCurrentPost(
@@ -131,8 +163,6 @@ export async function deletePost(
   await axios.delete(`http://localhost:3119/post/delete/${id}`, {
     withCredentials: true,
   });
-
-  console.log("onDelete...");
 
   dispatch({
     type: DELETE_POST,

@@ -16,7 +16,9 @@ function App() {
   const location = useLocation();
 
   const [_, userDispatch] = useUser();
-  const [__, postDispatch] = usePost();
+  const [postState, postDispatch] = usePost();
+
+  console.log("post: ", postState.paginatedPosts.postAndInteractions);
 
   useEffect(() => {
     const fetchPostsAndMe = async () => {
