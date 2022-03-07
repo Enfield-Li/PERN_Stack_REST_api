@@ -6,10 +6,10 @@
 
     仿Reddit论坛PC端功能，搭建的一个论坛式网站
 
-    前端框架：Nextjs / Apollo Client + Context api (state 管理) / Boostrap 5 (css);
-    APi： GraphQL
-    服务器：Express.JS / Express session (auth) / Apollo Server
-    数据库：PostgreSQL / TypeORM
+    前端：Reactjs / Context api (state 管理) / Boostrap 5 (css);
+    API: REST api
+    服务器： Express.JS / Express session (auth) / Nestjs
+    数据库：PostgreSQL / Prisma
 
 如何使用？
 
