@@ -2,7 +2,7 @@ import {
   CREATE_POST,
   DELETE_POST,
   FETCH_PAGINATED_POSTS,
-  EDIT_CURRENT_POST,
+  CURRENT_POST,
   CLEAR_CACHE,
 } from "../constant";
 import { PostActionType, PostState } from "./types/PostTypes";
@@ -15,6 +15,7 @@ export default function PostReducer(state: PostState, action: PostActionType) {
       console.log("CLEAR_CACHE reducer here");
       return produce(state, (draftState) => {
         draftState.paginatedPosts.postAndInteractions = [];
+        draftState.currentPost = null;
       });
     }
 
@@ -54,7 +55,7 @@ export default function PostReducer(state: PostState, action: PostActionType) {
       // };
     }
 
-    case EDIT_CURRENT_POST: {
+    case CURRENT_POST: {
       return {
         ...state,
         currentPost: action.payload,

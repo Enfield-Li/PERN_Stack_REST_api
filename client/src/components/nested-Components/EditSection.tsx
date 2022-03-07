@@ -82,23 +82,27 @@ const EditSection: React.FC<EditSectionProps> = ({ post }) => {
         </span>
       </div>
       {/* show edit/delete button or not */}
-      {/* {meData?.me?.id === post.creatorId ? ( */}
-      <div className="mt-1 d-flex flex-column">
-        {/* edit */}
-        <span role="button" className="text-decoration-none" onClick={() => {}}>
-          📝
-        </span>
+      {userState.user?.username === post.user.username ? (
+        <div className="mt-1 d-flex flex-column">
+          {/* edit */}
+          <span
+            role="button"
+            className="text-decoration-none"
+            onClick={() => {}}
+          >
+            📝
+          </span>
 
-        {/* delete */}
-        <span
-          role="button"
-          className="mt-2 text-decoration-none"
-          onClick={async () => {}}
-        >
-          <i className="bi bi-trash3"></i>
-        </span>
-      </div>
-      {/* ) : null} */}
+          {/* delete */}
+          <span
+            role="button"
+            className="mt-2 text-decoration-none"
+            onClick={async () => {}}
+          >
+            <i className="bi bi-trash3"></i>
+          </span>
+        </div>
+      ) : null}
     </div>
   );
 };

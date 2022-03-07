@@ -1,5 +1,5 @@
 import React from "react";
-import { Link, Route, Routes } from "react-router-dom";
+import { Link } from "react-router-dom";
 import {
   clearCache,
   fetchPaginatedPosts,
@@ -18,7 +18,7 @@ const Navbar: React.FC<navbarProps> = ({}) => {
       <div
         className="dropdown-toggle border px-3 py-1 my-2 d-flex justify-content-center align-items-center"
         role="button"
-        id="dropdownMenuButton1"
+        id="dropDowns"
         data-bs-toggle="dropdown"
         aria-expanded="false"
       >
@@ -33,8 +33,8 @@ const Navbar: React.FC<navbarProps> = ({}) => {
       </div>
       <ul
         className="dropdown-menu"
-        aria-labelledby="dropdownMenuButton1"
-        style={{ width: 242 }}
+        aria-labelledby="dropDowns"
+        style={{ width: 238 }}
       >
         <li>
           <div className="ms-3">MY STUFF</div>

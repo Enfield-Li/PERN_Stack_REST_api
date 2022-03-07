@@ -86,7 +86,7 @@ export class PostService {
     if (userId) {
       for (let i = 0; i < posts.length - 1; i++) {
         // send snippets numbering 49
-        posts[i].content = posts[i].content.slice(0, 50);
+        // posts[i].content = posts[i].content.slice(0, 50);
 
         const interactions = await this.prismaService.interactions.findUnique({
           where: { userId_postId: { userId, postId: posts[i].id } },
@@ -108,7 +108,7 @@ export class PostService {
     else {
       for (let i = 0; i < posts.length - 1; i++) {
         // send snippets numbering 49
-        posts[i].content = posts[i].content.slice(0, 50);
+        // posts[i].content = posts[i].content.slice(0, 50);
 
         postAndInteractions.push(posts[i]);
       }

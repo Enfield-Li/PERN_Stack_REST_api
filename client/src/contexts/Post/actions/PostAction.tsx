@@ -2,7 +2,7 @@ import {
   CLEAR_CACHE,
   CREATE_POST,
   DELETE_POST,
-  EDIT_CURRENT_POST,
+  CURRENT_POST,
   FETCH_PAGINATED_POSTS,
 } from "../../constant";
 import axios from "axios";
@@ -39,7 +39,7 @@ export function setCurrentPost(
 ) {
   console.log("set current post...");
   dispatch({
-    type: EDIT_CURRENT_POST,
+    type: CURRENT_POST,
     payload: currentPost,
   });
 }
@@ -92,7 +92,7 @@ export const fetchSinglePost = async (
   );
 
   dispatch({
-    type: EDIT_CURRENT_POST,
+    type: CURRENT_POST,
     payload: res.data,
   });
 };

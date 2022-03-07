@@ -4,7 +4,7 @@ import CreatePost from "./components/CreatePost";
 import Login from "./components/Login";
 import MainContents from "./components/MainContents";
 import Navbar from "./components/Navbar";
-import PostDataType from "./components/Post";
+import PostPage from "./components/Post";
 import Register from "./components/register";
 import { me, useUser } from "./contexts/User/actions/UserAction";
 import {
@@ -41,7 +41,7 @@ function App() {
               <Route path="/login" element={<Login />} />
               <Route path="/register" element={<Register />} />
               <Route path="/create-post" element={<CreatePost />} />
-              <Route path="/post/:id" element={<PostDataType />} />
+              <Route path="/post/:id" element={<PostPage />} />
             </>
           )}
         </Routes>

@@ -14,15 +14,12 @@ const PostCardSection: React.FC<PostCardSectionProps> = ({ post }) => {
         style={{ color: "black", textDecoration: "none" }}
       >
         {/* title */}
-        <div
-          role="button"
-          className="card-title text-dark text-decoration-none h3"
-        >
+        <div role="button" className="card-title text-decoration-none h3">
           {post.title}
         </div>
 
         {/* text */}
-        <p className="card-text mt-1 fs-5">{post.content}</p>
+        <p className="card-text mt-1 text-muted fs-5">{post.content}</p>
       </Link>
       <InteractionDisplay post={post} />
     </div>

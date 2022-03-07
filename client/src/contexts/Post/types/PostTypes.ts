@@ -2,7 +2,7 @@ import {
   CREATE_POST,
   DELETE_POST,
   FETCH_PAGINATED_POSTS,
-  EDIT_CURRENT_POST,
+  CURRENT_POST,
   CLEAR_CACHE,
 } from "../../constant";
 import { Interactions } from "../../Interactions/types/InteractionsTypes";
@@ -63,7 +63,7 @@ export type FetchPaginatedPosts = {
 };
 
 export type SetPost = {
-  type: typeof EDIT_CURRENT_POST;
+  type: typeof CURRENT_POST;
   payload: PostAndInteractions;
 };
 
