@@ -87,8 +87,6 @@ export class PostController {
     @Query('field') field: 'vote' | 'like' | 'laugh' | 'confused',
     @Req() req: Request,
   ): Promise<Boolean> {
-    console.log(req.session.userId);
-
     return this.postService.votePost(
       +id,
       req.session.userId,

@@ -9,7 +9,7 @@ import {
   LAUGHE_POST,
   CONFUSE_POST,
 } from "../../constant";
-import { Interactions } from "../../Interactions/types/InteractionsTypes";
+import { Interactions } from "./InteractionsTypes";
 
 export type PostState = {
   paginatedPosts: PaginatedPost;

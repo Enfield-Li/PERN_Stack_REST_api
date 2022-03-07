@@ -134,6 +134,7 @@ export async function createPost(
   post: CreatePostType
 ) {
   console.log("create post...");
+
   try {
     const res = await axios.post<PostAndInteractions>(
       "http://localhost:3119/post/create-post",

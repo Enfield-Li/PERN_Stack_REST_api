@@ -50,7 +50,14 @@ export class PostService {
       updateUserPostAmounts,
     ]);
 
-    return createdPost[0];
+    const interactions = await this.prismaService.interactions.findUnique({
+      where: { userId_postId: { userId, postId: createdPost[0].id } },
+    });
+
+    return {
+      ...createdPost[0],
+      user: { ...createdPost[0].user, interactions },
+    };
   }
 
   async getPaginatedPost(
