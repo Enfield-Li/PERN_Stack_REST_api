@@ -1,6 +1,6 @@
  仿Reddit的一个全栈 web app
     
-    (https://www.reddit.com/)
+    (reddit 官网: https://www.reddit.com/) 
 
 作品描述：
 
