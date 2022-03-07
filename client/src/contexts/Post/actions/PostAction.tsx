@@ -21,6 +21,18 @@ export const usePost = (): [PostState, React.Dispatch<PostActionType>] => {
   return [state, dispatch];
 };
 
+export async function interactWithPost(
+  dispatch: React.Dispatch<PostActionType>,
+  id: number,
+  value: boolean,
+  field: "vote" | "like" | "laugh" | "confused"
+) {
+  const res = await axios.get<boolean>(
+    `http://localhost:3119/post/interact/${id}?value=${value}&field=${field}`,
+    { withCredentials: true }
+  );
+}
+
 export function setCurrentPost(
   dispatch: React.Dispatch<PostActionType>,
   currentPost: PostAndInteractions
@@ -61,7 +73,7 @@ export const fetchPaginatedPosts = async (
 };
 
 export const clearCache = (dispatch: React.Dispatch<PostActionType>) => {
-  console.log("clear cache...")
+  console.log("clear cache...");
   dispatch({
     type: CLEAR_CACHE,
   });
@@ -116,7 +128,9 @@ export async function deletePost(
   id: number
 ) {
   console.log("delete post...");
-  await axios.delete(`http://localhost:3119/post/delete/${id}`);
+  await axios.delete(`http://localhost:3119/post/delete/${id}`, {
+    withCredentials: true,
+  });
 
   console.log("onDelete...");
 

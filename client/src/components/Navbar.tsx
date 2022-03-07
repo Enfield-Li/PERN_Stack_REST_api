@@ -10,7 +10,7 @@ import { logout, useUser } from "../contexts/User/actions/UserAction";
 interface navbarProps {}
 
 const Navbar: React.FC<navbarProps> = ({}) => {
-  const [, postDispatch] = usePost();
+  const [_, postDispatch] = usePost();
   const [{ user }, userDispatch] = useUser();
 
   let userProfile = user ? (
@@ -47,7 +47,9 @@ const Navbar: React.FC<navbarProps> = ({}) => {
             className="dropdown-item"
             role="button"
             onClick={async () => {
-              await logout(userDispatch);
+              logout(userDispatch);
+              clearCache(postDispatch);
+              fetchPaginatedPosts(postDispatch);
             }}
           >
             <i className="bi bi-box-arrow-right fs-5 me-2"></i> Logout
@@ -79,7 +81,7 @@ const Navbar: React.FC<navbarProps> = ({}) => {
         aria-current="page"
         onClick={async () => {
           clearCache(postDispatch);
-          await fetchPaginatedPosts(postDispatch);
+          fetchPaginatedPosts(postDispatch);
         }}
       >
         <Link to="/" style={{ color: "black", textDecoration: "none" }}>

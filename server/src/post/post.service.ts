@@ -82,9 +82,12 @@ export class PostService {
 
     let postAndInteractions: PostAndInteractions[] = [];
 
-    // if user is loged in, then show their interactions with post[]
+    // user is loged in, then show their interactions with post[]
     if (userId) {
       for (let i = 0; i < posts.length - 1; i++) {
+        // send snippets numbering 49
+        posts[i].content = posts[i].content.slice(0, 50);
+
         const interactions = await this.prismaService.interactions.findUnique({
           where: { userId_postId: { userId, postId: posts[i].id } },
         });
@@ -101,12 +104,16 @@ export class PostService {
       }
     }
 
-    // no interactions without loged in
+    // user is not loged in, then show no interactions
     else {
       for (let i = 0; i < posts.length - 1; i++) {
+        // send snippets numbering 49
+        posts[i].content = posts[i].content.slice(0, 50);
+
         postAndInteractions.push(posts[i]);
       }
     }
+    // console.log('postAndInteractions: ', postAndInteractions);
 
     return {
       hasMore: posts.length === takeLimitPlusOne,

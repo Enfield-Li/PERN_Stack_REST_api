@@ -6,6 +6,7 @@ import {
 } from "../contexts/Post/actions/PostAction";
 import ContentPlaceholder from "./layout/ContentPlaceholder";
 import CreatePostArea from "./layout/CreatePostArea";
+import EditSection from "./nested-Components/EditSection";
 import PostCardSection from "./nested-Components/PostCardSection";
 import PostCreatorInfo from "./nested-Components/PostCreatorInfo";
 import VoteSection from "./nested-Components/voteSection";
@@ -27,11 +28,7 @@ const MainContents: React.FC<MainContentsProps> = ({}) => {
               <div className="d-flex justify-content-between">
                 <div className="d-flex justify-content-between">
                   <VoteSection post={post} />
-
-                  <Link
-                    to={`/post/${post.id}`}
-                    style={{ color: "black", textDecoration: "none" }}
-                  >
+                  <div>
                     <PostCreatorInfo post={post} />
                     <div
                       className="d-flex flex-column justify-content-between"
@@ -39,8 +36,9 @@ const MainContents: React.FC<MainContentsProps> = ({}) => {
                     >
                       <PostCardSection post={post} />
                     </div>
-                  </Link>
+                  </div>
                 </div>
+                <EditSection post={post} />
               </div>
             </div>
           </div>

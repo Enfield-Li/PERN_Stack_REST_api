@@ -1,3 +1,9 @@
+import { useNavigate } from "react-router-dom";
+import {
+  interactWithPost,
+  usePost,
+} from "../../contexts/Post/actions/PostAction";
+import { useUser } from "../../contexts/User/actions/UserAction";
 import { PostAndInteractions } from "../../contexts/Post/types/PostTypes";
 
 interface InteractionDisplayProps {
@@ -6,9 +12,12 @@ interface InteractionDisplayProps {
 
 const InteractionDisplay: React.FC<InteractionDisplayProps> = ({ post }) => {
   const userInteractions = post.user.interactions;
+  const [_, postDispatch] = usePost();
+  const [userState] = useUser();
+  const navigate = useNavigate();
 
   return (
-    <div className="d-flex">
+    <div className="d-flex mt-2">
       {/* like */}
       {post.likePoints > 0 ? (
         <div
@@ -16,13 +25,14 @@ const InteractionDisplay: React.FC<InteractionDisplayProps> = ({ post }) => {
           className={`border border-1 rounded-pill me-2 d-flex text-decoration-none ${
             userInteractions?.likeStatus ? "border-info" : "border-dark"
           }`}
-          onClick={async () => {
-            // if (meData?.me === null) {
-            //   // router.replace(`/login?next=${path}`);
-            //   router.push("/login");
-            //   return;
-            // }
-            // await interactWithPost(post.id, "like", interact, state);
+          onClick={() => {
+            if (!userState.user) {
+              navigate("/login");
+              return;
+            }
+
+            interactWithPost(postDispatch, post.id, true, "like");
+            return;
           }}
         >
           <div className="mx-1">❤</div>
@@ -44,12 +54,13 @@ const InteractionDisplay: React.FC<InteractionDisplayProps> = ({ post }) => {
             userInteractions?.laughStatus ? "border-info" : "border-dark"
           }`}
           onClick={() => {
-            // if (meData?.me === null) {
-            //   // router.replace(`/login?next=${path}`);
-            //   router.push("/login");
-            //   return;
-            // }
-            // interactWithPost(post.id, "laugh", interact, state);
+            if (!userState.user) {
+              navigate("/login");
+              return;
+            }
+
+            interactWithPost(postDispatch, post.id, true, "laugh");
+            return;
           }}
         >
           <div className="mx-1">😄</div>
@@ -71,12 +82,13 @@ const InteractionDisplay: React.FC<InteractionDisplayProps> = ({ post }) => {
             userInteractions?.confusedStatus ? "border-info" : "border-dark"
           }`}
           onClick={() => {
-            // if (meData?.me === null) {
-            //   // router.replace(`/login?next=${path}`);
-            //   router.push("/login");
-            //   return;
-            // }
-            // interactWithPost(post.id, "confused", interact, state);
+            if (!userState.user) {
+              navigate("/login");
+              return;
+            }
+
+            interactWithPost(postDispatch, post.id, true, "confused");
+            return;
           }}
         >
           <div className="mx-1">😕</div>

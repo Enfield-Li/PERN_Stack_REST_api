@@ -7,7 +7,6 @@ import {
   Param,
   Delete,
   Req,
-  BadRequestException,
   HttpException,
   Query,
   Put,
@@ -15,13 +14,17 @@ import {
 import { PostService } from './post.service';
 import {
   CreatePostDto,
-  CursorAndTake,
   PaginatedPost,
   PostAndInteractions,
 } from './dto/create-post.dto';
 import { UpdatePostDto } from './dto/update-post.dto';
 import { Request } from 'express';
-import { ApiCreatedResponse, ApiQuery, ApiTags } from '@nestjs/swagger';
+import {
+  ApiCreatedResponse,
+  ApiOkResponse,
+  ApiQuery,
+  ApiTags,
+} from '@nestjs/swagger';
 
 @ApiTags('Post')
 @Controller('post')
@@ -73,14 +76,17 @@ export class PostController {
     name: 'field',
     enum: ['vote', 'like', 'laugh', 'confused'],
   })
-  @Put('vote/:id')
+  @Get('interact/:id')
+  @ApiOkResponse({ type: Boolean })
   votings(
     @Param('id') id: string,
     @Query('value') value: string,
     @Query('field') field: 'vote' | 'like' | 'laugh' | 'confused',
     @Req() req: Request,
   ) {
-    this.postService.votePost(
+    console.log(req.session.userId);
+
+    return this.postService.votePost(
       +id,
       req.session.userId,
       value === 'true' ? true : value === 'false' ? false : null,
@@ -94,9 +100,11 @@ export class PostController {
     return this.postService.update(+id, updatePostDto);
   }
 
-  @ApiCreatedResponse({ type: Boolean })
+  @ApiOkResponse({ type: Boolean })
   @Delete('delete/:id')
-  remove(@Param('id') id: string) {
+  remove(@Req() req: Request, @Param('id') id: string) {
+    if (!req.session.userId) throw new HttpException('Not authenticated', 401);
+
     return this.postService.remove(+id);
   }
 }

@@ -6,11 +6,18 @@ import { mapToError } from "../utils/toError";
 import FormWrapper from "./nested-Components/FormWrapper";
 import InputWrapper from "./nested-Components/InputWrapper";
 import * as Yup from "yup";
+import {
+  clearCache,
+  fetchPaginatedPosts,
+  usePost,
+} from "../contexts/Post/actions/PostAction";
 
 interface LoginProps {}
 
 const Login: React.FC<LoginProps> = ({}) => {
-  const [state, dispatch] = useUser();
+  const [_, dispatch] = useUser();
+  const [__, postDispatch] = usePost();
+
   const navigate = useNavigate();
 
   const validationSchema = Yup.object({
@@ -20,7 +27,6 @@ const Login: React.FC<LoginProps> = ({}) => {
     password: Yup.string()
       .min(5, "Must be longer than or equal to 5 characters")
       .required("Required"),
-    // email: Yup.string().email("Invalid email address").required("Required"),
   });
 
   return (
@@ -31,8 +37,12 @@ const Login: React.FC<LoginProps> = ({}) => {
 
         if (errorRes) {
           setErrors(mapToError(errorRes));
+          return;
         } else {
+          clearCache(postDispatch);
+          fetchPaginatedPosts(postDispatch);
           navigate("/");
+          return;
         }
       }}
       validationSchema={validationSchema}

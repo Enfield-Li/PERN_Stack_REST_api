@@ -37,15 +37,21 @@ export default function PostReducer(state: PostState, action: PostActionType) {
     }
 
     case DELETE_POST: {
-      return {
-        ...state,
-        paginatedPosts: {
-          ...state.paginatedPosts,
-          posts: state.paginatedPosts.postAndInteractions.filter(
-            (post) => post.id !== action.payload
-          ),
-        },
-      };
+      console.log("DELETE_POST reducer here");
+      return produce(state, (draftState) => {
+        draftState.paginatedPosts.postAndInteractions.filter((post) => {
+          return post.id !== action.payload;
+        });
+      });
+      // return {
+      //   ...state,
+      //   paginatedPosts: {
+      //     ...state.paginatedPosts,
+      //     posts: state.paginatedPosts.postAndInteractions.filter(
+      //       (post) => post.id !== action.payload
+      //     ),
+      //   },
+      // };
     }
 
     case EDIT_CURRENT_POST: {

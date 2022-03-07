@@ -15,8 +15,8 @@ import {
 function App() {
   const location = useLocation();
 
-  const [userState, userDispatch] = useUser();
-  const [postState, postDispatch] = usePost();
+  const [_, userDispatch] = useUser();
+  const [__, postDispatch] = usePost();
 
   useEffect(() => {
     const fetchPostsAndMe = async () => {
