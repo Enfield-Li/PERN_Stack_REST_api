@@ -47,9 +47,11 @@ const Navbar: React.FC<navbarProps> = ({}) => {
             className="dropdown-item"
             role="button"
             onClick={async () => {
-              logout(userDispatch);
               clearCache(postDispatch);
-              fetchPaginatedPosts(postDispatch);
+              setTimeout(() => {
+                logout(userDispatch);
+                fetchPaginatedPosts(postDispatch);
+              }, 0);
             }}
           >
             <i className="bi bi-box-arrow-right fs-5 me-2"></i> Logout
@@ -79,19 +81,22 @@ const Navbar: React.FC<navbarProps> = ({}) => {
         role="button"
         className="nav-link active text-dark h2"
         aria-current="page"
-        onClick={async () => {
-          clearCache(postDispatch);
-          fetchPaginatedPosts(postDispatch);
-        }}
       >
-        <Link to="/" style={{ color: "black", textDecoration: "none" }}>
+        <Link
+          to="/"
+          style={{ color: "black", textDecoration: "none" }}
+          onClick={async () => {
+            clearCache(postDispatch);
+            fetchPaginatedPosts(postDispatch);
+          }}
+        >
           Home
         </Link>
       </div>
 
       <div className="d-flex align-items-center">
         <Link to="/create-post" style={{ color: "black" }}>
-          <i className="bi bi-plus-square fs-3 mx-3" role="button"></i>
+          <i className="bi bi-plus-square fs-3 mx-3"></i>
         </Link>
         <div>{userProfile}</div>
       </div>
