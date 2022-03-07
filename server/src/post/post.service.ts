@@ -50,12 +50,7 @@ export class PostService {
       updateUserPostAmounts,
     ]);
 
-    // createdPost returns [post, user]
     return createdPost[0];
-    // return {
-    //   user: createdPost[0].user,
-    //   posts: { ...createdPost[0] },
-    // };
   }
 
   async getPaginatedPost(

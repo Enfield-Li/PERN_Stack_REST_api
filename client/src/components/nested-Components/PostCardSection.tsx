@@ -19,7 +19,9 @@ const PostCardSection: React.FC<PostCardSectionProps> = ({ post }) => {
         </div>
 
         {/* text */}
-        <p className="card-text mt-1 text-muted fs-5">{post.content}</p>
+        <p className="card-text mt-1 text-muted fs-5">
+          {post.content?.slice(0, 50)}
+        </p>
       </Link>
       <InteractionDisplay post={post} />
     </div>
