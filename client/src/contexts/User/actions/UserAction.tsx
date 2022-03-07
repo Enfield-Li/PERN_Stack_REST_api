@@ -23,7 +23,8 @@ export async function registerUser(
   console.log("register User...");
   const res = await axios.post<UserRO>(
     "http://localhost:3119/user/register",
-    userCredential
+    userCredential,
+    { withCredentials: true }
   );
 
   dispatch({
