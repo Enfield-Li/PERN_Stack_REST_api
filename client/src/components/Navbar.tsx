@@ -49,9 +49,9 @@ const Navbar: React.FC<navbarProps> = ({}) => {
             onClick={async () => {
               clearCache(postDispatch);
               setTimeout(() => {
-                logout(userDispatch);
                 fetchPaginatedPosts(postDispatch);
-              }, 0);
+              }, 1);
+              logout(userDispatch);
             }}
           >
             <i className="bi bi-box-arrow-right fs-5 me-2"></i> Logout
