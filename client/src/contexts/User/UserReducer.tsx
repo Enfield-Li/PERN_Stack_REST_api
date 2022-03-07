@@ -1,26 +1,18 @@
-import {
-  CREATE_POST,
-  DELETE_POST,
-  FETCH_PAGINATED_POSTS,
-  LOGIN_USER,
-  LOGOUT_USER,
-  EDIT_CURRENT_POST,
-} from "../constant";
-import { UserState, UserActionType } from "./types/UserTypes";
+import { LOGIN_USER, LOGOUT_USER } from "../constant";
+import { UserActionType, UserState } from "./types/UserTypes";
 
 export default function UserReducer(state: UserState, action: UserActionType) {
-  console.log("reducer called");
+  console.log("UserReducer reducer called");
   switch (action.type) {
     case LOGIN_USER: {
+      console.log("login reducer");
       return {
-        ...state,
         user: action.payload,
       };
     }
     case LOGOUT_USER: {
       console.log("logout reducer");
       return {
-        ...state,
         user: null,
       };
     }

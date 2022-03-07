@@ -10,6 +10,7 @@ interface ProviderType {
 export default function PostProvider({ children }: ProviderType) {
   const [state, dispatch] = useReducer(PostReducer, postInitialState);
 
+  
   return (
     <PostContext.Provider
       value={{

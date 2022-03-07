@@ -1,11 +1,17 @@
 import React from "react";
 import { Link, Route, Routes } from "react-router-dom";
+import {
+  clearCache,
+  fetchPaginatedPosts,
+  usePost,
+} from "../contexts/Post/actions/PostAction";
 import { logout, useUser } from "../contexts/User/actions/UserAction";
 
 interface navbarProps {}
 
 const Navbar: React.FC<navbarProps> = ({}) => {
-  const [{ user }, dispatch] = useUser();
+  const [, postDispatch] = usePost();
+  const [{ user }, userDispatch] = useUser();
   console.log("user: ", user);
 
   let userProfile = user ? (
@@ -42,7 +48,7 @@ const Navbar: React.FC<navbarProps> = ({}) => {
             className="dropdown-item"
             role="button"
             onClick={async () => {
-              await logout(dispatch);
+              await logout(userDispatch);
             }}
           >
             <i className="bi bi-box-arrow-right fs-5 me-2"></i> Logout
@@ -72,6 +78,10 @@ const Navbar: React.FC<navbarProps> = ({}) => {
         role="button"
         className="nav-link active text-dark h2"
         aria-current="page"
+        onClick={async () => {
+          clearCache(postDispatch);
+          await fetchPaginatedPosts(postDispatch);
+        }}
       >
         <Link to="/" style={{ color: "black", textDecoration: "none" }}>
           Home

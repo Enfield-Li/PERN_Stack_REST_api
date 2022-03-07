@@ -1,4 +1,5 @@
 import {
+  CLEAR_CACHE,
   CREATE_POST,
   DELETE_POST,
   EDIT_CURRENT_POST,
@@ -56,6 +57,12 @@ export const fetchPaginatedPosts = async (
       payload: res.data,
     });
   }
+};
+
+export const clearCache = (dispatch: React.Dispatch<PostActionType>) => {
+  dispatch({
+    type: CLEAR_CACHE,
+  });
 };
 
 export const fetchSinglePost = async (

@@ -11,14 +11,12 @@ import {
   fetchPaginatedPosts,
   usePost,
 } from "./contexts/Post/actions/PostAction";
-import { FETCH_PAGINATED_POSTS } from "./contexts/constant";
 
 function App() {
   const location = useLocation();
 
   const [userState, userDispatch] = useUser();
   const [postState, postDispatch] = usePost();
-  console.log("posts: ", postState);
 
   useEffect(() => {
     const fetchPostsAndMe = async () => {

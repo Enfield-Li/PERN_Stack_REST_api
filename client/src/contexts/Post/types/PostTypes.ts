@@ -3,6 +3,7 @@ import {
   DELETE_POST,
   FETCH_PAGINATED_POSTS,
   EDIT_CURRENT_POST,
+  CLEAR_CACHE,
 } from "../../constant";
 import { Interactions } from "../../Interactions/types/InteractionsTypes";
 
@@ -48,7 +49,8 @@ export type PostActionType =
   | AddPost
   | SetPost
   | DeletePost
-  | FetchPaginatedPosts;
+  | FetchPaginatedPosts
+  | ClearCache;
 
 export type AddPost = {
   type: typeof CREATE_POST;
@@ -68,4 +70,8 @@ export type SetPost = {
 export type DeletePost = {
   type: typeof DELETE_POST;
   payload: number;
+};
+
+export type ClearCache = {
+  type: typeof CLEAR_CACHE;
 };
