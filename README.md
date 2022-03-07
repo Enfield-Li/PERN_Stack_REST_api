@@ -17,6 +17,6 @@
     2. 分别进入server 和 client:
         npm i
     3. 更改连接数据库文件： /utils/connectdb.ts （我用的PostgreSQL)
-    4. cd 回主文件
+    4. cd.. 回到主文件夹
     5. npm run dev
     6. enjoy :)
