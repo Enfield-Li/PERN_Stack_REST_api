@@ -104,6 +104,23 @@ export class PostService {
 
         postAndInteractions.push(postIdMapToInteractions);
       }
+
+      // fill out some dummy data, in case client's interaction is null
+      postAndInteractions.filter((postAndInteraction) => {
+        if (postAndInteraction.user.interactions === null) {
+          postAndInteraction.user.interactions = {
+            confusedStatus: null,
+            createdAt: new Date('2021'),
+            laughStatus: null,
+            likeStatus: null,
+            postId: postAndInteraction.id,
+            userId,
+            voteStatus: null,
+          };
+        }
+
+        return postAndInteraction;
+      });
     }
 
     // user is not loged in, then show no interactions

@@ -40,7 +40,7 @@ export type PostAndInteractions = {
   laughPoints: number;
   user: {
     username: string;
-    interactions?: Interactions;
+    interactions: Interactions;
   };
 };
 
