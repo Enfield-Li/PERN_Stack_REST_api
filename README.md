@@ -8,7 +8,7 @@
 
     前端：Reactjs / Context api (缓存管理) / Boostrap 5 (css);
     API: REST api
-    服务器： Express.JS / Express session (auth) / Nestjs
+    服务器： Nestjs / Express session + redis-server (auth) 
     数据库：PostgreSQL / Prisma
 
 如何使用？
