@@ -17,7 +17,13 @@
     1. npm i
     2. 再分别进入server 和 client:
         npm i
-    3. 更改连接数据库文件： server/utils/connectdb.ts （我用的PostgreSQL，可替换别的，另外后台还要运行redis-server)
+    3. cd server:
+        1) 更改.env 文件， 使prisma和数据库建立连接 
+  <a href="https://www.prisma.io/docs/getting-started/setup-prisma/start-from-scratch/relational-databases/connect-your-database-typescript-postgres">官方文档，用于连接数据库</a>
+        
+        2) npx prisma db push (将schema推到数据库)
+        3) npx prisma generate (生成相应type definition)
+        
     4. cd.. 回到主文件夹
     5. npm run dev
     6. enjoy :)
