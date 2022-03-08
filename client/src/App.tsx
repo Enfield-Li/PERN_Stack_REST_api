@@ -18,7 +18,8 @@ function App() {
   const [_, userDispatch] = useUser();
   const [postState, postDispatch] = usePost();
 
-  console.log("post: ", postState.paginatedPosts.postAndInteractions);
+  // console.log("currentPost: ", postState.currentPost);
+  // console.log("posts: ", postState.paginatedPosts.postAndInteractions);
 
   useEffect(() => {
     const fetchPostsAndMe = async () => {
