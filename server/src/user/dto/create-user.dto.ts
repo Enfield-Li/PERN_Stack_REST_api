@@ -27,6 +27,9 @@ export class LoginUserDto {
 
 export class ResUser {
   @ApiProperty()
+  id: number;
+
+  @ApiProperty()
   username: string;
 
   @ApiProperty()

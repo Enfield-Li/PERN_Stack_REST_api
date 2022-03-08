@@ -4,7 +4,7 @@ import { PrismaService } from 'src/config/prisma.service';
 import {
   CreatePostDto,
   PaginatedPost,
-  PostAndInteractions,
+  PostAndInteraction,
 } from './dto/create-post.dto';
 import { UpdatePostDto } from './dto/update-post.dto';
 
@@ -12,10 +12,7 @@ import { UpdatePostDto } from './dto/update-post.dto';
 export class PostService {
   constructor(private readonly prismaService: PrismaService) {}
 
-  async createPost(
-    createPostDto: CreatePostDto,
-    userId: number,
-  ): Promise<PostAndInteractions> {
+  async createPost(createPostDto: CreatePostDto, userId: number) {
     const { title, content } = createPostDto;
 
     // create post & create relevant interactions
@@ -32,6 +29,7 @@ export class PostService {
       },
       include: {
         user: { select: { username: true } },
+        interactions: { where: { userId } },
       },
     });
 
@@ -50,14 +48,7 @@ export class PostService {
       updateUserPostAmounts,
     ]);
 
-    const interactions = await this.prismaService.interactions.findUnique({
-      where: { userId_postId: { userId, postId: createdPost[0].id } },
-    });
-
-    return {
-      ...createdPost[0],
-      user: { ...createdPost[0].user, interactions },
-    };
+    return createdPost[0];
   }
 
   async getPaginatedPost(
@@ -82,57 +73,21 @@ export class PostService {
       },
     });
 
-    let postAndInteractions: PostAndInteractions[] = [];
+    const postAndInteractions: PostAndInteraction[] = [];
 
-    // user is loged in, then show their interactions with post[]
-    if (userId) {
-      for (let i = 0; i < posts.length - 1; i++) {
-        // send snippets numbering 49
-        // posts[i].content = posts[i].content.slice(0, 50);
+    for (let i = 0; i < posts.length - 1; i++) {
+      // send snippets numbering 49
+      posts[i].content = posts[i].content.slice(0, 50);
 
-        const interactions = await this.prismaService.interactions.findUnique({
-          where: { userId_postId: { userId, postId: posts[i].id } },
-        });
-
-        const postIdMapToInteractions: PostAndInteractions = {
-          ...posts[i],
-          user: {
-            ...posts[i].user,
-            interactions,
-          },
-        };
-
-        postAndInteractions.push(postIdMapToInteractions);
-      }
-
-      // fill out some dummy data, in case client's interaction is null
-      postAndInteractions.filter((postAndInteraction) => {
-        if (postAndInteraction.user.interactions === null) {
-          postAndInteraction.user.interactions = {
-            confusedStatus: null,
-            createdAt: new Date('2021'),
-            laughStatus: null,
-            likeStatus: null,
-            postId: postAndInteraction.id,
-            userId,
-            voteStatus: null,
-          };
-        }
-
-        return postAndInteraction;
+      const interactions = await this.prismaService.interactions.findUnique({
+        where: { userId_postId: { userId, postId: posts[i].id } },
       });
-    }
 
-    // user is not loged in, then show no interactions
-    else {
-      for (let i = 0; i < posts.length - 1; i++) {
-        // send snippets numbering 49
-        // posts[i].content = posts[i].content.slice(0, 50);
-
-        postAndInteractions.push(posts[i]);
-      }
+      postAndInteractions[i] = {
+        post: posts[i],
+        interactions: userId ? interactions : null,
+      };
     }
-    // console.log('postAndInteractions: ', postAndInteractions);
 
     return {
       hasMore: posts.length === takeLimitPlusOne,
@@ -143,7 +98,7 @@ export class PostService {
   async fetchOnePost(
     userId: number,
     postId: number,
-  ): Promise<PostAndInteractions> {
+  ): Promise<PostAndInteraction> {
     const post = await this.prismaService.post.findUnique({
       where: { id: postId },
       include: {
@@ -156,10 +111,10 @@ export class PostService {
     });
 
     const interactions = await this.prismaService.interactions.findUnique({
-      where: { userId_postId: { userId, postId } },
+      where: { userId_postId: { userId, postId: post.id } },
     });
 
-    return { ...post, user: { ...post.user, interactions } };
+    return { post, interactions };
   }
 
   async update(id: number, updatePostDto: UpdatePostDto) {

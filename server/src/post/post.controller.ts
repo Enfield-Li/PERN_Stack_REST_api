@@ -15,7 +15,7 @@ import { PostService } from './post.service';
 import {
   CreatePostDto,
   PaginatedPost,
-  PostAndInteractions,
+  PostAndInteraction,
 } from './dto/create-post.dto';
 import { UpdatePostDto } from './dto/update-post.dto';
 import { Request } from 'express';
@@ -25,6 +25,7 @@ import {
   ApiQuery,
   ApiTags,
 } from '@nestjs/swagger';
+import { post } from '@prisma/client';
 
 @ApiTags('Post')
 @Controller('post')
@@ -32,7 +33,7 @@ export class PostController {
   constructor(private readonly postService: PostService) {}
 
   @Post('create-post')
-  @ApiCreatedResponse({ type: PostAndInteractions })
+  @ApiCreatedResponse({ type: PostAndInteraction })
   async create(@Body() createPostDto: CreatePostDto, @Req() req: Request) {
     if (!req.session.userId) throw new HttpException('Not authenticated', 401);
 
@@ -62,12 +63,12 @@ export class PostController {
     return this.postService.getPaginatedPost(req.session.userId, +take, cursor);
   }
 
-  @ApiCreatedResponse({ type: PostAndInteractions })
+  @ApiCreatedResponse({ type: PostAndInteraction })
   @Get('single-post/:id')
   findOne(
     @Req() req: Request,
     @Param('id') id: string,
-  ): Promise<PostAndInteractions> {
+  ): Promise<PostAndInteraction> {
     return this.postService.fetchOnePost(req.session.userId, +id);
   }
 
@@ -95,7 +96,7 @@ export class PostController {
     );
   }
 
-  @ApiCreatedResponse({ type: PostAndInteractions })
+  @ApiCreatedResponse({ type: PostAndInteraction })
   @Patch('update/:id')
   update(
     @Param('id') id: string,
