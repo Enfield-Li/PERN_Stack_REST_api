@@ -11,6 +11,8 @@ import {
 } from "../constant";
 import { PostActionType, PostState } from "./types/PostTypes";
 import produce from "immer";
+import { voteManipulation } from "../../utils/voteManipulation";
+import { interactionManipulation } from "../../utils/interactionManipulation";
 
 export default function PostReducer(state: PostState, action: PostActionType) {
   console.log("post reducer called");
@@ -65,26 +67,37 @@ export default function PostReducer(state: PostState, action: PostActionType) {
             (postAndInteraction) => {
               if (postAndInteraction.post.id === action.payload.id) {
                 const voteValue = action.payload.value;
-                const voteStatus = postAndInteraction.interactions?.voteStatus;
+                const voteStatus = postAndInteraction.interactions.voteStatus;
+                const votePoints = postAndInteraction.post.votePoints;
 
-                if (voteStatus !== voteValue && voteStatus === null) {
-                  postAndInteraction.interactions.voteStatus = voteValue;
-                  postAndInteraction.post.votePoints =
-                    postAndInteraction.post.votePoints + (voteValue ? 1 : -1);
-                } else if (voteStatus === voteValue && voteStatus !== null) {
-                  postAndInteraction.interactions.voteStatus = null;
-                  postAndInteraction.post.votePoints =
-                    postAndInteraction.post.votePoints + (voteValue ? -1 : 1);
-                } else {
-                  postAndInteraction.interactions.voteStatus = voteValue;
-                  postAndInteraction.post.votePoints =
-                    postAndInteraction.post.votePoints + (voteValue ? 2 : -2);
-                }
+                const { newVoteStatus, newVotePoints } = voteManipulation(
+                  voteValue,
+                  voteStatus,
+                  votePoints
+                );
+
+                postAndInteraction.interactions.voteStatus = newVoteStatus;
+                postAndInteraction.post.votePoints = newVotePoints;
               }
 
               return postAndInteraction;
             }
           );
+
+        if (draftState.currentPost) {
+          const voteValue = action.payload.value;
+          const voteStatus = draftState.currentPost.interactions.voteStatus;
+          const votePoints = draftState.currentPost.post.votePoints;
+
+          const { newVoteStatus, newVotePoints } = voteManipulation(
+            voteValue,
+            voteStatus,
+            votePoints
+          );
+
+          draftState.currentPost.interactions.voteStatus = newVoteStatus;
+          draftState.currentPost.post.votePoints = newVotePoints;
+        }
       });
     }
 
@@ -93,23 +106,35 @@ export default function PostReducer(state: PostState, action: PostActionType) {
         draftState.paginatedPosts.postAndInteractions =
           draftState.paginatedPosts.postAndInteractions.filter(
             (postAndInteraction) => {
-              const likeStatus = postAndInteraction.interactions.likeStatus;
-
               if (postAndInteraction.post.id === action.payload) {
-                if (likeStatus === null) {
-                  postAndInteraction.interactions.likeStatus = !likeStatus;
-                  postAndInteraction.post.likePoints =
-                    postAndInteraction.post.likePoints + 1;
-                } else if (likeStatus !== null) {
-                  postAndInteraction.interactions.likeStatus = null;
-                  postAndInteraction.post.likePoints =
-                    postAndInteraction.post.likePoints - 1;
-                }
+                const likeStatus = postAndInteraction.interactions.likeStatus;
+                const likePoints = postAndInteraction.post.likePoints;
+
+                const { newStatus, newPoints } = interactionManipulation(
+                  likeStatus,
+                  likePoints
+                );
+
+                postAndInteraction.interactions.likeStatus = newStatus;
+                postAndInteraction.post.likePoints = newPoints;
               }
 
               return postAndInteraction.interactions;
             }
           );
+
+        if (draftState.currentPost) {
+          const likeStatus = draftState.currentPost.interactions.likeStatus;
+          const likePoints = draftState.currentPost.post.likePoints;
+
+          const { newStatus, newPoints } = interactionManipulation(
+            likeStatus,
+            likePoints
+          );
+
+          draftState.currentPost.interactions.likeStatus = newStatus;
+          draftState.currentPost.post.likePoints = newPoints;
+        }
       });
     }
 
@@ -118,23 +143,35 @@ export default function PostReducer(state: PostState, action: PostActionType) {
         draftState.paginatedPosts.postAndInteractions =
           draftState.paginatedPosts.postAndInteractions.filter(
             (postAndInteraction) => {
-              const laughStatus = postAndInteraction.interactions.laughStatus;
-
               if (postAndInteraction.post.id === action.payload) {
-                if (laughStatus === null) {
-                  postAndInteraction.interactions.laughStatus = !laughStatus;
-                  postAndInteraction.post.laughPoints =
-                    postAndInteraction.post.laughPoints + 1;
-                } else if (laughStatus !== null) {
-                  postAndInteraction.interactions.laughStatus = null;
-                  postAndInteraction.post.laughPoints =
-                    postAndInteraction.post.laughPoints - 1;
-                }
+                const laughStatus = postAndInteraction.interactions.laughStatus;
+                const laughPoints = postAndInteraction.post.laughPoints;
+
+                const { newStatus, newPoints } = interactionManipulation(
+                  laughStatus,
+                  laughPoints
+                );
+
+                postAndInteraction.interactions.laughStatus = newStatus;
+                postAndInteraction.post.laughPoints = newPoints;
               }
 
               return postAndInteraction.interactions;
             }
           );
+
+        if (draftState.currentPost) {
+          const laughStatus = draftState.currentPost.interactions.laughStatus;
+          const laughPoints = draftState.currentPost.post.laughPoints;
+
+          const { newStatus, newPoints } = interactionManipulation(
+            laughStatus,
+            laughPoints
+          );
+
+          draftState.currentPost.interactions.laughStatus = newStatus;
+          draftState.currentPost.post.laughPoints = newPoints;
+        }
       });
     }
 
@@ -143,25 +180,37 @@ export default function PostReducer(state: PostState, action: PostActionType) {
         draftState.paginatedPosts.postAndInteractions =
           draftState.paginatedPosts.postAndInteractions.filter(
             (postAndInteraction) => {
-              const confusedStatus =
-                postAndInteraction.interactions.confusedStatus;
-
               if (postAndInteraction.post.id === action.payload) {
-                if (confusedStatus === null) {
-                  postAndInteraction.interactions.confusedStatus =
-                    !confusedStatus;
-                  postAndInteraction.post.confusedPoints =
-                    postAndInteraction.post.confusedPoints + 1;
-                } else if (confusedStatus !== null) {
-                  postAndInteraction.interactions.confusedStatus = null;
-                  postAndInteraction.post.confusedPoints =
-                    postAndInteraction.post.confusedPoints - 1;
-                }
+                const confusedStatus =
+                  postAndInteraction.interactions.confusedStatus;
+                const confusedPoints = postAndInteraction.post.confusedPoints;
+
+                const { newStatus, newPoints } = interactionManipulation(
+                  confusedStatus,
+                  confusedPoints
+                );
+
+                postAndInteraction.interactions.confusedStatus = newStatus;
+                postAndInteraction.post.confusedPoints = newPoints;
               }
 
               return postAndInteraction.interactions;
             }
           );
+
+        if (draftState.currentPost) {
+          const confusedStatus =
+            draftState.currentPost.interactions.confusedStatus;
+          const confusedPoints = draftState.currentPost.post.confusedPoints;
+
+          const { newStatus, newPoints } = interactionManipulation(
+            confusedStatus,
+            confusedPoints
+          );
+
+          draftState.currentPost.interactions.confusedStatus = newStatus;
+          draftState.currentPost.post.confusedPoints = newPoints;
+        }
       });
     }
 
