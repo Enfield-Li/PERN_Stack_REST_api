@@ -12,7 +12,10 @@ import { UpdatePostDto } from './dto/update-post.dto';
 export class PostService {
   constructor(private readonly prismaService: PrismaService) {}
 
-  async createPost(createPostDto: CreatePostDto, userId: number) {
+  async createPost(
+    createPostDto: CreatePostDto,
+    userId: number,
+  ): Promise<PostAndInteraction> {
     const { title, content } = createPostDto;
 
     // create post & create relevant interactions
@@ -28,7 +31,7 @@ export class PostService {
         },
       },
       include: {
-        user: { select: { username: true } },
+        user: { select: { username: true, id: true } },
         interactions: { where: { userId } },
       },
     });
@@ -48,7 +51,11 @@ export class PostService {
       updateUserPostAmounts,
     ]);
 
-    return createdPost[0];
+    const interactions = createdPost[0].interactions[0];
+
+    delete createdPost[0].interactions;
+
+    return { post: createdPost[0], interactions };
   }
 
   async getPaginatedPost(

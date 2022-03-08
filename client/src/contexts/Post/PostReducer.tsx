@@ -37,7 +37,7 @@ export default function PostReducer(state: PostState, action: PostActionType) {
     case CREATE_POST: {
       console.log("CREATE_POST reducer here");
       return produce(state, (draftState) => {
-        draftState.paginatedPosts.postAndInteractions.push(action.payload);
+        draftState.currentPost = action.payload;
       });
     }
 
@@ -45,7 +45,8 @@ export default function PostReducer(state: PostState, action: PostActionType) {
       return produce(state, (draftState) => {
         draftState.paginatedPosts.postAndInteractions =
           draftState.paginatedPosts.postAndInteractions.filter(
-            (post) => post.id !== action.payload
+            (postAndInteraction) =>
+              postAndInteraction.post.id !== action.payload
           );
       });
     }
@@ -60,88 +61,107 @@ export default function PostReducer(state: PostState, action: PostActionType) {
     case VOTE_POST: {
       return produce(state, (draftState) => {
         draftState.paginatedPosts.postAndInteractions =
-          draftState.paginatedPosts.postAndInteractions.filter((post) => {
-            if (post.id === action.payload.id) {
-              const voteValue = action.payload.value;
-              const voteStatus = post.user.interactions?.voteStatus;
+          draftState.paginatedPosts.postAndInteractions.filter(
+            (postAndInteraction) => {
+              if (postAndInteraction.post.id === action.payload.id) {
+                const voteValue = action.payload.value;
+                const voteStatus = postAndInteraction.interactions?.voteStatus;
 
-              if (voteStatus !== voteValue && voteStatus === null) {
-                post.user.interactions!.voteStatus = voteValue;
-                post.votePoints = post.votePoints + (voteValue ? 1 : -1);
-              } else if (voteStatus === voteValue && voteStatus !== null) {
-                post.user.interactions!.voteStatus = null;
-                post.votePoints = post.votePoints + (voteValue ? -1 : 1);
-              } else {
-                post.user.interactions!.voteStatus = voteValue;
-                post.votePoints = post.votePoints + (voteValue ? 2 : -2);
+                if (voteStatus !== voteValue && voteStatus === null) {
+                  postAndInteraction.interactions.voteStatus = voteValue;
+                  postAndInteraction.post.votePoints =
+                    postAndInteraction.post.votePoints + (voteValue ? 1 : -1);
+                } else if (voteStatus === voteValue && voteStatus !== null) {
+                  postAndInteraction.interactions.voteStatus = null;
+                  postAndInteraction.post.votePoints =
+                    postAndInteraction.post.votePoints + (voteValue ? -1 : 1);
+                } else {
+                  postAndInteraction.interactions.voteStatus = voteValue;
+                  postAndInteraction.post.votePoints =
+                    postAndInteraction.post.votePoints + (voteValue ? 2 : -2);
+                }
               }
-            }
 
-            return post;
-          });
+              return postAndInteraction;
+            }
+          );
       });
     }
 
     case LIKE_POST: {
       return produce(state, (draftState) => {
         draftState.paginatedPosts.postAndInteractions =
-          draftState.paginatedPosts.postAndInteractions.filter((post) => {
-            const likeStatus = post.user.interactions?.likeStatus;
+          draftState.paginatedPosts.postAndInteractions.filter(
+            (postAndInteraction) => {
+              const likeStatus = postAndInteraction.interactions.likeStatus;
 
-            if (post.id === action.payload) {
-              if (likeStatus === null) {
-                post.user.interactions!.likeStatus = !likeStatus;
-                post.likePoints = post.likePoints + 1;
-              } else if (likeStatus !== null) {
-                post.user.interactions!.likeStatus = null;
-                post.likePoints = post.likePoints - 1;
+              if (postAndInteraction.post.id === action.payload) {
+                if (likeStatus === null) {
+                  postAndInteraction.interactions.likeStatus = !likeStatus;
+                  postAndInteraction.post.likePoints =
+                    postAndInteraction.post.likePoints + 1;
+                } else if (likeStatus !== null) {
+                  postAndInteraction.interactions.likeStatus = null;
+                  postAndInteraction.post.likePoints =
+                    postAndInteraction.post.likePoints - 1;
+                }
               }
-            }
 
-            return post;
-          });
+              return postAndInteraction.interactions;
+            }
+          );
       });
     }
 
     case LAUGHE_POST: {
       return produce(state, (draftState) => {
         draftState.paginatedPosts.postAndInteractions =
-          draftState.paginatedPosts.postAndInteractions.filter((post) => {
-            const laughStatus = post.user.interactions?.laughStatus;
+          draftState.paginatedPosts.postAndInteractions.filter(
+            (postAndInteraction) => {
+              const laughStatus = postAndInteraction.interactions.laughStatus;
 
-            if (post.id === action.payload) {
-              if (laughStatus === null) {
-                post.user.interactions!.laughStatus = !laughStatus;
-                post.laughPoints = post.laughPoints + 1;
-              } else if (laughStatus !== null) {
-                post.user.interactions!.laughStatus = null;
-                post.laughPoints = post.laughPoints - 1;
+              if (postAndInteraction.post.id === action.payload) {
+                if (laughStatus === null) {
+                  postAndInteraction.interactions.laughStatus = !laughStatus;
+                  postAndInteraction.post.laughPoints =
+                    postAndInteraction.post.laughPoints + 1;
+                } else if (laughStatus !== null) {
+                  postAndInteraction.interactions.laughStatus = null;
+                  postAndInteraction.post.laughPoints =
+                    postAndInteraction.post.laughPoints - 1;
+                }
               }
-            }
 
-            return post;
-          });
+              return postAndInteraction.interactions;
+            }
+          );
       });
     }
 
     case CONFUSE_POST: {
       return produce(state, (draftState) => {
         draftState.paginatedPosts.postAndInteractions =
-          draftState.paginatedPosts.postAndInteractions.filter((post) => {
-            const confusedStatus = post.user.interactions?.confusedStatus;
+          draftState.paginatedPosts.postAndInteractions.filter(
+            (postAndInteraction) => {
+              const confusedStatus =
+                postAndInteraction.interactions.confusedStatus;
 
-            if (post.id === action.payload) {
-              if (confusedStatus === null) {
-                post.user.interactions!.confusedStatus = !confusedStatus;
-                post.confusedPoints = post.confusedPoints + 1;
-              } else if (confusedStatus !== null) {
-                post.user.interactions!.confusedStatus = null;
-                post.confusedPoints = post.confusedPoints - 1;
+              if (postAndInteraction.post.id === action.payload) {
+                if (confusedStatus === null) {
+                  postAndInteraction.interactions.confusedStatus =
+                    !confusedStatus;
+                  postAndInteraction.post.confusedPoints =
+                    postAndInteraction.post.confusedPoints + 1;
+                } else if (confusedStatus !== null) {
+                  postAndInteraction.interactions.confusedStatus = null;
+                  postAndInteraction.post.confusedPoints =
+                    postAndInteraction.post.confusedPoints - 1;
+                }
               }
-            }
 
-            return post;
-          });
+              return postAndInteraction.interactions;
+            }
+          );
       });
     }
 

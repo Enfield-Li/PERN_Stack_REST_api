@@ -8,10 +8,10 @@ import { PostAndInteractions } from "../../contexts/Post/types/PostTypes";
 import { useUser } from "../../contexts/User/actions/UserAction";
 
 interface VoteSectionProps {
-  post: PostAndInteractions;
+  postAndInteractions: PostAndInteractions;
 }
 
-const VoteSection: React.FC<VoteSectionProps> = ({ post }) => {
+const VoteSection: React.FC<VoteSectionProps> = ({ postAndInteractions }) => {
   const location = useLocation();
   const [_, postDispatch] = usePost();
   const [userState] = useUser();
@@ -19,14 +19,16 @@ const VoteSection: React.FC<VoteSectionProps> = ({ post }) => {
 
   let path = "";
   if (location.pathname.includes("post")) {
-    path = `post/${post.id}`;
+    path = `post/${postAndInteractions.post.id}`;
   }
 
   return (
     <div className="me-3 mt-2">
       <button
         className={`bi bi-caret-up btn ${
-          post.user.interactions?.voteStatus === true ? "bg-info" : ""
+          postAndInteractions.interactions?.voteStatus === true
+            ? "bg-info"
+            : ""
         }`}
         onClick={async () => {
           if (!userState.user) {
@@ -34,14 +36,21 @@ const VoteSection: React.FC<VoteSectionProps> = ({ post }) => {
             return;
           }
 
-          await interactWithPost(postDispatch, post.id, true, "vote");
+          await interactWithPost(
+            postDispatch,
+            postAndInteractions.post.id,
+            true,
+            "vote"
+          );
           return;
         }}
       />
-      <div className="text-center">{post.votePoints}</div>
+      <div className="text-center">{postAndInteractions.post.votePoints}</div>
       <button
         className={`bi bi-caret-down btn  ${
-          post.user.interactions?.voteStatus === false ? "bg-danger" : ""
+          postAndInteractions.interactions?.voteStatus === false
+            ? "bg-danger"
+            : ""
         }`}
         onClick={async () => {
           if (!userState.user) {
@@ -49,7 +58,12 @@ const VoteSection: React.FC<VoteSectionProps> = ({ post }) => {
             return;
           }
 
-          await interactWithPost(postDispatch, post.id, false, "vote");
+          await interactWithPost(
+            postDispatch,
+            postAndInteractions.post.id,
+            false,
+            "vote"
+          );
           return;
         }}
       />

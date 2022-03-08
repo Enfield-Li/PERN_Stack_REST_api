@@ -8,10 +8,10 @@ import { PostAndInteractions } from "../../contexts/Post/types/PostTypes";
 import { useUser } from "../../contexts/User/actions/UserAction";
 
 interface EditSectionProps {
-  post: PostAndInteractions;
+  postAndInteraction: PostAndInteractions;
 }
 
-const EditSection: React.FC<EditSectionProps> = ({ post }) => {
+const EditSection: React.FC<EditSectionProps> = ({ postAndInteraction }) => {
   const [_, postDispatch] = usePost();
   const [userState] = useUser();
   const navigate = useNavigate();
@@ -24,7 +24,9 @@ const EditSection: React.FC<EditSectionProps> = ({ post }) => {
           <div
             role="button"
             className={`me-2 ${
-              post.user.interactions?.likeStatus ? "bg-secondary rounded" : null
+              postAndInteraction.interactions?.likeStatus
+                ? "bg-secondary rounded"
+                : null
             }`}
             onClick={() => {
               if (!userState.user) {
@@ -32,7 +34,12 @@ const EditSection: React.FC<EditSectionProps> = ({ post }) => {
                 return;
               }
 
-              interactWithPost(postDispatch, post.id, true, "like");
+              interactWithPost(
+                postDispatch,
+                postAndInteraction.post.id,
+                true,
+                "like"
+              );
               return;
             }}
           >
@@ -43,7 +50,7 @@ const EditSection: React.FC<EditSectionProps> = ({ post }) => {
           <span
             role="button"
             className={`me-2 ${
-              post.user.interactions?.laughStatus
+              postAndInteraction.interactions?.laughStatus
                 ? "bg-secondary rounded"
                 : null
             }`}
@@ -53,7 +60,12 @@ const EditSection: React.FC<EditSectionProps> = ({ post }) => {
                 return;
               }
 
-              interactWithPost(postDispatch, post.id, true, "laugh");
+              interactWithPost(
+                postDispatch,
+                postAndInteraction.post.id,
+                true,
+                "laugh"
+              );
               return;
             }}
           >
@@ -64,7 +76,7 @@ const EditSection: React.FC<EditSectionProps> = ({ post }) => {
           <span
             role="button"
             className={`${
-              post.user.interactions?.confusedStatus
+              postAndInteraction.interactions?.confusedStatus
                 ? "bg-secondary rounded"
                 : null
             }`}
@@ -74,7 +86,12 @@ const EditSection: React.FC<EditSectionProps> = ({ post }) => {
                 return;
               }
 
-              interactWithPost(postDispatch, post.id, true, "confused");
+              interactWithPost(
+                postDispatch,
+                postAndInteraction.post.id,
+                true,
+                "confused"
+              );
               return;
             }}
           >
@@ -83,7 +100,7 @@ const EditSection: React.FC<EditSectionProps> = ({ post }) => {
         </span>
       </div>
       {/* show edit/delete button or not */}
-      {userState.user?.username === post.user.username ? (
+      {userState.user?.username === postAndInteraction.post.user.username ? (
         <div className="mt-1 d-flex flex-column">
           {/* edit */}
           <span
@@ -99,7 +116,7 @@ const EditSection: React.FC<EditSectionProps> = ({ post }) => {
             role="button"
             className="mt-2 text-decoration-none"
             onClick={() => {
-              deletePost(postDispatch, post.id);
+              deletePost(postDispatch, postAndInteraction.post.id);
               return;
             }}
           >

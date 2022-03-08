@@ -19,6 +19,7 @@ import {
 } from "../types/PostTypes";
 import PostContext from "../PostContext";
 import { useContext } from "react";
+import { populateWithMockData } from "../../../utils/populateWithMockData";
 
 export const usePost = (): [PostState, React.Dispatch<PostActionType>] => {
   const { state, dispatch } = useContext(PostContext);
@@ -87,6 +88,9 @@ export const fetchPaginatedPosts = async (
       { withCredentials: true }
     );
 
+    // initiate interactions
+    populateWithMockData(res.data);
+
     dispatch({
       type: FETCH_PAGINATED_POSTS,
       payload: res.data,
@@ -96,6 +100,9 @@ export const fetchPaginatedPosts = async (
       "http://localhost:3119/post/paginated-posts",
       { withCredentials: true }
     );
+
+    // initiate interactions
+    populateWithMockData(res.data);
 
     dispatch({
       type: FETCH_PAGINATED_POSTS,

@@ -9,7 +9,6 @@ import {
   LAUGHE_POST,
   CONFUSE_POST,
 } from "../../constant";
-import { Interactions } from "./InteractionsTypes";
 
 export type PostState = {
   paginatedPosts: PaginatedPost;
@@ -17,31 +16,44 @@ export type PostState = {
 };
 
 export const postInitialState: PostState = {
-  paginatedPosts: { hasMore: null, postAndInteractions: [] },
+  paginatedPosts: { hasMore: false, postAndInteractions: [] },
   currentPost: null,
+};
+
+export type PostAndInteractions = {
+  post: {
+    id: number;
+    createdAt: Date;
+    updatedAt: Date;
+    title: string;
+    content: string | null;
+    userId: number;
+    viewCount: number;
+    votePoints: number;
+    likePoints: number;
+    confusedPoints: number;
+    laughPoints: number;
+    user: {
+      id: number;
+      username: string;
+    };
+  };
+  interactions: Interactions;
 };
 
 export type PaginatedPost = {
   postAndInteractions: PostAndInteractions[];
-  hasMore: boolean | null;
+  hasMore: boolean;
 };
 
-export type PostAndInteractions = {
-  id: number;
+export type Interactions = {
+  voteStatus: boolean | null;
+  likeStatus: boolean | null;
+  laughStatus: boolean | null;
+  confusedStatus: boolean | null;
   createdAt: Date;
-  updatedAt: Date;
-  title: string;
-  content: string | null;
   userId: number;
-  viewCount: number;
-  votePoints: number;
-  likePoints: number;
-  confusedPoints: number;
-  laughPoints: number;
-  user: {
-    username: string;
-    interactions: Interactions;
-  };
+  postId: number;
 };
 
 export type CreatePostType = {

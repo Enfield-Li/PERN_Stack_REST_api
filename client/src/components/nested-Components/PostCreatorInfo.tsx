@@ -3,10 +3,12 @@ import { PostAndInteractions } from "../../contexts/Post/types/PostTypes";
 import { calculateTime } from "../../utils/calculaTime";
 
 interface PostCreatorInfoProps {
-  post: PostAndInteractions;
+  postAndInteractions: PostAndInteractions;
 }
 
-const PostCreatorInfo: React.FC<PostCreatorInfoProps> = ({ post }) => {
+const PostCreatorInfo: React.FC<PostCreatorInfoProps> = ({
+  postAndInteractions,
+}) => {
   const [decoration, setDecoration] = useState(false);
   // const {
   //   getArrowProps,
@@ -43,7 +45,7 @@ const PostCreatorInfo: React.FC<PostCreatorInfoProps> = ({ post }) => {
             decoration ? "text-decoration-underline" : "text-decoration-none"
           }`}
         >
-          {post.user.username}
+          {postAndInteractions.post.user.username}
           {/* </span> */}
         </span>
         {/* {visible && (
@@ -58,7 +60,9 @@ const PostCreatorInfo: React.FC<PostCreatorInfoProps> = ({ post }) => {
           </div>
         )} */}
       </span>
-      <span className="ms-2 fw-lighter">{calculateTime(post.createdAt)}</span>
+      <span className="ms-2 fw-lighter">
+        {calculateTime(postAndInteractions.post.createdAt)}
+      </span>
     </div>
   );
 };

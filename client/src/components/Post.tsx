@@ -15,8 +15,8 @@ const Post: React.FC<PostProps> = ({}) => {
   const { id } = useParams();
 
   const existingPostId: number[] = [];
-  paginatedPosts.postAndInteractions.forEach((post) => {
-    existingPostId.push(post.id);
+  paginatedPosts.postAndInteractions.forEach((postAndInteraction) => {
+    existingPostId.push(postAndInteraction.post.id);
   });
 
   let postData: PostAndInteractions | null = null;
@@ -26,8 +26,8 @@ const Post: React.FC<PostProps> = ({}) => {
       return <div>Post does not exist...</div>;
     }
 
-    postData = paginatedPosts.postAndInteractions.filter((post) => {
-      return post.id === +id;
+    postData = paginatedPosts.postAndInteractions.filter((postAndInteraction) => {
+      return postAndInteraction.post.id === +id;
     })[0];
 
     return (
@@ -36,15 +36,17 @@ const Post: React.FC<PostProps> = ({}) => {
           <div className="card-body">
             <div className="d-flex justify-content-between">
               <div className="d-flex">
-                <VoteSection post={postData} />
+                <VoteSection postAndInteractions={postData} />
                 <div>
-                  <PostCreatorInfo post={postData} />
-                  <h3 className="my-2">{postData.title}</h3>
-                  <p className="card-text mb-3 me-2 fs-5">{postData.content}</p>
-                  <InteractionDisplay post={postData} />
+                  <PostCreatorInfo postAndInteractions={postData} />
+                  <h3 className="my-2">{postData.post.title}</h3>
+                  <p className="card-text mb-3 me-2 fs-5">
+                    {postData.post.content}
+                  </p>
+                  <InteractionDisplay postAndInteractions={postData} />
                 </div>
               </div>
-              <EditSection post={postData} />
+              <EditSection postAndInteraction={postData} />
             </div>
           </div>
         </div>

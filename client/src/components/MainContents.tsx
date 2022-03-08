@@ -21,23 +21,23 @@ const MainContents: React.FC<MainContentsProps> = ({}) => {
       <CreatePostArea />
 
       {posts.postAndInteractions.length > 0 ? (
-        posts.postAndInteractions.map((post) => (
-          <div className="card my-3 " key={post.id}>
+        posts.postAndInteractions.map((postAndInteraction) => (
+          <div className="card my-3 " key={postAndInteraction.post.id}>
             <div className="card-body">
               <div className="d-flex justify-content-between">
                 <div className="d-flex justify-content-between">
-                  <VoteSection post={post} />
+                  <VoteSection postAndInteractions={postAndInteraction} />
                   <div>
-                    <PostCreatorInfo post={post} />
+                    <PostCreatorInfo postAndInteractions={postAndInteraction} />
                     <div
                       className="d-flex flex-column justify-content-between"
                       style={{ color: "gray" }}
                     >
-                      <PostCardSection post={post} />
+                      <PostCardSection postAndInteractions={postAndInteraction} />
                     </div>
                   </div>
                 </div>
-                <EditSection post={post} />
+                <EditSection postAndInteraction={postAndInteraction} />
               </div>
             </div>
           </div>
@@ -57,7 +57,7 @@ const MainContents: React.FC<MainContentsProps> = ({}) => {
               fetchPaginatedPosts(
                 postDispatch,
                 posts.postAndInteractions[posts.postAndInteractions.length - 1]
-                  .createdAt
+                  .post.createdAt
               );
             }}
           >

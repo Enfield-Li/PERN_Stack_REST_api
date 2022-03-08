@@ -63,7 +63,7 @@ export class PostController {
     return this.postService.getPaginatedPost(req.session.userId, +take, cursor);
   }
 
-  @ApiCreatedResponse({ type: PostAndInteraction })
+  @ApiOkResponse({ type: PostAndInteraction })
   @Get('single-post/:id')
   findOne(
     @Req() req: Request,

@@ -7,11 +7,13 @@ import { useUser } from "../../contexts/User/actions/UserAction";
 import { PostAndInteractions } from "../../contexts/Post/types/PostTypes";
 
 interface InteractionDisplayProps {
-  post: PostAndInteractions;
+  postAndInteractions: PostAndInteractions;
 }
 
-const InteractionDisplay: React.FC<InteractionDisplayProps> = ({ post }) => {
-  const userInteractions = post.user.interactions;
+const InteractionDisplay: React.FC<InteractionDisplayProps> = ({
+  postAndInteractions,
+}) => {
+  const userInteractions = postAndInteractions.interactions;
   const [_, postDispatch] = usePost();
   const [userState] = useUser();
   const navigate = useNavigate();
@@ -19,7 +21,7 @@ const InteractionDisplay: React.FC<InteractionDisplayProps> = ({ post }) => {
   return (
     <div className="d-flex mt-2">
       {/* like */}
-      {post.likePoints > 0 ? (
+      {postAndInteractions.post.likePoints > 0 ? (
         <div
           role="button"
           className={`border border-1 rounded-pill me-2 d-flex text-decoration-none ${
@@ -31,7 +33,12 @@ const InteractionDisplay: React.FC<InteractionDisplayProps> = ({ post }) => {
               return;
             }
 
-            interactWithPost(postDispatch, post.id, true, "like");
+            interactWithPost(
+              postDispatch,
+              postAndInteractions.post.id,
+              true,
+              "like"
+            );
             return;
           }}
         >
@@ -41,13 +48,13 @@ const InteractionDisplay: React.FC<InteractionDisplayProps> = ({ post }) => {
               userInteractions?.likeStatus ? "text-info" : "text-dark"
             }`}
           >
-            {post.likePoints}
+            {postAndInteractions.post.likePoints}
           </div>
         </div>
       ) : null}
 
       {/* laugh */}
-      {post.laughPoints > 0 ? (
+      {postAndInteractions.post.laughPoints > 0 ? (
         <div
           role="button"
           className={`border border-1 rounded-pill me-2 d-flex text-decoration-none ${
@@ -59,7 +66,12 @@ const InteractionDisplay: React.FC<InteractionDisplayProps> = ({ post }) => {
               return;
             }
 
-            interactWithPost(postDispatch, post.id, true, "laugh");
+            interactWithPost(
+              postDispatch,
+              postAndInteractions.post.id,
+              true,
+              "laugh"
+            );
             return;
           }}
         >
@@ -69,13 +81,13 @@ const InteractionDisplay: React.FC<InteractionDisplayProps> = ({ post }) => {
               userInteractions?.laughStatus ? "text-info" : "text-dark"
             }`}
           >
-            {post.laughPoints}
+            {postAndInteractions.post.laughPoints}
           </div>
         </div>
       ) : null}
 
       {/* confused */}
-      {post.confusedPoints > 0 ? (
+      {postAndInteractions.post.confusedPoints > 0 ? (
         <div
           role="button"
           className={`border border-1 rounded-pill me-2 d-flex text-decoration-none ${
@@ -87,7 +99,12 @@ const InteractionDisplay: React.FC<InteractionDisplayProps> = ({ post }) => {
               return;
             }
 
-            interactWithPost(postDispatch, post.id, true, "confused");
+            interactWithPost(
+              postDispatch,
+              postAndInteractions.post.id,
+              true,
+              "confused"
+            );
             return;
           }}
         >
@@ -97,7 +114,7 @@ const InteractionDisplay: React.FC<InteractionDisplayProps> = ({ post }) => {
               userInteractions?.confusedStatus ? "text-info" : "text-dark"
             }`}
           >
-            {post.confusedPoints}
+            {postAndInteractions.post.confusedPoints}
           </div>
         </div>
       ) : null}
