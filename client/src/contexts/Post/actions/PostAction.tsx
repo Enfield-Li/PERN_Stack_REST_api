@@ -19,7 +19,10 @@ import {
 } from "../types/PostTypes";
 import PostContext from "../PostContext";
 import { useContext } from "react";
-import { populateWithMockData } from "../../../utils/populateWithMockData";
+import {
+  interactionNullCheckAndPopulateData,
+  populateWithMockData,
+} from "../../../utils/populateWithMockData";
 
 export const usePost = (): [PostState, React.Dispatch<PostActionType>] => {
   const { state, dispatch } = useContext(PostContext);
@@ -89,7 +92,7 @@ export const fetchPaginatedPosts = async (
     );
 
     // initiate interactions
-    populateWithMockData(res.data);
+    interactionNullCheckAndPopulateData(res.data.postAndInteractions);
 
     dispatch({
       type: FETCH_PAGINATED_POSTS,
@@ -102,7 +105,7 @@ export const fetchPaginatedPosts = async (
     );
 
     // initiate interactions
-    populateWithMockData(res.data);
+    interactionNullCheckAndPopulateData(res.data.postAndInteractions);
 
     dispatch({
       type: FETCH_PAGINATED_POSTS,
@@ -129,6 +132,14 @@ export const fetchSinglePost = async (
       withCredentials: true,
     }
   );
+
+  const userId = res.data.post.user.id;
+  const postId = res.data.post.id;
+  const interactions = res.data.interactions;
+
+  const newInteractions = populateWithMockData(interactions, userId, postId);
+
+  res.data.interactions = newInteractions;
 
   dispatch({
     type: CURRENT_POST,
