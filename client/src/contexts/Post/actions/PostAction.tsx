@@ -69,6 +69,24 @@ export async function interactWithPost(
   }
 }
 
+export async function editCurrentPost(
+  dispatch: React.Dispatch<PostActionType>,
+  id: number,
+  post: CreatePostType
+) {
+  // try {
+  //   const res = await axios.post<PostAndInteractions>(
+  //     `http://localhost:3119/post/edit/${id}`,
+  //     post,
+  //     { withCredentials: true }
+  //   );
+  //   return res.data;
+  // } catch (err) {
+  //   console.log(err);
+  //   return false;
+  // }
+}
+
 export function setCurrentPost(
   dispatch: React.Dispatch<PostActionType>,
   currentPost: PostAndInteractions

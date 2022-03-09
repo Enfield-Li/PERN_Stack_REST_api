@@ -1,5 +1,5 @@
-import { Injectable } from '@nestjs/common';
-import { post } from '@prisma/client';
+import { HttpException, Injectable } from '@nestjs/common';
+import { interactions } from '@prisma/client';
 import { PrismaService } from 'src/config/prisma.service';
 import {
   CreatePostDto,
@@ -86,13 +86,17 @@ export class PostService {
       // send snippets numbering 49
       posts[i].content = posts[i].content.slice(0, 50);
 
-      const interactions = await this.prismaService.interactions.findUnique({
-        where: { userId_postId: { userId, postId: posts[i].id } },
-      });
+      let interactions: interactions | null = null;
+
+      if (userId) {
+        interactions = await this.prismaService.interactions.findUnique({
+          where: { userId_postId: { userId, postId: posts[i].id } },
+        });
+      }
 
       postAndInteractions[i] = {
         post: posts[i],
-        interactions: userId ? interactions : null,
+        interactions,
       };
     }
 
@@ -117,15 +121,43 @@ export class PostService {
       },
     });
 
-    const interactions = await this.prismaService.interactions.findUnique({
-      where: { userId_postId: { userId, postId: post.id } },
-    });
+    let interactions: interactions | null = null;
+
+    if (userId) {
+      interactions = await this.prismaService.interactions.findUnique({
+        where: { userId_postId: { userId, postId: post.id } },
+      });
+    }
 
     return { post, interactions };
   }
 
-  async update(id: number, updatePostDto: UpdatePostDto) {
-    return `This action updates a #${id} post`;
+  async editPost(
+    id: number,
+    updatePostDto: UpdatePostDto,
+    userId: number,
+  ): Promise<PostAndInteraction> {
+    // check if user owns the post
+    const originalPost = await this.prismaService.post.findUnique({
+      where: { id },
+    });
+    if (originalPost.userId !== userId) return null;
+
+    const { title, content } = updatePostDto;
+
+    const updatedPost = await this.prismaService.post.update({
+      where: { id },
+      data: {
+        title,
+        content,
+      },
+      include: { interactions: { where: { userId: userId } } },
+    });
+
+    const interactions = updatedPost.interactions[0];
+    delete updatedPost.interactions;
+
+    return { post: updatedPost, interactions };
   }
 
   async deletePost(id: number): Promise<Boolean> {

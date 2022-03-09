@@ -97,12 +97,23 @@ export class PostController {
   }
 
   @ApiCreatedResponse({ type: PostAndInteraction })
-  @Patch('update/:id')
-  update(
+  @Patch('edit/:id')
+  async update(
     @Param('id') id: string,
     @Body() updatePostDto: UpdatePostDto,
-  ): Promise<String> {
-    return this.postService.update(+id, updatePostDto);
+    @Req() req: Request,
+  ): Promise<PostAndInteraction> {
+    if (!req.session.userId) throw new HttpException('Not authenticated', 401);
+
+    const updatedPost = await this.postService.editPost(
+      +id,
+      updatePostDto,
+      req.session.userId,
+    );
+
+    if (!updatedPost) throw new HttpException('Not authorized', 403);
+
+    return updatedPost;
   }
 
   @ApiOkResponse({ type: Boolean })

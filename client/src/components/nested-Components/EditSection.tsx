@@ -9,9 +9,13 @@ import { useUser } from "../../contexts/User/actions/UserAction";
 
 interface EditSectionProps {
   postAndInteraction: PostAndInteractions;
+  isNotMain: boolean;
 }
 
-const EditSection: React.FC<EditSectionProps> = ({ postAndInteraction }) => {
+const EditSection: React.FC<EditSectionProps> = ({
+  postAndInteraction,
+  isNotMain,
+}) => {
   const [_, postDispatch] = usePost();
   const [userState] = useUser();
   const navigate = useNavigate();
@@ -99,14 +103,18 @@ const EditSection: React.FC<EditSectionProps> = ({ postAndInteraction }) => {
           </span>
         </span>
       </div>
+
       {/* show edit/delete button or not */}
-      {userState.user?.username === postAndInteraction.post.user.username ? (
+      {isNotMain &&
+      userState.user?.username === postAndInteraction.post.user.username ? (
         <div className="mt-1 d-flex flex-column">
           {/* edit */}
           <span
             role="button"
             className="text-decoration-none"
-            onClick={() => {}}
+            onClick={() => {
+              navigate(`/post/edit/${postAndInteraction.post.id}`);
+            }}
           >
             📝
           </span>

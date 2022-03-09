@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { usePopperTooltip } from "react-popper-tooltip";
 import { PostAndInteractions } from "../../contexts/Post/types/PostTypes";
 import { calculateTime } from "../../utils/calculaTime";
 
@@ -10,19 +11,19 @@ const PostCreatorInfo: React.FC<PostCreatorInfoProps> = ({
   postAndInteractions,
 }) => {
   const [decoration, setDecoration] = useState(false);
-  // const {
-  //   getArrowProps,
-  //   getTooltipProps,
-  //   setTooltipRef,
-  //   setTriggerRef,
-  //   visible,
-  // } = usePopperTooltip({
-  //   trigger: "hover",
-  //   delayHide: 100,
-  //   interactive: true,
-  //   placement: "right",
-  //   // delayShow: 50,
-  // });
+  const {
+    getArrowProps,
+    getTooltipProps,
+    setTooltipRef,
+    setTriggerRef,
+    visible,
+  } = usePopperTooltip({
+    trigger: "hover",
+    delayHide: 100,
+    interactive: true,
+    placement: "right",
+    // delayShow: 50,
+  });
 
   return (
     <div className="fs-6 fw-lighter mt-2">
@@ -38,27 +39,28 @@ const PostCreatorInfo: React.FC<PostCreatorInfoProps> = ({
         }}
         onMouseLeave={() => setDecoration(false)}
       >
-        {/* <span role="button" ref={setTriggerRef}> */}
-        <span
-          role="button"
-          className={`fw-light text-dark ${
-            decoration ? "text-decoration-underline" : "text-decoration-none"
-          }`}
-        >
-          {postAndInteractions.post.user.username}
-          {/* </span> */}
+        <span role="button" ref={setTriggerRef}>
+          <span
+            role="button"
+            className={`fw-light text-dark ${
+              decoration ? "text-decoration-underline" : "text-decoration-none"
+            }`}
+          >
+            {postAndInteractions.post.user.username}
+          </span>
         </span>
-        {/* {visible && (
+        {visible && (
           <div ref={setTooltipRef} {...getTooltipProps({ className: "" })}>
             <div {...getArrowProps({ className: "tooltip-arrow" })} />
             <div>
-              {userCard?.data
+              {/* {userCard?.data
                 ? ""
                 : // <ProfileCard user={userCard?.data} userCard={true} />
-                  null}
+                  null} */}
+              123
             </div>
           </div>
-        )} */}
+        )}
       </span>
       <span className="ms-2 fw-lighter">
         {calculateTime(postAndInteractions.post.createdAt)}

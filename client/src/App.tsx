@@ -11,10 +11,10 @@ import {
   fetchPaginatedPosts,
   usePost,
 } from "./contexts/Post/actions/PostAction";
+import EditPost from "./components/EditPost";
 
 function App() {
   const location = useLocation();
-
   const [_, userDispatch] = useUser();
   const [postState, postDispatch] = usePost();
 
@@ -45,6 +45,7 @@ function App() {
               <Route path="/register" element={<Register />} />
               <Route path="/create-post" element={<CreatePost />} />
               <Route path="/post/:id" element={<PostPage />} />
+              <Route path="/post/edit/:id" element={<EditPost />} />
             </>
           )}
         </Routes>

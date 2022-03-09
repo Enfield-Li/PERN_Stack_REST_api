@@ -33,11 +33,16 @@ const MainContents: React.FC<MainContentsProps> = ({}) => {
                       className="d-flex flex-column justify-content-between"
                       style={{ color: "gray" }}
                     >
-                      <PostCardSection postAndInteractions={postAndInteraction} />
+                      <PostCardSection
+                        postAndInteractions={postAndInteraction}
+                      />
                     </div>
                   </div>
                 </div>
-                <EditSection postAndInteraction={postAndInteraction} />
+                <EditSection
+                  postAndInteraction={postAndInteraction}
+                  isNotMain={false}
+                />
               </div>
             </div>
           </div>
