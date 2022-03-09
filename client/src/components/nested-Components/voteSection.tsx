@@ -12,23 +12,15 @@ interface VoteSectionProps {
 }
 
 const VoteSection: React.FC<VoteSectionProps> = ({ postAndInteractions }) => {
-  const location = useLocation();
   const [_, postDispatch] = usePost();
   const [userState] = useUser();
   const navigate = useNavigate();
-
-  let path = "";
-  if (location.pathname.includes("post")) {
-    path = `post/${postAndInteractions.post.id}`;
-  }
 
   return (
     <div className="me-3 mt-2">
       <button
         className={`bi bi-caret-up btn ${
-          postAndInteractions.interactions?.voteStatus === true
-            ? "bg-info"
-            : ""
+          postAndInteractions.interactions?.voteStatus === true ? "bg-info" : ""
         }`}
         onClick={async () => {
           if (!userState.user) {

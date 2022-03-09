@@ -59,17 +59,25 @@ export class PostService {
   }
 
   async getPaginatedPost(
+    orderBy: 'new' | 'hot' | 'best',
     userId: number,
     take: number = 10,
     cursor?: Date,
   ): Promise<PaginatedPost> {
+    let orderByObj = {};
+
+    // default order
+    orderByObj = { likePoints: 'desc' };
+    if (orderBy === 'hot') orderByObj = { votePoints: 'desc' };
+    if (orderBy === 'new') orderByObj = { createdAt: 'desc' };
+
     const takeLimit = Math.min(25, take);
     const takeLimitPlusOne = takeLimit + 1;
 
     const posts = await this.prismaService.post.findMany({
       take: takeLimitPlusOne,
       skip: cursor ? 1 : undefined,
-      orderBy: { createdAt: 'desc' },
+      orderBy: orderByObj,
       cursor: cursor ? { createdAt: cursor } : undefined,
       include: {
         user: {

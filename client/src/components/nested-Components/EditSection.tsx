@@ -1,3 +1,5 @@
+import { useState } from "react";
+import { usePopperTooltip } from "react-popper-tooltip";
 import { useNavigate } from "react-router-dom";
 import {
   deletePost,
@@ -20,89 +22,117 @@ const EditSection: React.FC<EditSectionProps> = ({
   const [userState] = useUser();
   const navigate = useNavigate();
 
+  const [controlledVisible, setControlledVisible] = useState(false);
+  const {
+    getArrowProps,
+    getTooltipProps,
+    setTooltipRef,
+    setTriggerRef,
+    visible,
+  } = usePopperTooltip({
+    trigger: "click",
+    closeOnOutsideClick: true,
+    visible: controlledVisible,
+    onVisibleChange: setControlledVisible,
+  });
+
   return (
     <div className="d-flex flex-column">
-      <div>
-        {/* like */}
-        <span className="d-flex">
-          <div
-            role="button"
-            className={`me-2 ${
-              postAndInteraction.interactions?.likeStatus
-                ? "bg-secondary rounded"
-                : null
-            }`}
-            onClick={() => {
-              if (!userState.user) {
-                navigate("/login");
-                return;
-              }
+      <div
+        role="button"
+        className="bi bi-three-dots text-success me-1"
+        ref={setTriggerRef}
+      ></div>
+      {visible && (
+        <div
+          ref={setTooltipRef}
+          {...getTooltipProps({ className: "card bg-info" })}
+        >
+          <div className="card-body">
+            <div {...getArrowProps({ className: "tooltip-arrow" })} />
 
-              interactWithPost(
-                postDispatch,
-                postAndInteraction.post.id,
-                true,
-                "like"
-              );
-              return;
-            }}
-          >
-            ❤
+            <span className="d-flex">
+              {/* like */}
+              <div
+                role="button"
+                className={`me-2 ${
+                  postAndInteraction.interactions?.likeStatus
+                    ? "bg-secondary rounded"
+                    : null
+                }`}
+                onClick={() => {
+                  if (!userState.user) {
+                    navigate("/login");
+                    return;
+                  }
+
+                  interactWithPost(
+                    postDispatch,
+                    postAndInteraction.post.id,
+                    true,
+                    "like"
+                  );
+                  return;
+                }}
+              >
+                ❤
+              </div>
+
+              {/* laugh */}
+              <span
+                role="button"
+                className={`me-2 ${
+                  postAndInteraction.interactions?.laughStatus
+                    ? "bg-secondary rounded"
+                    : null
+                }`}
+                onClick={() => {
+                  if (!userState.user) {
+                    navigate("/login");
+                    return;
+                  }
+
+                  interactWithPost(
+                    postDispatch,
+                    postAndInteraction.post.id,
+                    true,
+                    "laugh"
+                  );
+                  return;
+                }}
+              >
+                😄
+              </span>
+
+              {/* confused */}
+              <span
+                role="button"
+                className={`${
+                  postAndInteraction.interactions?.confusedStatus
+                    ? "bg-secondary rounded"
+                    : null
+                }`}
+                onClick={() => {
+                  if (!userState.user) {
+                    navigate("/login");
+                    return;
+                  }
+
+                  interactWithPost(
+                    postDispatch,
+                    postAndInteraction.post.id,
+                    true,
+                    "confused"
+                  );
+                  return;
+                }}
+              >
+                😕
+              </span>
+            </span>
           </div>
-
-          {/* laugh */}
-          <span
-            role="button"
-            className={`me-2 ${
-              postAndInteraction.interactions?.laughStatus
-                ? "bg-secondary rounded"
-                : null
-            }`}
-            onClick={() => {
-              if (!userState.user) {
-                navigate("/login");
-                return;
-              }
-
-              interactWithPost(
-                postDispatch,
-                postAndInteraction.post.id,
-                true,
-                "laugh"
-              );
-              return;
-            }}
-          >
-            😄
-          </span>
-
-          {/* confused */}
-          <span
-            role="button"
-            className={`${
-              postAndInteraction.interactions?.confusedStatus
-                ? "bg-secondary rounded"
-                : null
-            }`}
-            onClick={() => {
-              if (!userState.user) {
-                navigate("/login");
-                return;
-              }
-
-              interactWithPost(
-                postDispatch,
-                postAndInteraction.post.id,
-                true,
-                "confused"
-              );
-              return;
-            }}
-          >
-            😕
-          </span>
-        </span>
-      </div>
+        </div>
+      )}
 
       {/* show edit/delete button or not */}
       {userState.user?.username === postAndInteraction.post.user.username ? (

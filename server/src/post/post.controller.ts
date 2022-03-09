@@ -60,7 +60,12 @@ export class PostController {
     @Query('take') take: string = '10',
     @Query('cursor') cursor?: Date,
   ): Promise<PaginatedPost> {
-    return this.postService.getPaginatedPost(req.session.userId, +take, cursor);
+    return this.postService.getPaginatedPost(
+      'best',
+      req.session.userId,
+      +take,
+      cursor,
+    );
   }
 
   @ApiOkResponse({ type: PostAndInteraction })
