@@ -42,7 +42,7 @@ const EditPost: React.FC<EditPostProps> = ({}) => {
       }}
       onSubmit={async (values) => {
         const res = await editCurrentPost(postDispatch, +id!, values);
-        // if (res) navigate(`/post/${res.post.id}`, { replace: true });
+        if (res) navigate(`/post/${res.post.id}`, { replace: true });
       }}
       validationSchema={validationSchema}
     >

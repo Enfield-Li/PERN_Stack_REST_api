@@ -74,17 +74,19 @@ export async function editCurrentPost(
   id: number,
   post: CreatePostType
 ) {
-  // try {
-  //   const res = await axios.post<PostAndInteractions>(
-  //     `http://localhost:3119/post/edit/${id}`,
-  //     post,
-  //     { withCredentials: true }
-  //   );
-  //   return res.data;
-  // } catch (err) {
-  //   console.log(err);
-  //   return false;
-  // }
+  console.log("edit current post...");
+  try {
+    const res = await axios.patch<PostAndInteractions>(
+      `http://localhost:3119/post/edit/${id}`,
+      post,
+      { withCredentials: true }
+    );
+
+    return res.data;
+  } catch (err) {
+    console.log(err);
+    return false;
+  }
 }
 
 export function setCurrentPost(
@@ -151,13 +153,15 @@ export const fetchSinglePost = async (
     }
   );
 
-  const userId = res.data.post.user.id;
-  const postId = res.data.post.id;
-  const interactions = res.data.interactions;
+  if (!res.data.interactions) {
+    const userId = res.data.post.user.id;
+    const postId = res.data.post.id;
+    const interactions = res.data.interactions;
 
-  const newInteractions = populateWithMockData(interactions, userId, postId);
+    const newInteractions = populateWithMockData(interactions, userId, postId);
 
-  res.data.interactions = newInteractions;
+    res.data.interactions = newInteractions;
+  }
 
   dispatch({
     type: CURRENT_POST,

@@ -105,15 +105,18 @@ const EditSection: React.FC<EditSectionProps> = ({
       </div>
 
       {/* show edit/delete button or not */}
-      {isNotMain &&
-      userState.user?.username === postAndInteraction.post.user.username ? (
+      {userState.user?.username === postAndInteraction.post.user.username ? (
         <div className="mt-1 d-flex flex-column">
           {/* edit */}
           <span
             role="button"
             className="text-decoration-none"
             onClick={() => {
-              navigate(`/post/edit/${postAndInteraction.post.id}`);
+              const url = isNotMain
+                ? `/post/edit/${postAndInteraction.post.id}`
+                : `/post/${postAndInteraction.post.id}`;
+
+              navigate(url);
             }}
           >
             📝
@@ -124,7 +127,13 @@ const EditSection: React.FC<EditSectionProps> = ({
             role="button"
             className="mt-2 text-decoration-none"
             onClick={() => {
-              deletePost(postDispatch, postAndInteraction.post.id);
+              if (isNotMain) {
+                deletePost(postDispatch, postAndInteraction.post.id);
+                navigate("/");
+              } else {
+                navigate(`/post/${postAndInteraction.post.id}`);
+              }
+
               return;
             }}
           >
