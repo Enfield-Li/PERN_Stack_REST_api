@@ -12,7 +12,12 @@ import {
   Put,
 } from '@nestjs/common';
 import { UserService } from './user.service';
-import { CreateUserDto, LoginUserDto, UserRO } from './dto/create-user.dto';
+import {
+  CreateUserDto,
+  LoginUserDto,
+  userProfileRO as UserProfileRO,
+  UserRO,
+} from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import {
   ApiCreatedResponse,
@@ -35,6 +40,12 @@ export class UserController {
     @Req() req: Request,
   ): Promise<UserRO> {
     return this.userService.createUser(createUserDto, req);
+  }
+
+  @Get('/profile')
+  @ApiCreatedResponse({ type: UserProfileRO })
+  async getProfile(@Req() req: Request) {
+    return this.userService.fetchProfile(req.session.userId);
   }
 
   @Put('/login')

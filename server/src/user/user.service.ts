@@ -7,9 +7,11 @@ import {
   ResUserError,
   ResUser,
   UserRO,
+  userProfileRO,
 } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { Request } from 'express';
+import { PostAndInteraction } from 'src/post/dto/create-post.dto';
 // import argon2 from 'argon2';
 
 @Injectable()
@@ -70,6 +72,28 @@ export class UserService {
     });
 
     return { user: this.buildUserRO(user) };
+  }
+
+  async fetchProfile(id: number): Promise<userProfileRO> {
+    const userProfile = await this.prismaService.user.findUnique({
+      where: { id },
+      include: {
+        post: { include: { interactions: true } },
+      },
+    });
+
+    const postAndInteractions: PostAndInteraction[] = [];
+
+    for (let i = 0; i < userProfile.post.length; i++) {
+      postAndInteractions[i] = {
+        post: userProfile.post[i],
+        interactions: userProfile.post[i].interactions[0],
+      };
+      delete userProfile.post[i].interactions;
+    }
+    delete userProfile.post;
+
+    return { user: userProfile, userPosts: postAndInteractions };
   }
 
   async updateUser(id: number, updateUserDto: UpdateUserDto): Promise<UserRO> {
