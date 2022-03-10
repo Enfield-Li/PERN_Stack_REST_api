@@ -16,11 +16,14 @@ import {
   usePost,
 } from "./contexts/Post/actions/PostAction";
 import EditPost from "./components/EditPost";
+import UserProfile from "./components/UserProfile";
 
 function App() {
   const location = useLocation();
-  const [_, userDispatch] = useUser();
+  const [userState, userDispatch] = useUser();
   const [postState, postDispatch] = usePost();
+
+  console.log("userProfile: ", userState.userProfile);
 
   // console.log("currentPost: ", postState.currentPost);
   // console.log("posts: ", postState.paginatedPosts.postAndInteractions);
@@ -44,6 +47,7 @@ function App() {
               <Route path="/login" element={<Login />} />
               <Route path="/register" element={<Register />} />
               <Route path="/create-post" element={<CreatePost />} />
+              <Route path="/user-profile/:id" element={<UserProfile />} />
               <Route path="/post/:id" element={<PostPage />} />
               <Route path="/post/edit/:id" element={<EditPost />} />
             </>

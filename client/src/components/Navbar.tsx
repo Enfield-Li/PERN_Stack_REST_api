@@ -38,11 +38,15 @@ const Navbar: React.FC<navbarProps> = ({}) => {
       >
         <li>
           <div className="ms-3">MY STUFF</div>
-          <div className="dropdown-item">
-            <div role="button" className="text-dark">
+          <Link
+            to={`/user-profile/${userState.id}`}
+            style={{ color: "black", textDecoration: "none" }}
+            role="button"
+          >
+            <div className="dropdown-item">
               <i className="bi bi-person-circle fs-5 me-2"></i> Profile
             </div>
-          </div>
+          </Link>
           <div
             className="dropdown-item"
             role="button"
