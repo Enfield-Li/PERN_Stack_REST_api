@@ -6,12 +6,13 @@ import ContentPlaceholder from "./layout/ContentPlaceholder";
 import EditSection from "./nested-Components/EditSection";
 import PostCardSection from "./nested-Components/PostCardSection";
 import PostCreatorInfo from "./nested-Components/PostCreatorInfo";
+import ProfileCard from "./nested-Components/ProfileCard";
 import VoteSection from "./nested-Components/voteSection";
 
 const UserProfile: React.FC = ({}) => {
   const { id } = useParams();
   const [userState, userDispatch] = useUser();
-  console.log(id);
+  console.log("user: ", userState.userProfile?.user);
 
   useEffect(() => {
     if (id) getUserProfile(userDispatch, +id);
@@ -19,7 +20,7 @@ const UserProfile: React.FC = ({}) => {
 
   return (
     <div className="row ms-2">
-      <div className="col-8">
+      <div className="col-9">
         {userState.userProfile?.userPaginatedPost.postAndInteractions.map(
           (postAndInteraction) => (
             <div className="card my-3 " key={postAndInteraction.post.id}>
@@ -56,7 +57,12 @@ const UserProfile: React.FC = ({}) => {
           )
         )}
       </div>
-      <div className="col-4">{/* <ProfileCard user={meData} /> */}</div>
+      <div className="col-3 mt-2">
+        <ProfileCard
+          user={userState.userProfile?.user}
+          isMe={userState.user?.id === userState.userProfile?.user.id}
+        />
+      </div>
     </div>
   );
 };
