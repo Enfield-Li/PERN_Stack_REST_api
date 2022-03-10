@@ -1,17 +1,10 @@
 import {
-  CONFUSE_CURRENT_POST,
-  CONFUSE_POST,
-  LAUGHE_CURRENT_POST,
-  LAUGHE_POST,
-  LIKE_CURRENT_POST,
-  LIKE_POST,
-  LOGIN_USER,
+  CONFUSE_CURRENT_POST, LAUGH_CURRENT_POST, LIKE_CURRENT_POST, LOGIN_USER,
   LOGOUT_USER,
   USER_PROFILE,
-  VOTE_CURRENT_POST,
-  VOTE_POST,
+  VOTE_CURRENT_POST
 } from "../../constant";
-import { PaginatedPost, PostAndInteractions } from "../../Post/types/PostTypes";
+import { Interactions } from "../../Post/types/PostTypes";
 
 export type UserState = {
   user: User | null;
@@ -53,7 +46,30 @@ export type ResUserError = {
 
 export type UserProfileRO = {
   user: User;
-  userPaginatedPost: PaginatedPost;
+  userPaginatedPost: UserPaginatedPost;
+};
+
+export type UserPaginatedPost = {
+  postAndInteractions: UserPostAndInteractions[];
+  hasMore: boolean;
+};
+
+export type UserPostAndInteractions = {
+  post: {
+    id: number;
+    createdAt: Date;
+    updatedAt: Date;
+    title: string;
+    content: string | null;
+    userId: number;
+    viewCount: number;
+    votePoints: number;
+    likePoints: number;
+    confusedPoints: number;
+    laughPoints: number;
+    user: null;
+  };
+  interactions: Interactions;
 };
 
 export type UserActionType =
@@ -90,7 +106,7 @@ export type LikePost = {
 };
 
 export type LaughPost = {
-  type: typeof LAUGHE_CURRENT_POST;
+  type: typeof LAUGH_CURRENT_POST;
   payload: number;
 };
 

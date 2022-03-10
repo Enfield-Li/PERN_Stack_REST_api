@@ -35,7 +35,7 @@ const Post: React.FC<PostProps> = ({}) => {
                   <InteractionDisplay postAndInteractions={currentPost} />
                 </div>
               </div>
-              <EditSection postAndInteraction={currentPost} isNotMain={true} />
+              <EditSection postAndInteractions={currentPost} isNotMain={true} />
             </div>
           </div>
         </div>

@@ -1,10 +1,12 @@
 import { useState } from "react";
 import { usePopperTooltip } from "react-popper-tooltip";
+import { Link } from "react-router-dom";
 import { PostAndInteractions } from "../../contexts/Post/types/PostTypes";
+import { UserPostAndInteractions } from "../../contexts/User/types/UserTypes";
 import { calculateTime } from "../../utils/calculaTime";
 
 interface PostCreatorInfoProps {
-  postAndInteractions: PostAndInteractions;
+  postAndInteractions: PostAndInteractions | UserPostAndInteractions;
 }
 
 const PostCreatorInfo: React.FC<PostCreatorInfoProps> = ({
@@ -27,41 +29,52 @@ const PostCreatorInfo: React.FC<PostCreatorInfoProps> = ({
 
   return (
     <div className="fs-6 fw-lighter mt-2">
-      Posted by{" "}
-      <span
-        onMouseOver={async () => {
-          // setDecoration(true);
-          // let data = await apolloClient.query({
-          //   query: UserCardDocument,
-          //   variables: { userId: creator.id },
-          // });
-          // setUserCard(data);
-        }}
-        onMouseLeave={() => setDecoration(false)}
-      >
-        <span role="button" ref={setTriggerRef}>
-          <span
-            role="button"
-            className={`fw-light text-dark ${
-              decoration ? "text-decoration-underline" : "text-decoration-none"
-            }`}
-          >
-            {postAndInteractions.post.user.username}
+      Posted
+      {postAndInteractions.post.user && (
+        <span
+          onMouseOver={async () => {
+            // setDecoration(true);
+            // let data = await apolloClient.query({
+            //   query: UserCardDocument,
+            //   variables: { userId: creator.id },
+            // });
+            // setUserCard(data);
+          }}
+          onMouseLeave={() => setDecoration(false)}
+        >
+          <span role="button" ref={setTriggerRef}>
+            <span
+              role="button"
+              className={`fw-light text-dark ${
+                decoration
+                  ? "text-decoration-underline"
+                  : "text-decoration-none"
+              }`}
+            >
+              <span> by </span>
+              <Link
+                to={`/user-profile/${postAndInteractions.post.userId}`}
+                style={{ color: "black", textDecoration: "none" }}
+                role="button"
+              >
+                {postAndInteractions.post.user.username}
+              </Link>
+            </span>
           </span>
-        </span>
-        {visible && (
-          <div ref={setTooltipRef} {...getTooltipProps({ className: "" })}>
-            <div {...getArrowProps({ className: "tooltip-arrow" })} />
-            <div>
-              {/* {userCard?.data
+          {visible && (
+            <div ref={setTooltipRef} {...getTooltipProps({ className: "" })}>
+              <div {...getArrowProps({ className: "tooltip-arrow" })} />
+              <div>
+                {/* {userCard?.data
                 ? ""
                 : // <ProfileCard user={userCard?.data} userCard={true} />
                   null} */}
-              123
+                123
+              </div>
             </div>
-          </div>
-        )}
-      </span>
+          )}
+        </span>
+      )}
       <span className="ms-2 fw-lighter">
         {calculateTime(postAndInteractions.post.createdAt)}
       </span>

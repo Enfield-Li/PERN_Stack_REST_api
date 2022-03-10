@@ -1,29 +1,23 @@
+import axios from "axios";
 import { useContext } from "react";
-import UserContext from "../UserContext";
-import {
-  UserActionType,
-  UserState,
-  User,
-  UserCredential,
-  UserRegister,
-  UserRO,
-  UserProfileRO,
-} from "../types/UserTypes";
 import {
   CONFUSE_CURRENT_POST,
-  CONFUSE_POST,
-  LAUGHE_CURRENT_POST,
-  LAUGHE_POST,
+  LAUGH_CURRENT_POST,
   LIKE_CURRENT_POST,
-  LIKE_POST,
   LOGIN_USER,
   LOGOUT_USER,
   USER_PROFILE,
   VOTE_CURRENT_POST,
-  VOTE_POST,
 } from "../../constant";
-import axios from "axios";
-import { PostActionType } from "../../Post/types/PostTypes";
+import {
+  UserActionType,
+  UserCredential,
+  UserProfileRO,
+  UserRegister,
+  UserRO,
+  UserState,
+} from "../types/UserTypes";
+import UserContext from "../UserContext";
 
 export const useUser = (): [UserState, React.Dispatch<UserActionType>] => {
   const { state, dispatch } = useContext(UserContext);
@@ -87,7 +81,8 @@ export async function getUserProfile(
 ) {
   console.log("getUserProfile...");
   const res = await axios.get<UserProfileRO>(
-    `http://localhost:3119/user/profile/${id}`
+    `http://localhost:3119/user/profile/${id}`,
+    { withCredentials: true }
   );
   console.log("get userProfile: ", res.data);
 
@@ -124,7 +119,7 @@ export async function interactWithPostFromUserProfile(
 
   if (field === "laugh") {
     dispatch({
-      type: LAUGHE_CURRENT_POST,
+      type: LAUGH_CURRENT_POST,
       payload: id,
     });
   }

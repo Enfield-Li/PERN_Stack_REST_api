@@ -26,25 +26,30 @@ const UserProfile: React.FC = ({}) => {
               <div className="card-body">
                 <div className="d-flex justify-content-between">
                   <div className="d-flex justify-content-between">
-                    <VoteSection postAndInteractions={postAndInteraction} />
+                    <VoteSection
+                      postAndInteractions={postAndInteraction}
+                      isInProfile={true}
+                    />
                     <div>
-                      {/* <PostCreatorInfo
+                      <PostCreatorInfo
                         postAndInteractions={postAndInteraction}
-                      /> */}
+                      />
                       <div
                         className="d-flex flex-column justify-content-between"
                         style={{ color: "gray" }}
                       >
                         <PostCardSection
                           postAndInteractions={postAndInteraction}
+                          isInProfile={true}
                         />
                       </div>
                     </div>
                   </div>
-                  {/* <EditSection
-                    postAndInteraction={postAndInteraction}
-                    isNotMain={false}
-                  /> */}
+                  <EditSection
+                    postAndInteractions={postAndInteraction}
+                    isNotMain={true}
+                    isInProfile={true}
+                  />
                 </div>
               </div>
             </div>

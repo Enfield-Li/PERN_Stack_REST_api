@@ -23,7 +23,10 @@ function App() {
   const [userState, userDispatch] = useUser();
   const [postState, postDispatch] = usePost();
 
-  console.log("userProfile: ", userState.userProfile);
+  console.log(
+    "userProfile: ",
+    userState.userProfile?.userPaginatedPost.postAndInteractions
+  );
 
   // console.log("currentPost: ", postState.currentPost);
   // console.log("posts: ", postState.paginatedPosts.postAndInteractions);

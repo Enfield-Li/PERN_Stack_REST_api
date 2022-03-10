@@ -40,7 +40,7 @@ const MainContents: React.FC<MainContentsProps> = ({}) => {
                   </div>
                 </div>
                 <EditSection
-                  postAndInteraction={postAndInteraction}
+                  postAndInteractions={postAndInteraction}
                   isNotMain={false}
                 />
               </div>

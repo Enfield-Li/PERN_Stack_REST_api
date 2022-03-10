@@ -1,13 +1,16 @@
 import { PostAndInteractions } from "../../contexts/Post/types/PostTypes";
 import InteractionDisplay from "./InteractionDisplay";
 import { Link } from "react-router-dom";
+import { UserPostAndInteractions } from "../../contexts/User/types/UserTypes";
 
 interface PostCardSectionProps {
-  postAndInteractions: PostAndInteractions;
+  postAndInteractions: PostAndInteractions | UserPostAndInteractions;
+  isInProfile?: boolean;
 }
 
 const PostCardSection: React.FC<PostCardSectionProps> = ({
   postAndInteractions,
+  isInProfile = false,
 }) => {
   return (
     <div className="my-2">
@@ -25,7 +28,10 @@ const PostCardSection: React.FC<PostCardSectionProps> = ({
           {postAndInteractions.post.content}
         </p>
       </Link>
-      <InteractionDisplay postAndInteractions={postAndInteractions} />
+      <InteractionDisplay
+        postAndInteractions={postAndInteractions}
+        isInProfile={isInProfile}
+      />
     </div>
   );
 };

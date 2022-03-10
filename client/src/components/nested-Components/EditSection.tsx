@@ -7,19 +7,25 @@ import {
   usePost,
 } from "../../contexts/Post/actions/PostAction";
 import { PostAndInteractions } from "../../contexts/Post/types/PostTypes";
-import { useUser } from "../../contexts/User/actions/UserAction";
+import {
+  interactWithPostFromUserProfile,
+  useUser,
+} from "../../contexts/User/actions/UserAction";
+import { UserPostAndInteractions } from "../../contexts/User/types/UserTypes";
 
 interface EditSectionProps {
-  postAndInteraction: PostAndInteractions;
+  postAndInteractions: PostAndInteractions | UserPostAndInteractions;
   isNotMain: boolean;
+  isInProfile?: boolean;
 }
 
 const EditSection: React.FC<EditSectionProps> = ({
-  postAndInteraction,
+  postAndInteractions,
   isNotMain,
+  isInProfile = false,
 }) => {
   const [_, postDispatch] = usePost();
-  const [userState] = useUser();
+  const [userState, userDispatch] = useUser();
   const navigate = useNavigate();
 
   const [controlledVisible, setControlledVisible] = useState(false);
@@ -35,6 +41,25 @@ const EditSection: React.FC<EditSectionProps> = ({
     visible: controlledVisible,
     onVisibleChange: setControlledVisible,
   });
+
+  const interact = (field: "like" | "laugh" | "confused") => {
+    if (!userState.user) {
+      navigate("/login");
+      return;
+    }
+
+    if (isInProfile) {
+      interactWithPostFromUserProfile(
+        userDispatch,
+        postAndInteractions.post.id,
+        true,
+        field
+      );
+      return;
+    }
+
+    interactWithPost(postDispatch, postAndInteractions.post.id, true, field);
+  };
 
   return (
     <div className="d-flex flex-column">
@@ -56,24 +81,11 @@ const EditSection: React.FC<EditSectionProps> = ({
               <div
                 role="button"
                 className={`me-2 ${
-                  postAndInteraction.interactions?.likeStatus
+                  postAndInteractions.interactions?.likeStatus
                     ? "bg-secondary rounded"
                     : null
                 }`}
-                onClick={() => {
-                  if (!userState.user) {
-                    navigate("/login");
-                    return;
-                  }
-
-                  interactWithPost(
-                    postDispatch,
-                    postAndInteraction.post.id,
-                    true,
-                    "like"
-                  );
-                  return;
-                }}
+                onClick={() => interact("like")}
               >
                 ❤
               </div>
@@ -82,24 +94,11 @@ const EditSection: React.FC<EditSectionProps> = ({
               <span
                 role="button"
                 className={`me-2 ${
-                  postAndInteraction.interactions?.laughStatus
+                  postAndInteractions.interactions?.laughStatus
                     ? "bg-secondary rounded"
                     : null
                 }`}
-                onClick={() => {
-                  if (!userState.user) {
-                    navigate("/login");
-                    return;
-                  }
-
-                  interactWithPost(
-                    postDispatch,
-                    postAndInteraction.post.id,
-                    true,
-                    "laugh"
-                  );
-                  return;
-                }}
+                onClick={() => interact("laugh")}
               >
                 😄
               </span>
@@ -108,24 +107,11 @@ const EditSection: React.FC<EditSectionProps> = ({
               <span
                 role="button"
                 className={`${
-                  postAndInteraction.interactions?.confusedStatus
+                  postAndInteractions.interactions?.confusedStatus
                     ? "bg-secondary rounded"
                     : null
                 }`}
-                onClick={() => {
-                  if (!userState.user) {
-                    navigate("/login");
-                    return;
-                  }
-
-                  interactWithPost(
-                    postDispatch,
-                    postAndInteraction.post.id,
-                    true,
-                    "confused"
-                  );
-                  return;
-                }}
+                onClick={() => interact("confused")}
               >
                 😕
               </span>
@@ -135,42 +121,43 @@ const EditSection: React.FC<EditSectionProps> = ({
       )}
 
       {/* show edit/delete button or not */}
-      {userState.user?.username === postAndInteraction.post.user.username ? (
-        <div className="mt-1 d-flex flex-column">
-          {/* edit */}
-          <span
-            role="button"
-            className="text-decoration-none"
-            onClick={() => {
-              const url = isNotMain
-                ? `/post/edit/${postAndInteraction.post.id}`
-                : `/post/${postAndInteraction.post.id}`;
+      {postAndInteractions.post.user &&
+        (userState.user?.username === postAndInteractions.post.user.username ? (
+          <div className="mt-1 d-flex flex-column">
+            {/* edit */}
+            <span
+              role="button"
+              className="text-decoration-none"
+              onClick={() => {
+                const url = isNotMain
+                  ? `/post/edit/${postAndInteractions.post.id}`
+                  : `/post/${postAndInteractions.post.id}`;
 
-              navigate(url);
-            }}
-          >
-            📝
-          </span>
+                navigate(url);
+              }}
+            >
+              📝
+            </span>
 
-          {/* delete */}
-          <span
-            role="button"
-            className="mt-2 text-decoration-none"
-            onClick={() => {
-              if (isNotMain) {
-                deletePost(postDispatch, postAndInteraction.post.id);
-                navigate("/");
-              } else {
-                navigate(`/post/${postAndInteraction.post.id}`);
-              }
+            {/* delete */}
+            <span
+              role="button"
+              className="mt-2 text-decoration-none"
+              onClick={() => {
+                if (isNotMain) {
+                  deletePost(postDispatch, postAndInteractions.post.id);
+                  navigate("/");
+                } else {
+                  navigate(`/post/${postAndInteractions.post.id}`);
+                }
 
-              return;
-            }}
-          >
-            <i className="bi bi-trash3"></i>
-          </span>
-        </div>
-      ) : null}
+                return;
+              }}
+            >
+              <i className="bi bi-trash3"></i>
+            </span>
+          </div>
+        ) : null)}
     </div>
   );
 };

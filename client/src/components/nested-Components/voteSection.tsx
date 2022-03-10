@@ -5,16 +5,43 @@ import {
   usePost,
 } from "../../contexts/Post/actions/PostAction";
 import { PostAndInteractions } from "../../contexts/Post/types/PostTypes";
-import { useUser } from "../../contexts/User/actions/UserAction";
+import {
+  interactWithPostFromUserProfile,
+  useUser,
+} from "../../contexts/User/actions/UserAction";
+import { UserPostAndInteractions } from "../../contexts/User/types/UserTypes";
 
 interface VoteSectionProps {
-  postAndInteractions: PostAndInteractions;
+  postAndInteractions: PostAndInteractions | UserPostAndInteractions;
+  isInProfile?: boolean;
 }
 
-const VoteSection: React.FC<VoteSectionProps> = ({ postAndInteractions }) => {
+const VoteSection: React.FC<VoteSectionProps> = ({
+  postAndInteractions,
+  isInProfile = false,
+}) => {
   const [_, postDispatch] = usePost();
-  const [userState] = useUser();
+  const [userState, userDispatch] = useUser();
   const navigate = useNavigate();
+
+  const vote = (bool: boolean) => {
+    if (!userState.user) {
+      navigate("/login");
+      return;
+    }
+
+    if (isInProfile) {
+      interactWithPostFromUserProfile(
+        userDispatch,
+        postAndInteractions.post.id,
+        bool,
+        "vote"
+      );
+      return;
+    }
+
+    interactWithPost(postDispatch, postAndInteractions.post.id, bool, "vote");
+  };
 
   return (
     <div className="me-3 mt-2">
@@ -22,20 +49,7 @@ const VoteSection: React.FC<VoteSectionProps> = ({ postAndInteractions }) => {
         className={`bi bi-caret-up btn ${
           postAndInteractions.interactions?.voteStatus === true ? "bg-info" : ""
         }`}
-        onClick={async () => {
-          if (!userState.user) {
-            navigate("/login");
-            return;
-          }
-
-          await interactWithPost(
-            postDispatch,
-            postAndInteractions.post.id,
-            true,
-            "vote"
-          );
-          return;
-        }}
+        onClick={() => vote(true)}
       />
       <div className="text-center">{postAndInteractions.post.votePoints}</div>
       <button
@@ -44,20 +58,7 @@ const VoteSection: React.FC<VoteSectionProps> = ({ postAndInteractions }) => {
             ? "bg-danger"
             : ""
         }`}
-        onClick={async () => {
-          if (!userState.user) {
-            navigate("/login");
-            return;
-          }
-
-          await interactWithPost(
-            postDispatch,
-            postAndInteractions.post.id,
-            false,
-            "vote"
-          );
-          return;
-        }}
+        onClick={() => vote(false)}
       />
     </div>
   );
