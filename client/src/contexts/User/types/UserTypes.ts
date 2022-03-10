@@ -1,8 +1,11 @@
 import {
-  CONFUSE_CURRENT_POST, LAUGH_CURRENT_POST, LIKE_CURRENT_POST, LOGIN_USER,
+  CONFUSE_CURRENT_POST,
+  LAUGH_CURRENT_POST,
+  LIKE_CURRENT_POST,
+  LOGIN_USER,
   LOGOUT_USER,
   USER_PROFILE,
-  VOTE_CURRENT_POST
+  VOTE_CURRENT_POST,
 } from "../../constant";
 import { Interactions } from "../../Post/types/PostTypes";
 

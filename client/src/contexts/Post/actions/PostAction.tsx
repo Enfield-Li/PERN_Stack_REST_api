@@ -9,7 +9,7 @@ import {
   LAUGHE_POST,
   LIKE_POST,
 } from "../../constant";
-import axios from "axios";
+import axios, { AxiosResponse } from "axios";
 import {
   CreatePostType,
   PaginatedPost,
@@ -105,33 +105,28 @@ export const fetchPaginatedPosts = async (
   cursor?: Date
 ) => {
   console.log("fetchPaginatedPosts...");
+
+  let res: AxiosResponse<PaginatedPost, any> | null = null;
+
   if (cursor) {
-    const res = await axios.get<PaginatedPost>(
+    res = await axios.get<PaginatedPost>(
       `http://localhost:3119/post/paginated-posts?cursor=${cursor}`,
       { withCredentials: true }
     );
-
-    // initiate interactions
-    interactionNullCheckAndPopulateData(res.data.postAndInteractions);
-
-    dispatch({
-      type: FETCH_PAGINATED_POSTS,
-      payload: res.data,
-    });
   } else {
-    const res = await axios.get<PaginatedPost>(
+    res = await axios.get<PaginatedPost>(
       "http://localhost:3119/post/paginated-posts",
       { withCredentials: true }
     );
-
-    // initiate interactions
-    interactionNullCheckAndPopulateData(res.data.postAndInteractions);
-
-    dispatch({
-      type: FETCH_PAGINATED_POSTS,
-      payload: res.data,
-    });
   }
+
+  // initiate interactions
+  interactionNullCheckAndPopulateData(res.data.postAndInteractions);
+
+  dispatch({
+    type: FETCH_PAGINATED_POSTS,
+    payload: res.data,
+  });
 };
 
 export const clearCache = (dispatch: React.Dispatch<PostActionType>) => {
@@ -158,7 +153,7 @@ export const fetchSinglePost = async (
     const postId = res.data.post.id;
     const interactions = res.data.interactions;
 
-    const newInteractions = populateWithMockData(interactions, userId, postId);
+    const newInteractions = populateWithMockData(interactions, postId);
 
     res.data.interactions = newInteractions;
   }

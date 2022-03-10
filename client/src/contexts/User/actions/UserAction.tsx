@@ -1,5 +1,6 @@
-import axios from "axios";
+import axios, { AxiosResponse } from "axios";
 import { useContext } from "react";
+import { interactionNullCheckAndPopulateData } from "../../../utils/populateWithMockData";
 import {
   CONFUSE_CURRENT_POST,
   LAUGH_CURRENT_POST,
@@ -77,14 +78,33 @@ export async function me(dispatch: React.Dispatch<UserActionType>) {
 
 export async function getUserProfile(
   dispatch: React.Dispatch<UserActionType>,
-  id: number
+  id: number,
+  cursor?: Date
 ) {
   console.log("getUserProfile...");
-  const res = await axios.get<UserProfileRO>(
-    `http://localhost:3119/user/profile/${id}`,
-    { withCredentials: true }
+
+  let res: AxiosResponse<UserProfileRO, any> | null = null;
+
+  if (cursor) {
+    res = await axios.get<UserProfileRO>(
+      `http://localhost:3119/user/profile/${id}?cursor=${cursor}`,
+      { withCredentials: true }
+    );
+  } else {
+    res = await axios.get<UserProfileRO>(
+      `http://localhost:3119/user/profile/${id}`,
+      { withCredentials: true }
+    );
+  }
+
+  interactionNullCheckAndPopulateData(
+    res.data.userPaginatedPost.postAndInteractions
   );
-  console.log("get userProfile: ", res.data);
+
+  console.log(
+    "postAndInteractions: ",
+    res.data.userPaginatedPost.postAndInteractions
+  );
 
   dispatch({
     type: USER_PROFILE,

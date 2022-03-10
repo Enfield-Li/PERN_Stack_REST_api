@@ -1,8 +1,6 @@
 import React, { useEffect } from "react";
 import { useParams } from "react-router-dom";
 import { getUserProfile, useUser } from "../contexts/User/actions/UserAction";
-import { UserProfileRO } from "../contexts/User/types/UserTypes";
-import ContentPlaceholder from "./layout/ContentPlaceholder";
 import EditSection from "./nested-Components/EditSection";
 import PostCardSection from "./nested-Components/PostCardSection";
 import PostCreatorInfo from "./nested-Components/PostCreatorInfo";
@@ -12,7 +10,6 @@ import VoteSection from "./nested-Components/voteSection";
 const UserProfile: React.FC = ({}) => {
   const { id } = useParams();
   const [userState, userDispatch] = useUser();
-  console.log("user: ", userState.userProfile?.user);
 
   useEffect(() => {
     if (id) getUserProfile(userDispatch, +id);
@@ -56,6 +53,26 @@ const UserProfile: React.FC = ({}) => {
             </div>
           )
         )}
+
+        <div className="d-flex justify-content-center my-2">
+          {userState.userProfile?.userPaginatedPost.hasMore && id ? (
+            <button
+              className="btn btn-primary"
+              onClick={() => {
+                getUserProfile(
+                  userDispatch,
+                  +id,
+                  userState.userProfile?.userPaginatedPost.postAndInteractions[
+                    userState.userProfile?.userPaginatedPost.postAndInteractions
+                      .length - 1
+                  ].post.createdAt
+                );
+              }}
+            >
+              More Posts
+            </button>
+          ) : null}
+        </div>
       </div>
       <div className="col-3 mt-2">
         <ProfileCard

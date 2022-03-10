@@ -2,10 +2,11 @@ import {
   Interactions,
   PostAndInteractions,
 } from "../contexts/Post/types/PostTypes";
+import { UserPostAndInteractions } from "../contexts/User/types/UserTypes";
 
 export const populateWithMockData = (
   interactions: Interactions,
-  userId: number,
+
   postId: number
 ) => {
   interactions = {
@@ -14,7 +15,7 @@ export const populateWithMockData = (
     laughStatus: null,
     likeStatus: null,
     postId,
-    userId,
+    userId: 0,
     voteStatus: null,
   };
 
@@ -22,19 +23,14 @@ export const populateWithMockData = (
 };
 
 export const interactionNullCheckAndPopulateData = (
-  postAndInteractions: PostAndInteractions[]
+  postAndInteractions: PostAndInteractions[] | UserPostAndInteractions[]
 ) => {
   postAndInteractions.forEach((postAndInteraction) => {
-    if (postAndInteraction.interactions === null) {
+    if (!postAndInteraction.interactions) {
       const interactions = postAndInteraction.interactions;
-      const userId = postAndInteraction.post.user.id;
       const postId = postAndInteraction.post.id;
 
-      const newInteractions = populateWithMockData(
-        interactions,
-        userId,
-        postId
-      );
+      const newInteractions = populateWithMockData(interactions, postId);
 
       postAndInteraction.interactions = newInteractions;
     }

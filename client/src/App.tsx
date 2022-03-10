@@ -29,7 +29,7 @@ function App() {
   // );
 
   // console.log("currentPost: ", postState.currentPost);
-  // console.log("posts: ", postState.paginatedPosts.postAndInteractions);
+  console.log("posts: ", postState.paginatedPosts.postAndInteractions);
 
   useEffect(() => {
     me(userDispatch);

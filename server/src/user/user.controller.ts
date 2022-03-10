@@ -58,7 +58,7 @@ export class UserController {
   async getProfile(
     @Param('id') id: string,
     @Req() req: Request,
-    @Query('take') take: string = '10',
+    @Query('take') take: string = '5',
     @Query('cursor') cursor?: Date,
   ) {
     return this.userService.fetchProfile(

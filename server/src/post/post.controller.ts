@@ -61,7 +61,7 @@ export class PostController {
     @Query('cursor') cursor?: Date,
   ): Promise<PaginatedPost> {
     return this.postService.getPaginatedPost(
-      'best',
+      'new',
       req.session.userId,
       +take,
       cursor,

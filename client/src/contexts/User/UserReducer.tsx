@@ -31,6 +31,22 @@ export default function UserReducer(state: UserState, action: UserActionType) {
       };
     }
 
+    case USER_PROFILE: {
+      console.log("USER_PROFILE");
+      return produce(state, (draftState) => {
+        if (draftState.userProfile) {
+          draftState.userProfile.user = action.payload.user;
+          draftState.userProfile.userPaginatedPost.hasMore =
+            action.payload.userPaginatedPost.hasMore;
+          draftState.userProfile.userPaginatedPost.postAndInteractions.push(
+            ...action.payload.userPaginatedPost.postAndInteractions
+          );
+        } else {
+          draftState.userProfile = action.payload;
+        }
+      });
+    }
+
     case VOTE_CURRENT_POST: {
       return produce(state, (draftState) => {
         console.log("VOTE_CURRENT_POST userReducer...");
@@ -144,13 +160,6 @@ export default function UserReducer(state: UserState, action: UserActionType) {
               }
             );
         }
-      });
-    }
-
-    case USER_PROFILE: {
-      console.log("USER_PROFILE");
-      return produce(state, (draftState) => {
-        draftState.userProfile = action.payload;
       });
     }
 
