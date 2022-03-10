@@ -1,7 +1,9 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { user } from '@prisma/client';
 import { IsEmail, IsNotEmpty, IsString, MinLength } from 'class-validator';
-import { PostAndInteraction } from 'src/post/dto/create-post.dto';
+import {
+  PaginatedPost,
+  PostAndInteraction,
+} from 'src/post/dto/create-post.dto';
 
 export class CreateUserDto {
   @MinLength(5)
@@ -58,6 +60,9 @@ export class UserRO {
 }
 
 export class userProfileRO {
-  user: user;
-  userPosts: PostAndInteraction[];
+  @ApiProperty()
+  user: ResUser;
+
+  @ApiProperty()
+  userPaginatedPost: PaginatedPost;
 }

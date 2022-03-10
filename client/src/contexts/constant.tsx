@@ -9,3 +9,4 @@ export const VOTE_POST = "votes";
 export const LIKE_POST = "likes";
 export const LAUGHE_POST = "laughes";
 export const CONFUSE_POST = "confuses";
+export const USER_PROFILE = "user_Profile";

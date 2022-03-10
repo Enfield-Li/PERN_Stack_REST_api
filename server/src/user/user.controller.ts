@@ -10,6 +10,7 @@ import {
   HttpException,
   Res,
   Put,
+  Query,
 } from '@nestjs/common';
 import { UserService } from './user.service';
 import {
@@ -22,6 +23,7 @@ import { UpdateUserDto } from './dto/update-user.dto';
 import {
   ApiCreatedResponse,
   ApiOkResponse,
+  ApiQuery,
   ApiResponse,
   ApiTags,
 } from '@nestjs/swagger';
@@ -42,10 +44,29 @@ export class UserController {
     return this.userService.createUser(createUserDto, req);
   }
 
-  @Get('/profile')
+  @ApiQuery({
+    name: 'take',
+    required: false,
+  })
+  @ApiQuery({
+    name: 'cursor',
+    required: false,
+    type: Date,
+  })
+  @Get('/profile/:id')
   @ApiCreatedResponse({ type: UserProfileRO })
-  async getProfile(@Req() req: Request) {
-    return this.userService.fetchProfile(req.session.userId);
+  async getProfile(
+    @Param('id') id: string,
+    @Req() req: Request,
+    @Query('take') take: string = '10',
+    @Query('cursor') cursor?: Date,
+  ) {
+    return this.userService.fetchProfile(
+      +id,
+      req.session.userId,
+      +take,
+      cursor,
+    );
   }
 
   @Put('/login')

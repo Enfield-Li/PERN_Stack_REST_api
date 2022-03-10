@@ -1,10 +1,5 @@
-import { LOGIN_USER, LOGOUT_USER } from "../../constant";
-import {
-  AddPost,
-  SetPost,
-  DeletePost,
-  FetchPaginatedPosts,
-} from "../../Post/types/PostTypes";
+import { LOGIN_USER, LOGOUT_USER, USER_PROFILE } from "../../constant";
+import { PaginatedPost, PostAndInteractions } from "../../Post/types/PostTypes";
 
 export type UserState = {
   user: User | null;
@@ -26,8 +21,8 @@ export type UserRegister = {
 };
 
 export type User = {
+  id: number;
   username: string;
-  password: string;
   email: string;
   createdAt: string;
 };
@@ -42,7 +37,12 @@ export type ResUserError = {
   message: string;
 };
 
-export type UserActionType = LoginUser | LogoutUser;
+export type UserProfileRO = {
+  user: User;
+  userPaginatedPost: PaginatedPost;
+};
+
+export type UserActionType = LoginUser | LogoutUser | GetUserProfile;
 
 type LoginUser = {
   type: typeof LOGIN_USER;
@@ -51,4 +51,9 @@ type LoginUser = {
 
 type LogoutUser = {
   type: typeof LOGOUT_USER;
+};
+
+type GetUserProfile = {
+  type: typeof USER_PROFILE;
+  payload: UserProfileRO;
 };

@@ -7,8 +7,9 @@ import {
   UserCredential,
   UserRegister,
   UserRO,
+  UserProfileRO,
 } from "../types/UserTypes";
-import { LOGIN_USER, LOGOUT_USER } from "../../constant";
+import { LOGIN_USER, LOGOUT_USER, USER_PROFILE } from "../../constant";
 import axios from "axios";
 
 export const useUser = (): [UserState, React.Dispatch<UserActionType>] => {
@@ -42,7 +43,7 @@ export async function loginUser(
   const res = await axios.put<UserRO>(
     "http://localhost:3119/user/login",
     userCredential,
-    { withCredentials: true } // !!! important !!!
+    { withCredentials: true }
   );
 
   if (res.data.user) {
@@ -64,6 +65,21 @@ export async function me(dispatch: React.Dispatch<UserActionType>) {
   dispatch({
     type: LOGIN_USER,
     payload: res.data.user,
+  });
+}
+
+export async function getUserProfile(
+  dispatch: React.Dispatch<UserActionType>,
+  id: number
+) {
+  console.log("getUserProfile...");
+  const res = await axios.get<UserProfileRO>(
+    `http://localhost:3119/user/profile/${id}`
+  );
+
+  dispatch({
+    type: USER_PROFILE,
+    payload: res.data,
   });
 }
 

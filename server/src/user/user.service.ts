@@ -74,17 +74,35 @@ export class UserService {
     return { user: this.buildUserRO(user) };
   }
 
-  async fetchProfile(id: number): Promise<userProfileRO> {
+  async fetchProfile(
+    userId: number,
+    meId: number,
+    take: number,
+    cursor?: Date,
+  ): Promise<userProfileRO> {
+    const takeLimit = Math.min(25, take);
+    const takeLimitPlusOne = takeLimit + 1;
+
     const userProfile = await this.prismaService.user.findUnique({
-      where: { id },
+      where: { id: userId },
       include: {
-        post: { include: { interactions: true } },
+        post: {
+          include: { interactions: { where: { userId: meId } } },
+          take: takeLimitPlusOne,
+          orderBy: { createdAt: 'desc' },
+          skip: cursor ? 1 : undefined,
+          cursor: cursor ? { createdAt: cursor } : undefined,
+        },
       },
     });
 
+    const hasMore = userProfile.post.length === takeLimitPlusOne;
+
     const postAndInteractions: PostAndInteraction[] = [];
 
-    for (let i = 0; i < userProfile.post.length; i++) {
+    for (let i = 0; i < userProfile.post.length - 1; i++) {
+      userProfile.post[i].content.slice(0, 50);
+
       postAndInteractions[i] = {
         post: userProfile.post[i],
         interactions: userProfile.post[i].interactions[0],
@@ -93,7 +111,10 @@ export class UserService {
     }
     delete userProfile.post;
 
-    return { user: userProfile, userPosts: postAndInteractions };
+    return {
+      user: this.buildUserRO(userProfile),
+      userPaginatedPost: { hasMore, postAndInteractions },
+    };
   }
 
   async updateUser(id: number, updateUserDto: UpdateUserDto): Promise<UserRO> {

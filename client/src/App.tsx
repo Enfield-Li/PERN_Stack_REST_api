@@ -6,7 +6,11 @@ import MainContents from "./components/MainContents";
 import Navbar from "./components/Navbar";
 import PostPage from "./components/Post";
 import Register from "./components/register";
-import { me, useUser } from "./contexts/User/actions/UserAction";
+import {
+  getUserProfile,
+  me,
+  useUser,
+} from "./contexts/User/actions/UserAction";
 import {
   fetchPaginatedPosts,
   usePost,
@@ -22,12 +26,8 @@ function App() {
   // console.log("posts: ", postState.paginatedPosts.postAndInteractions);
 
   useEffect(() => {
-    const fetchPostsAndMe = async () => {
-      await me(userDispatch);
-      await fetchPaginatedPosts(postDispatch);
-    };
-
-    fetchPostsAndMe();
+    me(userDispatch);
+    fetchPaginatedPosts(postDispatch);
   }, []);
 
   return (

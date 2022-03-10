@@ -61,7 +61,7 @@ export class PostService {
   async getPaginatedPost(
     orderBy: 'new' | 'hot' | 'best',
     userId: number,
-    take: number = 10,
+    take: number,
     cursor?: Date,
   ): Promise<PaginatedPost> {
     let orderByObj = {};
