@@ -49,9 +49,10 @@ export default function UserReducer(state: UserState, action: UserActionType) {
     }
 
     case CLEAR_CACHE: {
-      return produce(state, (draftState) => {
-        draftState.userProfile = null;
-      });
+      return {
+        ...state,
+        userProfile: null,
+      };
     }
 
     case VOTE_CURRENT_POST: {

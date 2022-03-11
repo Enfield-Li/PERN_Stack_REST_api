@@ -1,5 +1,6 @@
 import moment from "moment";
 import React from "react";
+import { Link } from "react-router-dom";
 import { User } from "../../contexts/User/types/UserTypes";
 
 interface ProfileCardProps {
@@ -33,9 +34,11 @@ const ProfileCard: React.FC<ProfileCardProps> = ({ user, isMe }) => {
           </div>
         </div>
         {isMe && (
-          <div role="button" className="btn btn-primary col-12 mt-1">
-            Crete post
-          </div>
+          <Link to="/create-post">
+            <div role="button" className="btn btn-primary col-12 mt-1">
+              Crete post
+            </div>
+          </Link>
         )}
       </div>
     </div>
