@@ -112,7 +112,7 @@ export class UserService {
     delete userProfile.post;
 
     return {
-      user: this.buildUserRO(userProfile),
+      user: this.buildUserRO(userProfile, meId),
       userPaginatedPost: { hasMore, postAndInteractions },
     };
   }
@@ -144,8 +144,10 @@ export class UserService {
     return true;
   }
 
-  private buildUserRO(user: user) {
-    const { username, createdAt, email, id, postAmounts } = user;
+  private buildUserRO(user: user, meId?: number) {
+    let { username, createdAt, email, id, postAmounts } = user;
+
+    if (meId) email = meId === user.id ? email : null;
 
     return { createdAt, username, email, id, postAmounts };
   }

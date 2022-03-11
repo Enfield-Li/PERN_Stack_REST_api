@@ -18,7 +18,7 @@ const ProfileCard: React.FC<ProfileCardProps> = ({ user, isMe }) => {
       <div className="card-body">
         <div className="d-flex flex-column align-items-center">
           <div className="card-title fs-3">{user.username}</div>
-          <div>{user.email}</div>
+          <div>{user.email && user.email}</div>
         </div>
         <div className="card-text my-2">
           <div className="row">

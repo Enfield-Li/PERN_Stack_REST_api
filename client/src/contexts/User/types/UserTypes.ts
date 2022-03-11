@@ -28,7 +28,7 @@ export type UserCredential = {
 export type UserRegister = {
   username: string;
   password: string;
-  email: string;
+  email?: string;
 };
 
 export type User = {
