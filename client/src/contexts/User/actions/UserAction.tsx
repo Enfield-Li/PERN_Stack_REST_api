@@ -96,15 +96,15 @@ export async function getUserProfile(
       `http://localhost:3119/user/profile/${id}`,
       { withCredentials: true }
     );
+
+    dispatch({
+      type: CLEAR_CACHE,
+    });
   }
 
   interactionNullCheckAndPopulateData(
     res.data.userPaginatedPost.postAndInteractions
   );
-
-  dispatch({
-    type: CLEAR_CACHE,
-  });
 
   dispatch({
     type: USER_PROFILE,
