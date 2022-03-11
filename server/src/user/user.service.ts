@@ -96,11 +96,16 @@ export class UserService {
       },
     });
 
-    const hasMore = userProfile.post.length === takeLimitPlusOne;
-
     const postAndInteractions: PostAndInteraction[] = [];
 
-    for (let i = 0; i < userProfile.post.length - 1; i++) {
+    const hasMore = userProfile.post.length === takeLimitPlusOne;
+
+    // return all posts if user does not have post left
+    const fullLength = hasMore
+      ? userProfile.post.length - 1
+      : userProfile.post.length;
+
+    for (let i = 0; i < fullLength; i++) {
       userProfile.post[i].content.slice(0, 50);
 
       postAndInteractions[i] = {

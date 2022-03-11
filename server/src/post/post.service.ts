@@ -90,7 +90,11 @@ export class PostService {
 
     const postAndInteractions: PostAndInteraction[] = [];
 
-    for (let i = 0; i < posts.length - 1; i++) {
+    const hasMore = posts.length === takeLimitPlusOne;
+
+    const fullLength = hasMore ? posts.length - 1 : posts.length;
+
+    for (let i = 0; i < fullLength; i++) {
       // send snippets numbering 49
       posts[i].content = posts[i].content.slice(0, 50);
 
@@ -109,7 +113,7 @@ export class PostService {
     }
 
     return {
-      hasMore: posts.length === takeLimitPlusOne,
+      hasMore,
       postAndInteractions,
     };
   }
