@@ -145,9 +145,9 @@ export class UserService {
   }
 
   private buildUserRO(user: user) {
-    const { username, createdAt, email, id } = user;
+    const { username, createdAt, email, id, postAmounts } = user;
 
-    return { createdAt, username, email, id };
+    return { createdAt, username, email, id, postAmounts };
   }
 
   private buildErrorRo(field: string): ResUserError {

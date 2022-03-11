@@ -41,6 +41,9 @@ export class ResUser {
 
   @ApiProperty()
   createdAt: Date;
+
+  @ApiProperty()
+  postAmounts: number;
 }
 
 export class ResUserError {

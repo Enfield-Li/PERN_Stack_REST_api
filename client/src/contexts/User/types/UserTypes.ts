@@ -35,6 +35,7 @@ export type User = {
   username: string;
   email: string;
   createdAt: string;
+  postAmounts: number;
 };
 
 export type UserRO = {

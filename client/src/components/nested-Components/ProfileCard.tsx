@@ -23,7 +23,7 @@ const ProfileCard: React.FC<ProfileCardProps> = ({ user, isMe }) => {
           <div className="row">
             <div className="col-5 ms-1">
               <div>Posts</div>
-              <div>📘 </div>
+              <div>📘 {user.postAmounts} posts </div>
             </div>
 
             <div className="col-6">
