@@ -1,4 +1,5 @@
 import {
+  CLEAR_CACHE,
   CONFUSE_CURRENT_POST,
   LAUGH_CURRENT_POST,
   LIKE_CURRENT_POST,
@@ -44,6 +45,12 @@ export default function UserReducer(state: UserState, action: UserActionType) {
         } else {
           draftState.userProfile = action.payload;
         }
+      });
+    }
+
+    case CLEAR_CACHE: {
+      return produce(state, (draftState) => {
+        draftState.userProfile = null;
       });
     }
 

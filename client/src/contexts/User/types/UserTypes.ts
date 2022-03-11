@@ -1,4 +1,5 @@
 import {
+  CLEAR_CACHE,
   CONFUSE_CURRENT_POST,
   LAUGH_CURRENT_POST,
   LIKE_CURRENT_POST,
@@ -83,7 +84,8 @@ export type UserActionType =
   | VotePost
   | LikePost
   | ConfusePost
-  | LaughPost;
+  | LaughPost
+  | ClearUserCache;
 
 type LoginUser = {
   type: typeof LOGIN_USER;
@@ -117,4 +119,8 @@ export type LaughPost = {
 export type ConfusePost = {
   type: typeof CONFUSE_CURRENT_POST;
   payload: number;
+};
+
+export type ClearUserCache = {
+  type: typeof CLEAR_CACHE;
 };

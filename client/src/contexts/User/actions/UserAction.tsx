@@ -2,6 +2,7 @@ import axios, { AxiosResponse } from "axios";
 import { useContext } from "react";
 import { interactionNullCheckAndPopulateData } from "../../../utils/populateWithMockData";
 import {
+  CLEAR_CACHE,
   CONFUSE_CURRENT_POST,
   LAUGH_CURRENT_POST,
   LIKE_CURRENT_POST,
@@ -101,10 +102,9 @@ export async function getUserProfile(
     res.data.userPaginatedPost.postAndInteractions
   );
 
-  console.log(
-    "postAndInteractions: ",
-    res.data.userPaginatedPost.postAndInteractions
-  );
+  dispatch({
+    type: CLEAR_CACHE,
+  });
 
   dispatch({
     type: USER_PROFILE,
