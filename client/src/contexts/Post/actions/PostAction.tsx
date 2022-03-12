@@ -102,6 +102,7 @@ export function setCurrentPost(
 
 export const fetchPaginatedPosts = async (
   dispatch: React.Dispatch<PostActionType>,
+  orderBy: "new" | "hot" | "best" = "best",
   cursor?: Date
 ) => {
   console.log("fetchPaginatedPosts...");
@@ -110,14 +111,20 @@ export const fetchPaginatedPosts = async (
 
   if (cursor) {
     res = await axios.get<PaginatedPost>(
-      `http://localhost:3119/post/paginated-posts?cursor=${cursor}`,
+      `http://localhost:3119/post/paginated-posts?cursor=${cursor}&orderBy=${orderBy}`,
       { withCredentials: true }
     );
   } else {
+    console.log("orderBy:", orderBy);
     res = await axios.get<PaginatedPost>(
-      "http://localhost:3119/post/paginated-posts",
+      `http://localhost:3119/post/paginated-posts?orderBy=${orderBy}`,
       { withCredentials: true }
     );
+
+    // Clear cache first when switch orderBy
+    dispatch({
+      type: CLEAR_CACHE,
+    });
   }
 
   // initiate interactions

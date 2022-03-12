@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   fetchPaginatedPosts,
   usePost,
@@ -9,19 +9,22 @@ import EditSection from "./nested-Components/EditSection";
 import PostCardSection from "./nested-Components/PostCardSection";
 import PostCreatorInfo from "./nested-Components/PostCreatorInfo";
 import VoteSection from "./nested-Components/voteSection";
+import FilterBy from "./layout/FilterBy";
 
 interface MainContentsProps {}
 
 const MainContents: React.FC<MainContentsProps> = ({}) => {
-  const [postState, postDispatch] = usePost();
-  const posts = postState.paginatedPosts;
+  const [{ paginatedPosts }, postDispatch] = usePost();
+
+  const [state, setState] = useState<"new" | "hot" | "best">("best");
 
   return (
     <div>
       <CreatePostArea />
+      <FilterBy state={state} setState={setState} />
 
-      {posts.postAndInteractions.length > 0 ? (
-        posts.postAndInteractions.map((postAndInteraction) => (
+      {paginatedPosts.postAndInteractions.length > 0 ? (
+        paginatedPosts.postAndInteractions.map((postAndInteraction) => (
           <div className="card my-3 " key={postAndInteraction.post.id}>
             <div className="card-body">
               <div className="d-flex justify-content-between">
@@ -55,14 +58,16 @@ const MainContents: React.FC<MainContentsProps> = ({}) => {
       )}
 
       <div className="d-flex justify-content-center">
-        {posts.hasMore ? (
+        {paginatedPosts.hasMore ? (
           <button
             className="btn btn-primary"
             onClick={() => {
               fetchPaginatedPosts(
                 postDispatch,
-                posts.postAndInteractions[posts.postAndInteractions.length - 1]
-                  .post.createdAt
+                state,
+                paginatedPosts.postAndInteractions[
+                  paginatedPosts.postAndInteractions.length - 1
+                ].post.createdAt
               );
             }}
           >

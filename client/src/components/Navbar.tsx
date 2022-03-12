@@ -13,6 +13,7 @@ const Navbar: React.FC<navbarProps> = ({}) => {
   const [_, postDispatch] = usePost();
   const [{ user }, userDispatch] = useUser();
 
+  // user related settings
   let userProfile = user ? (
     <div className="dropdown">
       <div
@@ -94,7 +95,8 @@ const Navbar: React.FC<navbarProps> = ({}) => {
             fetchPaginatedPosts(postDispatch);
           }}
         >
-          Home
+          <i className="bi bi-reddit text-danger fs-1"></i>{" "}
+          <span className="text-danger">Reddit</span>
         </Link>
       </div>
 
