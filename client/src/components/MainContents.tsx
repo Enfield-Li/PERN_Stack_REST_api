@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   fetchPaginatedPosts,
   usePost,
@@ -18,6 +18,10 @@ const MainContents: React.FC<MainContentsProps> = ({}) => {
   const postAndInteractions = paginatedPosts.postAndInteractions;
 
   const [state, setState] = useState<"new" | "hot" | "best">("best");
+
+  useEffect(() => {
+    setState("best");
+  }, []);
 
   let cursor = new Date("2250").toISOString();
   for (let i = 0; i < postAndInteractions.length; i++) {
