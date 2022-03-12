@@ -64,12 +64,14 @@ export class PostService {
     take: number,
     cursor?: Date,
   ): Promise<PaginatedPost> {
-    let orderByObj = {};
-
-    // default order ie. orderBy === new
-    orderByObj = { createdAt: 'desc' };
-    if (orderBy === 'hot') orderByObj = { votePoints: 'desc' };
-    if (orderBy === 'best') orderByObj = { likePoints: 'desc' };
+    let orderByObj: any = [{ votePoints: 'desc' }, { laughPoints: 'desc' }];
+    if (orderBy === 'hot')
+      orderByObj = [
+        { updatedAt: 'desc' },
+        { createdAt: 'desc' },
+        { likePoints: 'desc' },
+      ];
+    if (orderBy === 'new') orderByObj = { createdAt: 'desc' };
 
     const takeLimit = Math.min(25, take);
     const takeLimitPlusOne = takeLimit + 1;

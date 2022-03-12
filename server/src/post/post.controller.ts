@@ -53,15 +53,21 @@ export class PostController {
     required: false,
     type: Date,
   })
+  @ApiQuery({
+    name: 'orderBy',
+    required: false,
+    enum: ['new', 'hot', 'best'],
+  })
   @ApiCreatedResponse({ type: PaginatedPost })
   @Get('paginated-posts')
   findAll(
     @Req() req: Request,
     @Query('take') take: string = '10',
+    @Query('orderBy') orderBy: 'new' | 'hot' | 'best' = 'best',
     @Query('cursor') cursor?: Date,
   ): Promise<PaginatedPost> {
     return this.postService.getPaginatedPost(
-      'new',
+      orderBy,
       req.session.userId,
       +take,
       cursor,

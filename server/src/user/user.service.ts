@@ -62,10 +62,6 @@ export class UserService {
     return user;
   }
 
-  // async findUserAndPostAmount(): Promise<ResUser> {
-
-  // }
-
   async me(id: number): Promise<UserRO> {
     const user = await this.prismaService.user.findUnique({
       where: { id },

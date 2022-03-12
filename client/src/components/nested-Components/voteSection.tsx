@@ -21,11 +21,11 @@ const VoteSection: React.FC<VoteSectionProps> = ({
   isInProfile = false,
 }) => {
   const [_, postDispatch] = usePost();
-  const [userState, userDispatch] = useUser();
+  const [{ user }, userDispatch] = useUser();
   const navigate = useNavigate();
 
   const vote = (bool: boolean) => {
-    if (!userState.user) {
+    if (!user) {
       navigate("/login");
       return;
     }

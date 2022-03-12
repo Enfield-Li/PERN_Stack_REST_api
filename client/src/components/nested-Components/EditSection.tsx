@@ -25,7 +25,7 @@ const EditSection: React.FC<EditSectionProps> = ({
   isInProfile = false,
 }) => {
   const [_, postDispatch] = usePost();
-  const [userState, userDispatch] = useUser();
+  const [{ user }, userDispatch] = useUser();
   const navigate = useNavigate();
 
   const [controlledVisible, setControlledVisible] = useState(false);
@@ -43,7 +43,7 @@ const EditSection: React.FC<EditSectionProps> = ({
   });
 
   const interact = (field: "like" | "laugh" | "confused") => {
-    if (!userState.user) {
+    if (!user) {
       navigate("/login");
       return;
     }
@@ -122,7 +122,7 @@ const EditSection: React.FC<EditSectionProps> = ({
 
       {/* show edit/delete button or not */}
       {postAndInteractions.post.user &&
-        (userState.user?.username === postAndInteractions.post.user.username ? (
+        (user?.username === postAndInteractions.post.user.username ? (
           <div className="mt-1 d-flex flex-column">
             {/* edit */}
             <span

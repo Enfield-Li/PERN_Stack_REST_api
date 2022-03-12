@@ -14,9 +14,14 @@ const CreatePostArea: React.FC<searchBarProps> = ({}) => {
         <div className="card-body d-flex align-items-center">
           {/* userProfile */}
           {userState ? (
-            <div role="button" className="fs-5 ms-2">
-              <i className="bi bi-person-circle fs-2"></i>
-            </div>
+            <Link
+              to={`user-profile/${userState.id}`}
+              style={{ color: "black" }}
+            >
+              <div role="button" className="fs-5 ms-2">
+                <i className="bi bi-person-circle fs-2"></i>
+              </div>
+            </Link>
           ) : null}
 
           {/* createPost */}

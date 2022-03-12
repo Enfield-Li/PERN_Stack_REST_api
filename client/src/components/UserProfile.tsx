@@ -9,16 +9,16 @@ import VoteSection from "./nested-Components/voteSection";
 
 const UserProfile: React.FC = ({}) => {
   const { id } = useParams();
-  const [userState, userDispatch] = useUser();
+  const [{ user, userProfile }, userDispatch] = useUser();
 
   useEffect(() => {
     if (id) getUserProfile(userDispatch, +id);
   }, [id]);
 
   return (
-    <div className="row ms-2">
+    <div className="row">
       <div className="col-9">
-        {userState.userProfile?.userPaginatedPost.postAndInteractions.map(
+        {userProfile?.userPaginatedPost.postAndInteractions.map(
           (postAndInteraction) => (
             <div className="card my-3 " key={postAndInteraction.post.id}>
               <div className="card-body">
@@ -55,16 +55,16 @@ const UserProfile: React.FC = ({}) => {
         )}
 
         <div className="d-flex justify-content-center my-2">
-          {userState.userProfile?.userPaginatedPost.hasMore && id ? (
+          {userProfile?.userPaginatedPost.hasMore && id ? (
             <button
               className="btn btn-primary"
               onClick={() => {
                 getUserProfile(
                   userDispatch,
                   +id,
-                  userState.userProfile?.userPaginatedPost.postAndInteractions[
-                    userState.userProfile?.userPaginatedPost.postAndInteractions
-                      .length - 1
+                  userProfile?.userPaginatedPost.postAndInteractions[
+                    userProfile?.userPaginatedPost.postAndInteractions.length -
+                      1
                   ].post.createdAt
                 );
               }}
@@ -76,8 +76,8 @@ const UserProfile: React.FC = ({}) => {
       </div>
       <div className="col-3 mt-2">
         <ProfileCard
-          user={userState.userProfile?.user}
-          isMe={userState.user?.id === userState.userProfile?.user.id}
+          user={userProfile?.user}
+          isMe={user?.id === userProfile?.user.id}
         />
       </div>
     </div>

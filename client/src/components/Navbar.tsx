@@ -11,9 +11,9 @@ interface navbarProps {}
 
 const Navbar: React.FC<navbarProps> = ({}) => {
   const [_, postDispatch] = usePost();
-  const [{ user: userState }, userDispatch] = useUser();
+  const [{ user }, userDispatch] = useUser();
 
-  let userProfile = userState ? (
+  let userProfile = user ? (
     <div className="dropdown">
       <div
         className="dropdown-toggle border px-3 py-1 my-2 d-flex justify-content-center align-items-center"
@@ -26,20 +26,20 @@ const Navbar: React.FC<navbarProps> = ({}) => {
         <div className="ms-3 me-2 d-flex flex-column align-items-center justify-content-center">
           <div>
             <i className="bi bi-bookmark-star me-1"></i>
-            {userState.username}
+            {user.username}
           </div>
-          <div>{userState.email}</div>
+          <div>{user.email}</div>
         </div>
       </div>
       <ul
         className="dropdown-menu"
         aria-labelledby="dropDowns"
-        style={{ width: 238 }}
+        style={{ width: 240 }}
       >
         <li>
           <div className="ms-3">MY STUFF</div>
           <Link
-            to={`/user-profile/${userState.id}`}
+            to={`/user-profile/${user.id}`}
             style={{ color: "black", textDecoration: "none" }}
             role="button"
           >
@@ -99,10 +99,7 @@ const Navbar: React.FC<navbarProps> = ({}) => {
       </div>
 
       <div className="d-flex align-items-center">
-        <Link
-          to={userState ? "/create-post" : "/login"}
-          style={{ color: "black" }}
-        >
+        <Link to={user ? "/create-post" : "/login"} style={{ color: "black" }}>
           <i className="bi bi-plus-square fs-3 mx-3"></i>
         </Link>
         <div>{userProfile}</div>

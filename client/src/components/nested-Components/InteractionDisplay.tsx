@@ -21,11 +21,11 @@ const InteractionDisplay: React.FC<InteractionDisplayProps> = ({
 }) => {
   const userInteractions = postAndInteractions.interactions;
   const [_, postDispatch] = usePost();
-  const [userState, userDispatch] = useUser();
+  const [{ user }, userDispatch] = useUser();
   const navigate = useNavigate();
 
   const interact = (field: "like" | "laugh" | "confused") => {
-    if (!userState.user) {
+    if (!user) {
       navigate("/login");
       return;
     }
