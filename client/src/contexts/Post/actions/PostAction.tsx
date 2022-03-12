@@ -103,7 +103,7 @@ export function setCurrentPost(
 export const fetchPaginatedPosts = async (
   dispatch: React.Dispatch<PostActionType>,
   orderBy: "new" | "hot" | "best" = "best",
-  cursor?: Date
+  cursor?: string
 ) => {
   console.log("fetchPaginatedPosts...");
 

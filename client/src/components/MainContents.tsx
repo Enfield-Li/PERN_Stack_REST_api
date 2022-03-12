@@ -15,16 +15,28 @@ interface MainContentsProps {}
 
 const MainContents: React.FC<MainContentsProps> = ({}) => {
   const [{ paginatedPosts }, postDispatch] = usePost();
+  const postAndInteractions = paginatedPosts.postAndInteractions;
 
   const [state, setState] = useState<"new" | "hot" | "best">("best");
+
+  let cursor = new Date("2250").toISOString();
+  for (let i = 0; i < postAndInteractions.length; i++) {
+    const postDate = new Date(
+      postAndInteractions[i].post.createdAt
+    ).toISOString();
+
+    if (postDate < cursor) {
+      cursor = postDate;
+    }
+  }
 
   return (
     <div>
       <CreatePostArea />
       <FilterBy state={state} setState={setState} />
 
-      {paginatedPosts.postAndInteractions.length > 0 ? (
-        paginatedPosts.postAndInteractions.map((postAndInteraction) => (
+      {postAndInteractions.length > 0 ? (
+        postAndInteractions.map((postAndInteraction) => (
           <div className="card my-3 " key={postAndInteraction.post.id}>
             <div className="card-body">
               <div className="d-flex justify-content-between">
@@ -62,13 +74,7 @@ const MainContents: React.FC<MainContentsProps> = ({}) => {
           <button
             className="btn btn-primary"
             onClick={() => {
-              fetchPaginatedPosts(
-                postDispatch,
-                state,
-                paginatedPosts.postAndInteractions[
-                  paginatedPosts.postAndInteractions.length - 1
-                ].post.createdAt
-              );
+              fetchPaginatedPosts(postDispatch, state, cursor);
             }}
           >
             More Posts

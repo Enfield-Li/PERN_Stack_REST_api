@@ -11,7 +11,6 @@ interface FilterByProps {
 
 const FilterBy: React.FC<FilterByProps> = ({ state, setState }) => {
   const [_, postDispatch] = usePost();
-  console.log("order State: ", state);
 
   const fontAndBg = "rounded-pill text-primary";
   const selectedBg = { background: "#f6f7f8" };

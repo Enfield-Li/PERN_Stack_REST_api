@@ -28,8 +28,6 @@ const EditPost: React.FC<EditPostProps> = ({}) => {
     content: Yup.string(),
   });
 
-  console.log("current post:", postState.currentPost);
-
   return (
     <Formik
       initialValues={{

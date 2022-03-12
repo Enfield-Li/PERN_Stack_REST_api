@@ -33,8 +33,6 @@ const PostCreatorInfo: React.FC<PostCreatorInfoProps> = ({
     // delayShow: 50,
   });
 
-  console.log(user);
-
   return (
     <div className="fs-6 fw-lighter mt-2">
       Posted
