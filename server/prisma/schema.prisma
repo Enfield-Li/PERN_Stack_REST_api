@@ -1,5 +1,6 @@
 generator client {
   provider = "prisma-client-js"
+  previewFeatures = ["fullTextSearch"]
 }
 
 datasource db {
@@ -31,6 +32,7 @@ model post {
   votePoints     Int            @default(0)
   likePoints     Int            @default(0)
   confusedPoints Int            @default(0)
+  commentAmounts Int            @default(0)
   laughPoints    Int            @default(0)
   user           user           @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: NoAction)
   interactions   interactions[]

@@ -9,7 +9,7 @@ import EditSection from "./nested-Components/EditSection";
 import PostCardSection from "./nested-Components/PostCardSection";
 import PostCreatorInfo from "./nested-Components/PostCreatorInfo";
 import VoteSection from "./nested-Components/voteSection";
-import FilterBy from "./layout/FilterBy";
+import SortBy from "./layout/FilterBy";
 
 interface MainContentsProps {}
 
@@ -37,7 +37,7 @@ const MainContents: React.FC<MainContentsProps> = ({}) => {
   return (
     <div>
       <CreatePostArea />
-      <FilterBy state={state} setState={setState} />
+      <SortBy state={state} setState={setState} />
 
       {postAndInteractions.length > 0 ? (
         postAndInteractions.map((postAndInteraction) => (

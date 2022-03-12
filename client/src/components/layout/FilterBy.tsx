@@ -4,12 +4,12 @@ import {
   usePost,
 } from "../../contexts/Post/actions/PostAction";
 
-interface FilterByProps {
+interface SortByProps {
   state: "new" | "hot" | "best";
   setState: React.Dispatch<React.SetStateAction<"new" | "hot" | "best">>;
 }
 
-const FilterBy: React.FC<FilterByProps> = ({ state, setState }) => {
+const SortBy: React.FC<SortByProps> = ({ state, setState }) => {
   const [_, postDispatch] = usePost();
 
   const fontAndBg = "rounded-pill text-primary";
@@ -68,4 +68,4 @@ const FilterBy: React.FC<FilterByProps> = ({ state, setState }) => {
   );
 };
 
-export default FilterBy;
+export default SortBy;

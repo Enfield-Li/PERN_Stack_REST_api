@@ -40,9 +40,7 @@ const PostCreatorInfo: React.FC<PostCreatorInfoProps> = ({
         <span
           onMouseOver={async () => {
             setDecoration(true);
-
             const user = await getUserInfo(postAndInteractions.post.userId);
-
             setuser(user);
           }}
           onMouseLeave={() => setDecoration(false)}

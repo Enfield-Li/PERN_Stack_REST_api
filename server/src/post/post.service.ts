@@ -30,6 +30,7 @@ export class PostService {
           create: { userId, voteStatus: true, likeStatus: true },
         },
       },
+
       include: {
         user: { select: { username: true, id: true } },
         interactions: { where: { userId } },
@@ -51,43 +52,57 @@ export class PostService {
       updateUserPostAmounts,
     ]);
 
+    // refactor json data
     const interactions = createdPost[0].interactions[0];
-
     delete createdPost[0].interactions;
 
     return { post: createdPost[0], interactions };
   }
 
   async getPaginatedPost(
-    orderBy: 'new' | 'hot' | 'best',
+    sortBy: 'new' | 'hot' | 'best',
     userId: number,
     take: number,
     cursor?: Date,
   ): Promise<PaginatedPost> {
-    // orderBy === "best"
-    let orderByObj: any = [
-      { votePoints: 'desc' },
-      { laughPoints: 'desc' },
-      { createdAt: 'desc' },
-    ];
-
-    if (orderBy === 'hot')
-      orderByObj = [
-        { likePoints: 'desc' },
-        { updatedAt: 'desc' },
-        { createdAt: 'desc' },
-      ];
-
-    if (orderBy === 'new') orderByObj = { createdAt: 'desc' };
-
-    const takeLimit = Math.min(3, take);
+    const takeLimit = Math.min(25, take);
     const takeLimitPlusOne = takeLimit + 1;
+
+    let cursorPlus: Date | undefined = undefined;
+    if (cursor) {
+      const days = 86400000; //number of milliseconds in a day
+
+      // default sortBy === "best" / days = 10
+      let daysPlus: number = days * 50;
+      if (sortBy === 'hot') {
+        daysPlus = days * 20;
+      }
+
+      cursorPlus = new Date(cursor.getTime() - daysPlus);
+    }
+
+    // sortBy === "best"
+    let sortCondition: any = {
+      votePoints: { gte: 20 },
+      laughPoints: { gte: 15 },
+      createdAt: { gte: cursorPlus },
+    };
+
+    if (sortBy === 'hot')
+      sortCondition = {
+        createdAt: { gte: cursorPlus },
+        likePoints: { gte: 20 },
+      };
+
+    if (sortBy === 'new') {
+      sortCondition = undefined;
+    }
 
     const posts = await this.prismaService.post.findMany({
       take: takeLimitPlusOne,
       skip: cursor ? 1 : undefined,
       cursor: cursor ? { createdAt: cursor } : undefined,
-      orderBy: orderByObj,
+      orderBy: { createdAt: 'desc' },
       include: {
         user: {
           select: {
@@ -95,6 +110,7 @@ export class PostService {
           },
         },
       },
+      where: sortCondition,
     });
 
     const postAndInteractions: PostAndInteraction[] = [];
@@ -131,7 +147,7 @@ export class PostService {
     userId: number,
     postId: number,
   ): Promise<PostAndInteraction> {
-    const post = await this.prismaService.post.findUnique({
+    const post = this.prismaService.post.findUnique({
       where: { id: postId },
       include: {
         user: {
@@ -142,15 +158,25 @@ export class PostService {
       },
     });
 
+    const incrementView = this.prismaService.post.update({
+      where: { id: postId },
+      data: { viewCount: { increment: 1 } },
+    });
+
+    const createdPost = await this.prismaService.$transaction([
+      post,
+      incrementView,
+    ]);
+
     let interactions: interactions | null = null;
 
     if (userId) {
       interactions = await this.prismaService.interactions.findUnique({
-        where: { userId_postId: { userId, postId: post.id } },
+        where: { userId_postId: { userId, postId } },
       });
     }
 
-    return { post, interactions };
+    return { post: createdPost[0], interactions };
   }
 
   async editPost(
