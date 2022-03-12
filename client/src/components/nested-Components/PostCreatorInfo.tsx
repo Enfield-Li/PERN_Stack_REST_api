@@ -2,7 +2,11 @@ import { useState } from "react";
 import { usePopperTooltip } from "react-popper-tooltip";
 import { Link } from "react-router-dom";
 import { PostAndInteractions } from "../../contexts/Post/types/PostTypes";
-import { UserPostAndInteractions } from "../../contexts/User/types/UserTypes";
+import { getUserInfo } from "../../contexts/User/actions/UserAction";
+import {
+  User,
+  UserPostAndInteractions,
+} from "../../contexts/User/types/UserTypes";
 import { calculateTime } from "../../utils/calculaTime";
 
 interface PostCreatorInfoProps {
@@ -12,6 +16,8 @@ interface PostCreatorInfoProps {
 const PostCreatorInfo: React.FC<PostCreatorInfoProps> = ({
   postAndInteractions,
 }) => {
+  const [user, setuser] = useState<User | null>(null);
+
   const [decoration, setDecoration] = useState(false);
   const {
     getArrowProps,
@@ -27,22 +33,24 @@ const PostCreatorInfo: React.FC<PostCreatorInfoProps> = ({
     // delayShow: 50,
   });
 
+  console.log(user);
+
   return (
     <div className="fs-6 fw-lighter mt-2">
       Posted
       {postAndInteractions.post.user && (
         <span
           onMouseOver={async () => {
-            // setDecoration(true);
-            // let data = await apolloClient.query({
-            //   query: UserCardDocument,
-            //   variables: { userId: creator.id },
-            // });
-            // setUserCard(data);
+            setDecoration(true);
+
+            const user = await getUserInfo(postAndInteractions.post.userId);
+
+            setuser(user);
           }}
           onMouseLeave={() => setDecoration(false)}
         >
           <span role="button" ref={setTriggerRef}>
+            <span> by </span>
             <span
               role="button"
               className={`fw-light text-dark ${
@@ -51,7 +59,6 @@ const PostCreatorInfo: React.FC<PostCreatorInfoProps> = ({
                   : "text-decoration-none"
               }`}
             >
-              <span> by </span>
               <Link
                 to={`/user-profile/${postAndInteractions.post.userId}`}
                 style={{ color: "black", textDecoration: "none" }}
@@ -65,11 +72,10 @@ const PostCreatorInfo: React.FC<PostCreatorInfoProps> = ({
             <div ref={setTooltipRef} {...getTooltipProps({ className: "" })}>
               <div {...getArrowProps({ className: "tooltip-arrow" })} />
               <div>
-                {/* {userCard?.data
-                ? ""
-                : // <ProfileCard user={userCard?.data} userCard={true} />
-                  null} */}
-                123
+                {user
+                  ? ""
+                  : // <ProfileCard user={user}  />
+                    null}
               </div>
             </div>
           )}

@@ -69,6 +69,16 @@ export class UserController {
     );
   }
 
+  @Get('/userInfo/:id')
+  async fetchUserInfo(@Param('id') id: string, @Req() req: Request) {
+    const user = await this.userService.fetchUserInfo(+id, req.session.userId);
+    if (!user) {
+      return 'User Not Found';
+    }
+
+    return user;
+  }
+
   @Put('/login')
   @ApiCreatedResponse({ type: UserRO })
   async login(

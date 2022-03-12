@@ -12,6 +12,7 @@ import {
   VOTE_CURRENT_POST,
 } from "../../constant";
 import {
+  User,
   UserActionType,
   UserCredential,
   UserProfileRO,
@@ -75,6 +76,14 @@ export async function me(dispatch: React.Dispatch<UserActionType>) {
     type: LOGIN_USER,
     payload: res.data.user,
   });
+}
+
+export async function getUserInfo(id: number) {
+  const res = await axios.get<User>(`http://localhost:3119/user/userInfo/${id}`, {
+    withCredentials: true,
+  });
+
+  return res.data;
 }
 
 export async function getUserProfile(

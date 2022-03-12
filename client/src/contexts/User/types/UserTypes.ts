@@ -34,7 +34,7 @@ export type UserRegister = {
 export type User = {
   id: number;
   username: string;
-  email: string;
+  email?: string;
   createdAt: string;
   postAmounts: number;
 };

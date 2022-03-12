@@ -22,7 +22,6 @@ function App() {
   const location = useLocation();
   const [userState, userDispatch] = useUser();
   const [postState, postDispatch] = usePost();
-  
 
   // console.log(
   //   "userProfile: ",

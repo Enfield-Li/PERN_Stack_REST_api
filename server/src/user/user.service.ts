@@ -31,7 +31,7 @@ export class UserService {
       });
 
       req.session.userId = user.id;
-      return { user: this.buildUserRO(user) };
+      return { user: this.buildResUser(user) };
     } catch {
       return { errors: this.buildErrorRo('usernameOrEmail') };
     }
@@ -47,7 +47,7 @@ export class UserService {
     if (!passwordIsValid) return { errors: this.buildErrorRo('password') };
 
     req.session.userId = user.id;
-    return { user: this.buildUserRO(user) };
+    return { user: this.buildResUser(user) };
   }
 
   private async findUser(usernameOrEmail: string): Promise<user> {
@@ -67,7 +67,19 @@ export class UserService {
       where: { id },
     });
 
-    return { user: this.buildUserRO(user) };
+    return { user: this.buildResUser(user) };
+  }
+
+  async fetchUserInfo(id: number, meId: number): Promise<ResUser> {
+    const user = await this.prismaService.user.findUnique({
+      where: { id },
+    });
+
+    if (!user) {
+      return null;
+    }
+
+    return this.buildResUser(user, meId);
   }
 
   async fetchProfile(
@@ -113,7 +125,7 @@ export class UserService {
     delete userProfile.post;
 
     return {
-      user: this.buildUserRO(userProfile, meId),
+      user: this.buildResUser(userProfile, meId),
       userPaginatedPost: { hasMore, postAndInteractions },
     };
   }
@@ -136,7 +148,7 @@ export class UserService {
       },
     });
 
-    return { user: this.buildUserRO(returnedUser) };
+    return { user: this.buildResUser(returnedUser) };
   }
 
   async deleteUser(id: number) {
@@ -145,9 +157,10 @@ export class UserService {
     return true;
   }
 
-  private buildUserRO(user: user, meId?: number) {
+  private buildResUser(user: user, meId?: number) {
     let { username, createdAt, email, id, postAmounts } = user;
 
+    // Show email when user check it's own info
     if (meId) email = meId === user.id ? email : null;
 
     return { createdAt, username, email, id, postAmounts };
