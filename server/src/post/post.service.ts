@@ -1,5 +1,5 @@
 import { HttpException, Injectable } from '@nestjs/common';
-import { interactions } from '@prisma/client';
+import { interactions, post } from '@prisma/client';
 import { PrismaService } from 'src/config/prisma.service';
 import {
   CreatePostDto,
@@ -68,34 +68,29 @@ export class PostService {
     const takeLimit = Math.min(25, take);
     const takeLimitPlusOne = takeLimit + 1;
 
-    let cursorPlus: Date | undefined = undefined;
+    let dateSpec: Date | undefined = undefined;
     if (cursor) {
-      const days = 86400000; //number of milliseconds in a day
-
-      // default sortBy === "best" / days = 10
-      let daysPlus: number = days * 50;
-      if (sortBy === 'hot') {
-        daysPlus = days * 20;
+      if (sortBy === 'best') {
+        dateSpec = this.calculateDate(50, cursor);
+      } else if (sortBy === 'hot') {
+        dateSpec = this.calculateDate(20, cursor);
       }
-
-      cursorPlus = new Date(cursor.getTime() - daysPlus);
     }
 
-    // sortBy === "best"
-    let sortCondition: any = {
-      votePoints: { gte: 20 },
-      laughPoints: { gte: 15 },
-      createdAt: { gte: cursorPlus },
-    };
-
-    if (sortBy === 'hot')
-      sortCondition = {
-        createdAt: { gte: cursorPlus },
-        likePoints: { gte: 20 },
-      };
-
+    let sortCondition: any;
     if (sortBy === 'new') {
       sortCondition = undefined;
+    } else if (sortBy === 'best') {
+      sortCondition = {
+        votePoints: { gte: 20 },
+        laughPoints: { gte: 15 },
+        createdAt: { gte: dateSpec },
+      };
+    } else if (sortBy === 'hot') {
+      sortCondition = {
+        createdAt: { gte: dateSpec },
+        likePoints: { gte: 20 },
+      };
     }
 
     const posts = await this.prismaService.post.findMany({
@@ -113,34 +108,51 @@ export class PostService {
       where: sortCondition,
     });
 
-    const postAndInteractions: PostAndInteraction[] = [];
+    const hasMore = posts.length === takeLimitPlusOne;
+
+    const postAndInteractions = await this.processPostWithInteractions(
+      hasMore,
+      posts,
+      userId,
+    );
+
+    return { hasMore, postAndInteractions };
+  }
+
+  async fetchPaginatedPostsSortByTop(
+    take: number,
+    time: 'half-year' | 'one-year' | 'all-time',
+    userId: number,
+    skipTimes?: number,
+  ): Promise<PaginatedPost> {
+    const takeLimit = Math.min(25, take);
+    const takeLimitPlusOne = takeLimit + 1;
+    let dateSpec: Date | undefined = undefined;
+
+    if (time === 'half-year') {
+      dateSpec = this.calculateDate(180, new Date(Date.now()));
+    } else if (time === 'one-year') {
+      dateSpec = this.calculateDate(360, new Date(Date.now()));
+    }
+
+    // ugly as f*ck
+    const posts = await this.prismaService.post.findMany({
+      take: takeLimitPlusOne,
+      skip: skipTimes ? takeLimitPlusOne * skipTimes : undefined,
+      where: time === 'all-time' ? undefined : { createdAt: { gte: dateSpec } },
+      orderBy: { votePoints: 'desc' },
+      include: { user: { select: { username: true } } },
+    });
 
     const hasMore = posts.length === takeLimitPlusOne;
 
-    const fullLength = hasMore ? posts.length - 1 : posts.length;
-
-    for (let i = 0; i < fullLength; i++) {
-      // send snippets numbering 49
-      posts[i].content = posts[i].content.slice(0, 50);
-
-      let interactions: interactions | null = null;
-
-      if (userId) {
-        interactions = await this.prismaService.interactions.findUnique({
-          where: { userId_postId: { userId, postId: posts[i].id } },
-        });
-      }
-
-      postAndInteractions[i] = {
-        post: posts[i],
-        interactions,
-      };
-    }
-
-    return {
+    const postAndInteractions = await this.processPostWithInteractions(
       hasMore,
-      postAndInteractions,
-    };
+      posts,
+      userId,
+    );
+
+    return { hasMore, postAndInteractions };
   }
 
   async fetchOnePost(
@@ -552,5 +564,50 @@ export class PostService {
     }
 
     return true;
+  }
+
+  private calculateDate(daysLimit: number, dateSpe: Date): Date {
+    //number of milliseconds in a day
+    const days = 86400000;
+
+    let daysPlus: number = days * daysLimit;
+
+    const itemsBeforeDate = new Date(dateSpe.getTime() - daysPlus);
+
+    return itemsBeforeDate;
+  }
+
+  private async processPostWithInteractions(
+    hasMore: boolean,
+    posts: (post & {
+      user: {
+        username: string;
+      };
+    })[],
+    userId: number,
+  ): Promise<PostAndInteraction[]> {
+    // make sure return full list if hasMore === false
+    const fullLength = hasMore ? posts.length - 1 : posts.length;
+    const postAndInteractions: PostAndInteraction[] = [];
+
+    for (let i = 0; i < fullLength; i++) {
+      // send snippets numbering 49
+      posts[i].content = posts[i].content.slice(0, 50);
+
+      let interactions: interactions | null = null;
+
+      if (userId) {
+        interactions = await this.prismaService.interactions.findUnique({
+          where: { userId_postId: { userId, postId: posts[i].id } },
+        });
+      }
+
+      postAndInteractions[i] = {
+        post: posts[i],
+        interactions,
+      };
+    }
+
+    return postAndInteractions;
   }
 }

@@ -74,6 +74,30 @@ export class PostController {
     );
   }
 
+  @ApiQuery({
+    name: 'time',
+    required: false,
+    enum: ['half-year', 'one-year', 'all-time'],
+  })
+  @ApiQuery({
+    name: 'skipTimes',
+    required: false,
+    type: Number,
+  })
+  @Get('paginated-posts/top')
+  findByTop(
+    @Req() req: Request,
+    @Query('time') time: 'half-year' | 'one-year' | 'all-time' = 'half-year',
+    @Query('skipTimes') skipTimes?: number,
+  ) {
+    return this.postService.fetchPaginatedPostsSortByTop(
+      10,
+      time,
+      req.session.userId,
+      skipTimes,
+    );
+  }
+
   @ApiOkResponse({ type: PostAndInteraction })
   @Get('single-post/:id')
   findOne(
