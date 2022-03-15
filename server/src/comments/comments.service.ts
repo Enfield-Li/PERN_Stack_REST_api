@@ -24,6 +24,7 @@ export class CommentsService {
   async findAll(postId: number) {
     const res = await this.prismaService.comments.findMany({
       where: { postId },
+      include: { user: { select: { username: true } } },
     });
 
     return res;
