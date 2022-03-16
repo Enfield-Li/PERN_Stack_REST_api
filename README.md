@@ -1,6 +1,6 @@
  仿Reddit的一个全栈 web app (REST api + SPA)
     
-    (reddit 官网: https://www.reddit.com/) 
+    (Reddit官网: https://www.reddit.com/ 需要翻墙) 
 
 作品描述：
 
