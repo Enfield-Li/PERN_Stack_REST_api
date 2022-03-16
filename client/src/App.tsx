@@ -41,9 +41,9 @@ function App() {
   }, []);
 
   useEffect(() => {
-    socket?.emit("message", "123");
+    socket?.emit("message", { msg: "msg here" });
     socket?.on("message", (data: any) => {
-      console.log("data: ", data);
+      console.log("data from server: ", data);
     });
   }, [socket]);
 
