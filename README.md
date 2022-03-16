@@ -6,7 +6,8 @@
 
     仿Reddit论坛PC端功能，搭建的一个论坛式网站
 
-Stack:
+Stack：
+
     语言：typescript；
     前端：Reactjs / React Context api (state 管理) / Boostrap 5 (css)；
     API: REST api；
