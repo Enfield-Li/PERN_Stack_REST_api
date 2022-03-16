@@ -88,13 +88,13 @@ export class PostController {
   findByTop(
     @Req() req: Request,
     @Query('time') time: 'half-year' | 'one-year' | 'all-time' = 'half-year',
-    @Query('skipTimes') skipTimes?: number,
+    @Query('skipTimes') skipTimes?: string,
   ) {
     return this.postService.fetchPaginatedPostsSortByTop(
       10,
       time,
       req.session.userId,
-      skipTimes,
+      +skipTimes,
     );
   }
 
@@ -123,7 +123,7 @@ export class PostController {
     @Query('field') field: 'vote' | 'like' | 'laugh' | 'confused',
     @Req() req: Request,
   ): Promise<Boolean> {
-    return this.postService.votePost(
+    return this.postService.voteAndInteractWithPost(
       +id,
       req.session.userId,
       value === 'true' ? true : value === 'false' ? false : null,

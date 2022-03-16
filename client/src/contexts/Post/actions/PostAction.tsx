@@ -102,30 +102,44 @@ export function setCurrentPost(
 
 export const fetchPaginatedPosts = async (
   dispatch: React.Dispatch<PostActionType>,
-  sortBy: "new" | "hot" | "best" = "best",
-  cursor?: string
+  sortBy: "new" | "hot" | "best" | "top" = "best",
+  cursor?: string, // date string or number string
+  time?: "half-year" | "one-year" | "all-time"
 ) => {
   console.log("fetchPaginatedPosts...");
 
   let res: AxiosResponse<PaginatedPost, any> | null = null;
 
-  if (cursor) {
-    res = await axios.get<PaginatedPost>(
-      `http://localhost:3119/post/paginated-posts?cursor=${cursor}&sortBy=${sortBy}`,
-      { withCredentials: true }
-    );
-  } else {
-    res = await axios.get<PaginatedPost>(
-      `http://localhost:3119/post/paginated-posts?sortBy=${sortBy}`,
-      { withCredentials: true }
-    );
+  if (!cursor) {
+    if (sortBy === "top") {
+      res = await axios.get<PaginatedPost>(
+        `http://localhost:3119/post/paginated-posts/top?time=${time}`,
+        { withCredentials: true }
+      );
+    } else {
+      res = await axios.get<PaginatedPost>(
+        `http://localhost:3119/post/paginated-posts?sortBy=${sortBy}`,
+        { withCredentials: true }
+      );
+    }
 
     // Clear cache first when switch sortBy
     dispatch({
       type: CLEAR_CACHE,
     });
+  } else {
+    if (sortBy === "top") {
+      res = await axios.get<PaginatedPost>(
+        `http://localhost:3119/post/paginated-posts/top?time=${time}&skipTimes=${cursor}`,
+        { withCredentials: true }
+      );
+    } else {
+      res = await axios.get<PaginatedPost>(
+        `http://localhost:3119/post/paginated-posts?cursor=${cursor}&sortBy=${sortBy}`,
+        { withCredentials: true }
+      );
+    }
   }
-
   // initiate interactions
   interactionNullCheckAndPopulateData(res.data.postAndInteractions);
 
@@ -155,7 +169,6 @@ export const fetchSinglePost = async (
   );
 
   if (!res.data.interactions) {
-    const userId = res.data.post.user.id;
     const postId = res.data.post.id;
     const interactions = res.data.interactions;
 

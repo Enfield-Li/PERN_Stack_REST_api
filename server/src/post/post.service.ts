@@ -225,7 +225,7 @@ export class PostService {
     return true;
   }
 
-  async votePost(
+  async voteAndInteractWithPost(
     postId: number,
     userId: number,
     value: boolean,
