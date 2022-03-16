@@ -6,10 +6,12 @@
 
     仿Reddit论坛PC端功能，搭建的一个论坛式网站
 
-    前端：Reactjs / Context api (缓存管理) / Boostrap 5;
-    API: REST api
-    服务器： Nestjs / Express session + redis-server (auth) 
-    数据库：PostgreSQL / Prisma
+Stack:
+    语言：typescript；
+    前端：Reactjs / React Context api (state 管理) / Boostrap 5 (css)；
+    API: REST api；
+    服务器：Nestjs / Express session + Redis-server (auth)；
+    数据库：PostgreSQL / Prisma(ORM)。
     
 现有功能： 
     
