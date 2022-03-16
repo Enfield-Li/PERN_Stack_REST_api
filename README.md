@@ -1,4 +1,4 @@
- 仿Reddit论坛 一个全栈 web app (REST api + SPA)
+仿Reddit论坛 又一个全栈 web app (REST api + SPA)
     
     (Reddit官网: https://www.reddit.com/ 需要科学上网) 
 
