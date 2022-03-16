@@ -101,6 +101,7 @@ export class PostService {
       include: {
         user: {
           select: {
+            id: true,
             username: true,
           },
         },

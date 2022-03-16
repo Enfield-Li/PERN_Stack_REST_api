@@ -1,27 +1,30 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { Route, Routes, useLocation } from "react-router-dom";
 import CreatePost from "./components/CreatePost";
+import EditPost from "./components/EditPost";
 import Login from "./components/Login";
 import MainContents from "./components/MainContents";
 import Navbar from "./components/Navbar";
 import PostPage from "./components/Post";
 import Register from "./components/register";
-import {
-  getUserProfile,
-  me,
-  useUser,
-} from "./contexts/User/actions/UserAction";
+import UserProfile from "./components/UserProfile";
 import {
   fetchPaginatedPosts,
   usePost,
 } from "./contexts/Post/actions/PostAction";
-import EditPost from "./components/EditPost";
-import UserProfile from "./components/UserProfile";
+import { me, useUser } from "./contexts/User/actions/UserAction";
+import { io, Socket } from "socket.io-client";
+import {
+  ClientToServerEvents,
+  ServerToClientEvents,
+} from "./utils/socketTypes";
 
 function App() {
   const location = useLocation();
   const [userState, userDispatch] = useUser();
   const [postState, postDispatch] = usePost();
+  const [socket, setSocket] = useState<any>(null);
+  // Socket<ServerToClientEvents, ClientToServerEvents>
 
   // console.log(
   //   "userProfile: ",
@@ -34,7 +37,15 @@ function App() {
   useEffect(() => {
     me(userDispatch);
     fetchPaginatedPosts(postDispatch);
+    setSocket(io("http://localhost:3119"));
   }, []);
+
+  useEffect(() => {
+    socket?.emit("message", "123");
+    socket?.on("message", (data: any) => {
+      console.log("data: ", data);
+    });
+  }, [socket]);
 
   return (
     <div style={{ backgroundColor: "#dae0e6" }}>
