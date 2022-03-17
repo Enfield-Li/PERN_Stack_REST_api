@@ -8,9 +8,9 @@ import InteractionDisplay from "./nested-Components/InteractionDisplay";
 import PostCreatorInfo from "./nested-Components/PostCreatorInfo";
 import VoteSection from "./nested-Components/voteSection";
 
-interface PostProps {}
+interface PostPageProps {}
 
-const Post: React.FC<PostProps> = ({}) => {
+const PostPage: React.FC<PostPageProps> = ({}) => {
   const [{ currentPost }, postDispatch] = usePost();
   const { id } = useParams();
 
@@ -46,4 +46,4 @@ const Post: React.FC<PostProps> = ({}) => {
   return <ContentPlaceholder />;
 };
 
-export default Post;
+export default PostPage;

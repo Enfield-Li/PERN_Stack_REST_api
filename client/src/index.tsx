@@ -5,16 +5,19 @@ import reportWebVitals from "./reportWebVitals";
 import { BrowserRouter } from "react-router-dom";
 import UserProvider from "./contexts/User/UserState";
 import PostProvider from "./contexts/Post/PostState";
+import SocketProvider from "./contexts/SocketIo/SocketState";
 
 ReactDOM.render(
   <BrowserRouter>
-    <PostProvider>
-      <UserProvider>
-        <React.StrictMode>
-          <App />
-        </React.StrictMode>
-      </UserProvider>
-    </PostProvider>
+    <SocketProvider>
+      <PostProvider>
+        <UserProvider>
+          <React.StrictMode>
+            <App />
+          </React.StrictMode>
+        </UserProvider>
+      </PostProvider>
+    </SocketProvider>
   </BrowserRouter>,
   document.getElementById("root")
 );

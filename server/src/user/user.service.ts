@@ -40,7 +40,8 @@ export class UserService {
   async loginUser(loginUserDto: LoginUserDto, req: Request): Promise<UserRO> {
     const { usernameOrEmail, password } = loginUserDto;
     const user = await this.findUser(usernameOrEmail);
-    console.log('user: ', user);
+    // console.log('user: ', user);
+
     if (!user) return { errors: this.buildErrorRo('usernameOrEmail') };
 
     const passwordIsValid = user.password === password;

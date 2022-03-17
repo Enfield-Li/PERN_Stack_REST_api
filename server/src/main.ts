@@ -11,11 +11,7 @@ async function bootstrap() {
 
   app.use(
     cors({
-      origin: [
-        'http://localhost:3118',
-        'http://localhost:3119',
-        // 'http://localhost:3119/socket.io',
-      ],
+      origin: ['http://localhost:3118', 'http://localhost:3119'],
       credentials: true,
     }),
   );
