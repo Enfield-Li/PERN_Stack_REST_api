@@ -1,8 +1,5 @@
-<<<<<<< HEAD
 import { Injectable, Logger, Req, Session } from '@nestjs/common';
-=======
-import { Req } from '@nestjs/common';
->>>>>>> 6a6ab5e36092ee1feef45de6a9459759a8ef1eb0
+
 import {
   WebSocketGateway,
   WebSocketServer,
@@ -13,7 +10,7 @@ import {
   OnGatewayConnection,
   OnGatewayDisconnect,
 } from '@nestjs/websockets';
-<<<<<<< HEAD
+
 import { Server, Socket } from 'socket.io';
 import { PrismaService } from 'src/config/prisma.service';
 import {
@@ -22,11 +19,6 @@ import {
   SendNotification,
   ServerToClientEvents,
 } from './socketType';
-=======
-import { Socket } from 'dgram';
-import { Request } from 'express';
-import { Server } from 'http';
->>>>>>> 6a6ab5e36092ee1feef45de6a9459759a8ef1eb0
 
 const options = {
   cors: {
@@ -60,7 +52,6 @@ export class SocketGateway
   }
 
   @WebSocketServer()
-<<<<<<< HEAD
   socketServer: Server<ClientToServerEvents, ServerToClientEvents>;
 
   @SubscribeMessage('MsgToServer')
@@ -126,13 +117,5 @@ export class SocketGateway
     this.onlineUsers = this.onlineUsers.filter(
       (user) => user.socketId !== socketId,
     );
-=======
-  server: Server;
-
-  @SubscribeMessage('message')
-  handleMessage(@MessageBody() message: string, @Req() req): void {
-    console.log('req: ', req.id);
-    this.server.emit('message', message);
->>>>>>> 6a6ab5e36092ee1feef45de6a9459759a8ef1eb0
   }
 }
