@@ -9,12 +9,10 @@ var cors = require('cors');
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
 
-  app.use(
-    cors({
-      origin: ['http://localhost:3118', 'http://localhost:3119'],
-      credentials: true,
-    }),
-  );
+  app.enableCors({
+    origin: ['http://localhost:3118', 'http://localhost:3119'],
+    credentials: true,
+  });
 
   app.use(sessionConfig);
 

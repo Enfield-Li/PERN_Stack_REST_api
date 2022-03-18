@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { interactions, post } from '@prisma/client';
 import { PrismaService } from 'src/config/prisma.service';
+import { SocketGateway } from 'src/socket/socket.gateway';
 import {
   CreatePostDto,
   PaginatedPost,
@@ -10,7 +11,10 @@ import { UpdatePostDto } from './dto/update-post.dto';
 
 @Injectable()
 export class PostService {
-  constructor(private readonly prismaService: PrismaService) {}
+  constructor(
+    private readonly prismaService: PrismaService,
+    private readonly SocketGateway: SocketGateway,
+  ) {}
 
   async createPost(
     createPostDto: CreatePostDto,

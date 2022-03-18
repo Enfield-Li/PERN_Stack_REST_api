@@ -1,4 +1,4 @@
-import { Logger, Req } from '@nestjs/common';
+import { Injectable, Logger, Req, Session } from '@nestjs/common';
 import {
   WebSocketGateway,
   WebSocketServer,
@@ -23,18 +23,21 @@ const options = {
 export class SocketGateway
   implements OnGatewayInit, OnGatewayConnection, OnGatewayDisconnect
 {
+  onlineUsers: { userId: number; socketId: string }[] = [];
+
   private logger: Logger = new Logger('SocketGateway');
 
   afterInit(server: Server) {
     this.logger.log('Initialzed!');
   }
 
-  handleConnection(client: Socket, ...args: any[]) {
-    this.logger.log(`Client disconnected: ${client.id}`);
+  handleConnection(socket: Socket, ...args: any[]) {
+    this.logger.log(`socket disconnected: ${socket.id}`);
   }
 
-  handleDisconnect(client: Socket) {
-    this.logger.log(`Client disconnected: ${client.id}`);
+  handleDisconnect(socket: Socket) {
+    this.logger.log(`socket disconnected: ${socket.id}`);
+    this.removeUser(socket.id);
   }
 
   @WebSocketServer()
@@ -45,12 +48,35 @@ export class SocketGateway
     @MessageBody() data: { msg: string },
     @Req() socket: Socket,
   ): WsResponse<{ msg: string }> {
-    console.log('id: ', socket.id);
-    console.log(data);
+    // console.log('id: ', socket.id);
+    // console.log(data);
 
     // this.server.emit('receiveMessage', { msg: data });
 
     // only send to the client who send message
     return { event: 'MsgToClient', data: { msg: 'hello world from server' } };
+  }
+
+  @SubscribeMessage('login')
+  login(@MessageBody() userId: number, @Req() socket: Socket) {
+    if (userId) {
+      this.addNewUser(userId, socket.id);
+    }
+  }
+
+  private addNewUser(userId: number, socketId: string) {
+    const userExist = this.onlineUsers.some((user) => user.userId === userId);
+
+    if (!userExist) this.onlineUsers.push({ userId, socketId });
+  }
+
+  private getUser(userId: number) {
+    return this.onlineUsers.find((user) => user.userId === userId);
+  }
+
+  private removeUser(socketId: string) {
+    this.onlineUsers = this.onlineUsers.filter(
+      (user) => user.socketId !== socketId,
+    );
   }
 }

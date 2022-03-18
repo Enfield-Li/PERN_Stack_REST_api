@@ -17,16 +17,18 @@ function App() {
   useEffect(() => {
     me(userDispatch);
     fetchPaginatedPosts(postDispatch);
+
     setSocket(io("http://localhost:3119", { withCredentials: true }));
   }, []);
 
   useEffect(() => {
-    socket?.emit("MsgToServer", { msg: "hello world from client" });
+    // socket?.emit("MsgToServer", { msg: "hello world from client" });
+    // socket?.on("MsgToClient", (data) => {
+    //   console.log("MsgToClient: ", data);
+    // });
 
-    socket?.on("MsgToClient", (data) => {
-      console.log("MsgToClient: ", data);
-    });
-  }, [socket]);
+    socket?.emit("login", userState.user?.id);
+  }, [socket, userState]);
 
   return (
     <div style={{ backgroundColor: "#dae0e6" }}>

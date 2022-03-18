@@ -12,11 +12,15 @@ import {
 import { UpdateUserDto } from './dto/update-user.dto';
 import { Request } from 'express';
 import { PostAndInteraction } from 'src/post/dto/create-post.dto';
+import { SocketGateway } from 'src/socket/socket.gateway';
 // import argon2 from 'argon2';
 
 @Injectable()
 export class UserService {
-  constructor(private readonly prismaService: PrismaService) {}
+  constructor(
+    private readonly prismaService: PrismaService,
+    private readonly SocketGateway: SocketGateway,
+  ) {}
 
   async createUser(
     userCreateInput: CreateUserDto,

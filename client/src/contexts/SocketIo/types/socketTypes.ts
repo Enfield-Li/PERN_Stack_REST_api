@@ -1,16 +1,14 @@
+// on
 export interface ServerToClientEvents {
-  MsgToClient: (data: { msg: string }) => void;
+  MsgToClient: (data: helloWorld) => void;
 }
 
+// emit
 export interface ClientToServerEvents {
-  MsgToServer: ({ msg }: { msg: string }) => void;
+  MsgToServer: (data: helloWorld) => void;
+  login: (userId: number | undefined) => void;
 }
 
-export interface InterServerEvents {
-  ping: () => void;
-}
-
-export interface SocketData {
-  name: string;
-  age: number;
-}
+type helloWorld = {
+  msg: string;
+};

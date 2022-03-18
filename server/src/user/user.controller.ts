@@ -29,6 +29,7 @@ import {
 } from '@nestjs/swagger';
 import { Request, Response } from 'express';
 import { COOKIE_NAME } from 'src/config/constants';
+import { Socket } from 'socket.io';
 
 @ApiTags('User')
 @Controller('user')
