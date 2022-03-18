@@ -5,7 +5,6 @@ import {
   fetchPaginatedPosts,
   usePost,
 } from "./contexts/Post/actions/PostAction";
-import { fetchInteractives } from "./contexts/SocketIo/actions/socketActions";
 import { useSocket } from "./contexts/SocketIo/actions/useSocket";
 import { me, useUser } from "./contexts/User/actions/UserAction";
 import PageRoutes from "./PageRoutes";
@@ -33,9 +32,6 @@ function App() {
 
   return (
     <div style={{ backgroundColor: "#dae0e6" }}>
-      <button className="btn btn-primary" onClick={() => fetchInteractives()}>
-        fetch
-      </button>
       <div className="bg-white">
         <Navbar />
       </div>

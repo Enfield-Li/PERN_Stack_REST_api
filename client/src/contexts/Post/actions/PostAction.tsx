@@ -167,6 +167,7 @@ export const fetchSinglePost = async (
       withCredentials: true,
     }
   );
+  console.log("resdata: ", res.data);
 
   if (!res.data.interactions) {
     const postId = res.data.post.id;

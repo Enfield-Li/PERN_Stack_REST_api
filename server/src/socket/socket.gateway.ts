@@ -68,7 +68,7 @@ export class SocketGateway
     if (userId) {
       this.addNewUser(userId, socket.id);
     }
-    console.log('onlineUser: ', this.onlineUsers);
+    // console.log('onlineUser: ', this.onlineUsers);
   }
 
   @SubscribeMessage('SendNotification')

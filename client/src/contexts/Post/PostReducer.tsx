@@ -21,7 +21,7 @@ export default function PostReducer(state: PostState, action: PostActionType) {
       console.log("CLEAR_CACHE reducer here");
       return produce(state, (draftState) => {
         draftState.paginatedPosts.postAndInteractions = [];
-        draftState.currentPost = null;
+        // draftState.currentPost = null;
       });
     }
 
