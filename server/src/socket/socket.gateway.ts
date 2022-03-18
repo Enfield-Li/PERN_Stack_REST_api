@@ -83,11 +83,10 @@ export class SocketGateway
     });
 
     const reciver = this.getUser(reciverId);
-    // console.log('onlineUser: ', this.onlineUsers);
 
     if (reciver) {
       const res = this.socketServer
-        // .to(reciver.socketId)
+        .to(reciver.socketId)
         .emit('ReceiveNotification', {
           postId: postId,
           title: post.title,

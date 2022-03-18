@@ -51,7 +51,9 @@ const VoteSection: React.FC<VoteSectionProps> = ({
       value: bool,
       senderName: user.username,
     });
+  };
 
+  useEffect(() => {
     socket?.on("ReceiveNotification", (data) => {
       console.log("ReceiveNotification", data);
     });
@@ -59,7 +61,7 @@ const VoteSection: React.FC<VoteSectionProps> = ({
     socket?.on("SendNotification", (data) => {
       console.log("SendNotification", data);
     });
-  };
+  }, [socket]);
 
   return (
     <div className="me-3 mt-2">
