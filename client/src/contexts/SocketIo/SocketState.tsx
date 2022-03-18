@@ -13,14 +13,27 @@ export type SocketInitialType = Socket<
   ClientToServerEvents
 > | null;
 
+export type Interactions = {
+  voteStatus: boolean | null;
+  likeStatus: boolean | null;
+  laughStatus: boolean | null;
+  confusedStatus: boolean | null;
+  createdAt: Date;
+  userId: number;
+  postId: number;
+}[];
+
 const SocketProvider: React.FC<ProviderType> = ({ children }) => {
   const [socket, setSocket] = useState<SocketInitialType>(null);
+  const [interactives, setInteractives] = useState<Interactions>([]);
 
   return (
     <SocketContext.Provider
       value={{
         socket,
         setSocket,
+        interactives,
+        setInteractives,
       }}
     >
       {children}

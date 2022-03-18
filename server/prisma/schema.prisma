@@ -9,9 +9,8 @@ datasource db {
 }
 
 model user {
-  id                  Int                   @id() @default(autoincrement())
-  createdAt           DateTime              @unique() @default(now())
-  updatedAt           DateTime              @unique() @default(now())
+  id        Int      @id() @default(autoincrement())
+  createdAt DateTime @unique() @default(now())
   username            String                @unique() @db.VarChar
   email               String                @unique() @db.VarChar
   password            String                @db.VarChar
@@ -23,9 +22,9 @@ model user {
 }
 
 model post {
-  id                  Int                   @id() @default(autoincrement())
-  createdAt           DateTime              @unique() @default(now())
-  updatedAt           DateTime              @unique() @default(now())
+  id        Int      @id() @default(autoincrement())
+  createdAt DateTime @unique() @default(now())
+  updatedAt DateTime @unique() @updatedAt
   title               String                @db.VarChar
   content             String?               @db.VarChar
   userId              Int
@@ -47,18 +46,19 @@ model interactions {
   laughStatus    Boolean?
   confusedStatus Boolean?
   createdAt      DateTime @unique() @default(now())
-  userId         Int
-  postId         Int
-  post           post     @relation(fields: [postId], references: [id], onDelete: Cascade, onUpdate: NoAction)
-  user           user     @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: NoAction)
+  updatedAt      DateTime @unique() @updatedAt
+  userId Int
+  postId Int
+  post   post @relation(fields: [postId], references: [id], onDelete: Cascade, onUpdate: NoAction)
+  user   user @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: NoAction)
 
   @@unique([userId, postId])
 }
 
 model comments {
-  id                  Int                   @id @default(autoincrement())
-  createdAt           DateTime              @unique() @default(now())
-  updatedAt           DateTime              @unique() @default(now())
+  id        Int      @id @default(autoincrement())
+  createdAt DateTime @unique() @default(now())
+  updatedAt DateTime @unique() @updatedAt
   comment_text        String                @db.VarChar
   parentId            Int?
   userId              Int
@@ -71,7 +71,7 @@ model comments {
 model commentInteractions {
   id         Int      @id @default(autoincrement())
   createdAt  DateTime @unique() @default(now())
-  updatedAt  DateTime @unique() @default(now())
+  updatedAt  DateTime @unique() @updatedAt
   voteStatus Boolean?
   commentId  Int
   userId     Int

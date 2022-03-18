@@ -11,10 +11,7 @@ import { UpdatePostDto } from './dto/update-post.dto';
 
 @Injectable()
 export class PostService {
-  constructor(
-    private readonly prismaService: PrismaService,
-    private readonly SocketGateway: SocketGateway,
-  ) {}
+  constructor(private readonly prismaService: PrismaService) {}
 
   async createPost(
     createPostDto: CreatePostDto,
@@ -112,6 +109,10 @@ export class PostService {
       },
       where: sortCondition,
     });
+
+    if (!posts.length) {
+      return this.fetchPaginatedPostsSortByTop(take, 'all-time', userId);
+    }
 
     const hasMore = posts.length === takeLimitPlusOne;
 

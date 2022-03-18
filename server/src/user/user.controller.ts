@@ -15,6 +15,7 @@ import {
 import { UserService } from './user.service';
 import {
   CreateUserDto,
+  interactions,
   LoginUserDto,
   userProfileRO as UserProfileRO,
   UserRO,
@@ -29,7 +30,6 @@ import {
 } from '@nestjs/swagger';
 import { Request, Response } from 'express';
 import { COOKIE_NAME } from 'src/config/constants';
-import { Socket } from 'socket.io';
 
 @ApiTags('User')
 @Controller('user')
@@ -87,6 +87,24 @@ export class UserController {
     @Req() req: Request,
   ): Promise<UserRO> {
     return this.userService.loginUser(loginUserDto, req);
+  }
+
+  @ApiQuery({
+    name: 'getAll',
+    required: false,
+    type: Boolean,
+  })
+  @Get('/interactives')
+  @ApiCreatedResponse({ type: [interactions] })
+  async getInteractives(
+    @Req() req: Request,
+    @Query('getAll') getAll: string = 'false',
+  ) {
+    if (!req.session.userId) return;
+
+    const getAllIsTrue = getAll === 'true';
+
+    return this.userService.fetchInteractives(req.session.userId, getAllIsTrue);
   }
 
   @Get('/me')

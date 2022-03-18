@@ -69,3 +69,20 @@ export class userProfileRO {
   @ApiProperty()
   userPaginatedPost: PaginatedPost;
 }
+
+export class interactions {
+  @ApiProperty()
+  voteStatus: boolean | null;
+  @ApiProperty()
+  likeStatus: boolean | null;
+  @ApiProperty()
+  laughStatus: boolean | null;
+  @ApiProperty()
+  confusedStatus: boolean | null;
+  @ApiProperty()
+  createdAt: Date;
+  @ApiProperty()
+  userId: number;
+  @ApiProperty()
+  postId: number;
+}

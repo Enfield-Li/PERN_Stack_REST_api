@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { user } from '@prisma/client';
+import { interactions, user } from '@prisma/client';
 import { PrismaService } from 'src/config/prisma.service';
 import {
   CreateUserDto,
@@ -12,7 +12,6 @@ import {
 import { UpdateUserDto } from './dto/update-user.dto';
 import { Request } from 'express';
 import { PostAndInteraction } from 'src/post/dto/create-post.dto';
-import { SocketGateway } from 'src/socket/socket.gateway';
 // import argon2 from 'argon2';
 
 @Injectable()
@@ -65,10 +64,12 @@ export class UserService {
   }
 
   async me(id: number): Promise<UserRO> {
+    console.log(id);
     const user = await this.prismaService.user.findUnique({
       where: { id },
     });
 
+    console.log(user);
     return { user: this.buildResUser(user) };
   }
 
@@ -130,6 +131,32 @@ export class UserService {
       user: this.buildResUser(userProfile, meId),
       userPaginatedPost: { hasMore, postAndInteractions },
     };
+  }
+
+  async fetchInteractives(
+    userId: number,
+    getAll: boolean,
+  ): Promise<interactions[]> {
+    const interactives = await this.prismaService.interactions.findMany({
+      // Fetch based on Post's creator ie. userId
+      where: {
+        post: { userId },
+        // Exclude oneself's interactives with it's own post
+        userId: { not: userId },
+
+        // One or more conditions must return true.
+        OR: [
+          { voteStatus: { not: null } },
+          { laughStatus: { not: null } },
+          { confusedStatus: { not: null } },
+          { likeStatus: { not: null } },
+        ],
+      },
+      orderBy: { updatedAt: 'desc' },
+      take: getAll === true ? undefined : 5,
+    });
+
+    return interactives;
   }
 
   async updateUser(id: number, updateUserDto: UpdateUserDto): Promise<UserRO> {
