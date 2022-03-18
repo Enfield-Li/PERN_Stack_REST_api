@@ -2,7 +2,6 @@
 export interface ServerToClientEvents {
   MsgToClient: (data: HelloWorld) => void;
   ReceiveNotification: (data: ReceiveNotification) => void;
-  SendNotification: (data: boolean) => void;
 }
 
 // emit

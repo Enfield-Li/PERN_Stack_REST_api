@@ -17,10 +17,7 @@ import { SocketGateway } from 'src/socket/socket.gateway';
 
 @Injectable()
 export class UserService {
-  constructor(
-    private readonly prismaService: PrismaService,
-    private readonly SocketGateway: SocketGateway,
-  ) {}
+  constructor(private readonly prismaService: PrismaService) {}
 
   async createUser(
     userCreateInput: CreateUserDto,

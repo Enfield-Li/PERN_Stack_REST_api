@@ -27,7 +27,7 @@ function App() {
     //   console.log("MsgToClient: ", data);
     // });
 
-    socket?.emit("login", userState.user?.id);
+    socket?.emit("Login", userState.user?.id);
   }, [socket, userState]);
 
   return (
