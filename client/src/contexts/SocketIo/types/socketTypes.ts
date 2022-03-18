@@ -1,5 +1,5 @@
 export interface ServerToClientEvents {
-  MsgToClient: (data: string) => void;
+  MsgToClient: (data: { msg: string }) => void;
 }
 
 export interface ClientToServerEvents {

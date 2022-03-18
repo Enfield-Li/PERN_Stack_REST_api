@@ -42,15 +42,15 @@ export class SocketGateway
 
   @SubscribeMessage('MsgToServer')
   handleMessage(
-    @MessageBody() data: any,
+    @MessageBody() data: { msg: string },
     @Req() socket: Socket,
-  ): WsResponse<String> {
+  ): WsResponse<{ msg: string }> {
     console.log('id: ', socket.id);
-    // console.log(data);
+    console.log(data);
 
-    // this.server.emit('receiveMessage', { 'msg from server': data });
+    // this.server.emit('receiveMessage', { msg: data });
 
     // only send to the client who send message
-    return { event: 'MsgToClient', data: 'hello world' };
+    return { event: 'MsgToClient', data: { msg: 'hello world from server' } };
   }
 }

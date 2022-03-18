@@ -21,9 +21,9 @@ function App() {
   }, []);
 
   useEffect(() => {
-    socket?.emit("MsgToServer", { msg: "msg here" });
+    socket?.emit("MsgToServer", { msg: "hello world from client" });
 
-    socket?.on("MsgToClient", (data: string) => {
+    socket?.on("MsgToClient", (data) => {
       console.log("MsgToClient: ", data);
     });
   }, [socket]);
