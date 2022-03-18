@@ -43,11 +43,11 @@ export class SocketGateway
   }
 
   handleConnection(socket: Socket, ...args: any[]) {
-    this.logger.log(`socket disconnected: ${socket.id}`);
+    this.logger.log(`Socket Connected: ${socket.id}`);
   }
 
   handleDisconnect(socket: Socket) {
-    this.logger.log(`socket disconnected: ${socket.id}`);
+    this.logger.log(`Socket Disconnected: ${socket.id}`);
     // this.removeUser(socket.id);
   }
 
@@ -68,7 +68,7 @@ export class SocketGateway
     if (userId) {
       this.addNewUser(userId, socket.id);
     }
-    // console.log('onlineUser: ', this.onlineUsers);
+    console.log('onlineUser: ', this.onlineUsers);
   }
 
   @SubscribeMessage('SendNotification')
