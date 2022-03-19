@@ -85,4 +85,6 @@ export class interactions {
   userId: number;
   @ApiProperty()
   postId: number;
+  @ApiProperty()
+  haveRead: boolean;
 }

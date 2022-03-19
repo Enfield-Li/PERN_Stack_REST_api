@@ -83,14 +83,14 @@ export class PostService {
       sortCondition = undefined;
     } else if (sortBy === 'best') {
       sortCondition = {
-        votePoints: { gte: 3000 },
-        laughPoints: { gte: 150 },
+        votePoints: { gte: 30 },
+        laughPoints: { gte: 20 },
         createdAt: { gte: dateSpec },
       };
     } else if (sortBy === 'hot') {
       sortCondition = {
         createdAt: { gte: dateSpec },
-        likePoints: { gte: 200 },
+        likePoints: { gte: 20 },
       };
     }
 
@@ -110,9 +110,9 @@ export class PostService {
       where: sortCondition,
     });
 
-    // if (!posts.length) {
-    //   return this.fetchPaginatedPostsSortByTop(take, 'all-time', userId);
-    // }
+    if (!posts.length) {
+      return this.fetchPaginatedPostsSortByTop(take, 'all-time', userId);
+    }
 
     const hasMore = posts.length === takeLimitPlusOne;
 

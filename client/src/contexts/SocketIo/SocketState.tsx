@@ -21,6 +21,7 @@ export type Interactions = {
   createdAt: Date;
   userId: number;
   postId: number;
+  haveRead: boolean;
 }[];
 
 const SocketProvider: React.FC<ProviderType> = ({ children }) => {
