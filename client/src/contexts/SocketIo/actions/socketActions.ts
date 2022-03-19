@@ -1,12 +1,26 @@
 import axios from "axios";
-import { Interactions, SocketInitialType } from "../SocketState";
-import { SendNotification } from "../types/socketTypes";
+import {
+  Interactives,
+  ReceiveNotification,
+  SendNotification,
+  SocketInitialType,
+} from "../types/socketTypes";
 
 export const sendNotification = (
   socket: SocketInitialType,
   data: SendNotification
 ) => {
   socket?.emit("SendNotification", data);
+
+  socket?.on("SendNotification", (data) => {
+    console.log("SendNotification", data);
+  });
+};
+
+export const receiveNotification = (socket: SocketInitialType) => {
+  socket?.on("ReceiveNotification", (data) => {
+    console.log("SendNotification", data);
+  });
 };
 
 export async function fetchInteractives(getAll: boolean = false) {

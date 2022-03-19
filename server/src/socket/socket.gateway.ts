@@ -18,7 +18,7 @@ import {
   HelloWorld,
   SendNotification,
   ServerToClientEvents,
-} from './socketType';
+} from './socketType.t';
 
 const options = {
   cors: {
@@ -68,14 +68,31 @@ export class SocketGateway
     if (userId) {
       this.addNewUser(userId, socket.id);
     }
-    // console.log('onlineUser: ', this.onlineUsers);
+    console.log('onlineUser: ', this.onlineUsers);
   }
 
   @SubscribeMessage('SendNotification')
   async sendNotification(
     @MessageBody() data: SendNotification,
   ): Promise<WsResponse<Boolean>> {
-    const { postId, senderId, senderName, reciverId, value } = data;
+    const { postId, senderId, senderName, reciverId, value, type } = data;
+
+    const interactions = await this.prismaService.interactions.findUnique({
+      where: {
+        userId_postId: {
+          postId,
+          userId: senderId,
+        },
+      },
+    });
+
+    let activityStatus: boolean | null = null;
+    if (type === 'vote') activityStatus = interactions.voteStatus;
+    if (type === 'laugh') activityStatus = interactions.laughStatus;
+    if (type === 'like') activityStatus = interactions.likeStatus;
+
+    // Negative value or cancel action from sender does not inform reciver
+    if (!value || activityStatus === true || type === 'confused') return;
 
     const post = await this.prismaService.post.findUnique({
       where: { id: postId },
@@ -92,6 +109,7 @@ export class SocketGateway
           title: post.title,
           senderId: senderId,
           senderName: senderName,
+          type,
         });
 
       if (!res) return { event: 'SendNotification', data: false };

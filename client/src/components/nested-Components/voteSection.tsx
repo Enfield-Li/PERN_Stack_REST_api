@@ -5,7 +5,10 @@ import {
   usePost,
 } from "../../contexts/Post/actions/PostAction";
 import { PostAndInteractions } from "../../contexts/Post/types/PostTypes";
-import { sendNotification } from "../../contexts/SocketIo/actions/socketActions";
+import {
+  receiveNotification,
+  sendNotification,
+} from "../../contexts/SocketIo/actions/socketActions";
 import { useSocket } from "../../contexts/SocketIo/actions/useSocket";
 import {
   interactWithPostFromUserProfile,
@@ -25,7 +28,7 @@ const VoteSection: React.FC<VoteSectionProps> = ({
   const [_, postDispatch] = usePost();
   const [{ user }, userDispatch] = useUser();
   const navigate = useNavigate();
-  const { socket, setSocket } = useSocket();
+  const { socket, setInteractives, interactives } = useSocket();
 
   const post = postAndInteractions.post;
   const postId = post.id;
@@ -37,30 +40,25 @@ const VoteSection: React.FC<VoteSectionProps> = ({
       return;
     }
 
-    if (isInProfile) {
-      interactWithPostFromUserProfile(userDispatch, postId, bool, "vote");
-      return;
-    }
-
-    interactWithPost(postDispatch, postId, bool, "vote");
-
     sendNotification(socket, {
       postId,
       reciverId: post.userId,
       senderId: user.id,
       value: bool,
       senderName: user.username,
+      type: "vote",
     });
+
+    if (isInProfile) {
+      interactWithPostFromUserProfile(userDispatch, postId, bool, "vote");
+      return;
+    }
+
+    interactWithPost(postDispatch, postId, bool, "vote");
   };
 
   useEffect(() => {
-    socket?.on("ReceiveNotification", (data) => {
-      console.log("ReceiveNotification", data);
-    });
-
-    socket?.on("SendNotification", (data) => {
-      console.log("SendNotification", data);
-    });
+    receiveNotification(socket);
   }, [socket]);
 
   return (

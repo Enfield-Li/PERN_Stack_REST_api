@@ -5,7 +5,9 @@ import {
   fetchPaginatedPosts,
   usePost,
 } from "../contexts/Post/actions/PostAction";
-import { logout, useUser } from "../contexts/User/actions/UserAction";
+import { useUser } from "../contexts/User/actions/UserAction";
+import Notifications from "./nested-Components/Notifications";
+import UserInfo from "./nested-Components/UserInfo";
 
 interface navbarProps {}
 
@@ -13,80 +15,14 @@ const Navbar: React.FC<navbarProps> = ({}) => {
   const [_, postDispatch] = usePost();
   const [{ user }, userDispatch] = useUser();
 
-  // user related settings
-  let userProfile = user ? (
-    <div className="dropdown">
-      <div
-        className="dropdown-toggle border px-3 py-1 my-2 d-flex justify-content-center align-items-center"
-        role="button"
-        id="dropDowns"
-        data-bs-toggle="dropdown"
-        aria-expanded="false"
-      >
-        <i className="bi bi-person-circle fs-2"></i>
-        <div className="ms-3 me-2 d-flex flex-column align-items-center justify-content-center">
-          <div>
-            <i className="bi bi-bookmark-star me-1"></i>
-            {user.username}
-          </div>
-          <div>{user.email}</div>
-        </div>
-      </div>
-      <ul
-        className="dropdown-menu"
-        aria-labelledby="dropDowns"
-        style={{ width: 240 }}
-      >
-        <li>
-          <div className="ms-3">MY STUFF</div>
-          <Link
-            to={`/user-profile/${user.id}`}
-            style={{ color: "black", textDecoration: "none" }}
-            role="button"
-          >
-            <div className="dropdown-item">
-              <i className="bi bi-person-circle fs-5 me-2"></i> Profile
-            </div>
-          </Link>
-          <div
-            className="dropdown-item"
-            role="button"
-            onClick={async () => {
-              clearCache(postDispatch);
-              setTimeout(() => {
-                fetchPaginatedPosts(postDispatch);
-              }, 1);
-              logout(userDispatch);
-            }}
-          >
-            <i className="bi bi-box-arrow-right fs-5 me-2"></i> Logout
-          </div>
-        </li>
-      </ul>
-    </div>
-  ) : (
-    <div className="d-flex align-items-center">
-      <div className="mx-3 fs-5">
-        <Link to="/login" style={{ color: "black" }}>
-          Login
-        </Link>
-      </div>
-
-      <div className="mx-3 fs-5">
-        <Link to="/register" style={{ color: "black" }}>
-          Register
-        </Link>
-      </div>
-    </div>
-  );
-
   return (
-    <div className="nav justify-content-between container align-items-center">
+    <div className="nav justify-content-between container align-items-center py-1">
       <div
         role="button"
         className="nav-link active text-dark h2"
         aria-current="page"
       >
+        {/* Home */}
         <Link
           to="/"
           style={{ color: "black", textDecoration: "none" }}
@@ -95,16 +31,20 @@ const Navbar: React.FC<navbarProps> = ({}) => {
             fetchPaginatedPosts(postDispatch);
           }}
         >
-          <i className="bi bi-reddit text-danger fs-1"></i>{" "}
-          <span className="text-danger">Reddit</span>
+          <i className="bi bi-reddit text-danger fs-1"></i>
+          <span className="text-danger"> Reddit</span>
         </Link>
       </div>
 
       <div className="d-flex align-items-center">
+        {/* CreatePost */}
         <Link to={user ? "/create-post" : "/login"} style={{ color: "black" }}>
           <i className="bi bi-plus-square fs-3 mx-3"></i>
         </Link>
-        <div>{userProfile}</div>
+
+        <Notifications />
+
+        <UserInfo />
       </div>
     </div>
   );

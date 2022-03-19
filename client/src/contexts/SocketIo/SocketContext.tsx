@@ -1,11 +1,11 @@
 import { createContext } from "react";
-import { Interactions, SocketInitialType } from "./SocketState";
+import { SocketInitialType, Interactives } from "./types/socketTypes";
 
 const SocketContext = createContext<{
   socket: SocketInitialType;
   setSocket: React.Dispatch<SocketInitialType>;
-  interactives: Interactions;
-  setInteractives: React.Dispatch<Interactions>;
+  interactives: Interactives;
+  setInteractives: React.Dispatch<Interactives>;
 }>({
   socket: null,
   setSocket: () => {},

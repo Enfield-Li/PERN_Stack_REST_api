@@ -21,6 +21,7 @@ export type SendNotification = {
   value: boolean;
   senderId: number;
   senderName: string;
+  type: 'vote' | 'like' | 'laugh' | 'confused';
 };
 
 export type ReceiveNotification = {
@@ -28,4 +29,5 @@ export type ReceiveNotification = {
   title: string;
   senderId: number;
   senderName: string;
+  type: 'vote' | 'like' | 'laugh' | 'confused';
 };

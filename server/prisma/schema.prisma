@@ -45,7 +45,8 @@ model interactions {
   likeStatus     Boolean?
   laughStatus    Boolean?
   confusedStatus Boolean?
-  haveRead       Boolean  @default(false)
+  read           Boolean  @default(false)
+  checked        Boolean  @default(false)
   createdAt      DateTime @unique() @default(now())
   updatedAt      DateTime @unique() @updatedAt
   userId         Int

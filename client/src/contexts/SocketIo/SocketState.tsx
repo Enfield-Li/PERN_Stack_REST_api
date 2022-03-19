@@ -1,32 +1,12 @@
 import React, { useState } from "react";
-import { Socket } from "socket.io-client";
-import {
-  ServerToClientEvents,
-  ClientToServerEvents,
-} from "./types/socketTypes";
 import SocketContext from "./SocketContext";
+import { SocketInitialType, Interactives } from "./types/socketTypes";
 
 interface ProviderType {}
 
-export type SocketInitialType = Socket<
-  ServerToClientEvents,
-  ClientToServerEvents
-> | null;
-
-export type Interactions = {
-  voteStatus: boolean | null;
-  likeStatus: boolean | null;
-  laughStatus: boolean | null;
-  confusedStatus: boolean | null;
-  createdAt: Date;
-  userId: number;
-  postId: number;
-  haveRead: boolean;
-}[];
-
 const SocketProvider: React.FC<ProviderType> = ({ children }) => {
   const [socket, setSocket] = useState<SocketInitialType>(null);
-  const [interactives, setInteractives] = useState<Interactions>([]);
+  const [interactives, setInteractives] = useState<Interactives>([]);
 
   return (
     <SocketContext.Provider

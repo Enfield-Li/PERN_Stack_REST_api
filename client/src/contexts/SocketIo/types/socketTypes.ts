@@ -1,3 +1,5 @@
+import { Socket } from "socket.io-client";
+
 // on
 export interface ServerToClientEvents {
   MsgToClient: (data: HelloWorld) => void;
@@ -12,6 +14,23 @@ export interface ClientToServerEvents {
   SendNotification: (data: SendNotification) => void;
 }
 
+export type SocketInitialType = Socket<
+  ServerToClientEvents,
+  ClientToServerEvents
+> | null;
+
+export type Interactives = {
+  voteStatus: boolean | null;
+  likeStatus: boolean | null;
+  laughStatus: boolean | null;
+  confusedStatus: boolean | null;
+  createdAt: Date;
+  userId: number;
+  postId: number;
+  read: boolean;
+  checked: boolean;
+}[];
+
 export type HelloWorld = {
   msg: string;
 };
@@ -22,6 +41,7 @@ export type SendNotification = {
   value: boolean;
   senderId: number;
   senderName: string;
+  type: "vote" | "like" | "laugh" | "confused";
 };
 
 export type ReceiveNotification = {
@@ -29,4 +49,5 @@ export type ReceiveNotification = {
   title: string;
   senderId: number;
   senderName: string;
+  type: "vote" | "like" | "laugh" | "confused";
 };
