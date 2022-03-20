@@ -1,9 +1,8 @@
 import axios from "axios";
-import { useCallback } from "react";
 import {
   ReceiveNotification,
   SendNotification,
-  SocketInitialType,
+  SocketInitialType
 } from "../types/socketTypes";
 
 export const sendNotification = (

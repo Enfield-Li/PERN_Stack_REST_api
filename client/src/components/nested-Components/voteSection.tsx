@@ -1,11 +1,14 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import {
   interactWithPost,
   usePost,
 } from "../../contexts/Post/actions/PostAction";
 import { PostAndInteractions } from "../../contexts/Post/types/PostTypes";
-import { sendNotification } from "../../contexts/SocketIo/actions/socketActions";
+import {
+  receiveNotification,
+  sendNotification,
+} from "../../contexts/SocketIo/actions/socketActions";
 import { useSocket } from "../../contexts/SocketIo/actions/useSocket";
 import { ReceiveNotification } from "../../contexts/SocketIo/types/socketTypes";
 import {
@@ -27,7 +30,15 @@ const VoteSection: React.FC<VoteSectionProps> = ({
   const [{ user }, userDispatch] = useUser();
   const navigate = useNavigate();
   const { socket, notifications, setNotifications } = useSocket();
-  const [state, setState] = useState<ReceiveNotification | null>(null);
+
+  useEffect(() => {
+    // receiveNotification(socket, notifications, setNotifications);
+    socket?.on("ReceiveNotification", (data) => {
+      console.log("ReceiveNotification: ", data);
+      setNotifications((prev) => [data, ...prev]);
+      console.log("notifications: ", notifications);
+    });
+  }, [socket]);
 
   const post = postAndInteractions.post;
   const postId = post.id;
@@ -55,10 +66,6 @@ const VoteSection: React.FC<VoteSectionProps> = ({
 
     interactWithPost(postDispatch, postId, bool, "vote");
   };
-
-  // useEffect(() => {
-  //   receiveNotification(socket, notifications, setNotifications);
-  // }, [socket]);
 
   return (
     <div className="me-3 mt-2">

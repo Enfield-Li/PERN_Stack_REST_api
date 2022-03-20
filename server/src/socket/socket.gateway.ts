@@ -22,7 +22,7 @@ import {
 const options = {
   cors: {
     origin: 'http://localhost:3118',
-    credentials: true,
+    // credentials: true,
     // methods: ['GET', 'POST'],
   },
 };
@@ -38,12 +38,10 @@ export class SocketGateway
   private logger: Logger = new Logger('SocketGateway');
 
   afterInit(server: Server) {
-    console.log('Initialzed!');
     this.logger.log('Initialzed!');
   }
 
   handleConnection(socket: Socket, ...args: any[]) {
-    console.log(`Socket Connected: ${socket.id}`);
     this.logger.log(`Socket Connected: ${socket.id}`);
   }
 
@@ -60,7 +58,6 @@ export class SocketGateway
     @MessageBody() data: HelloWorld,
     @Req() socket: Socket,
   ): WsResponse<HelloWorld> {
-    console.log('MsgToServer: ', data);
     // only send to the client who send message
     return { event: 'MsgToClient', data: { msg: 'hello world from server' } };
   }
@@ -75,13 +72,12 @@ export class SocketGateway
 
   @SubscribeMessage('sendChat')
   chatting(@MessageBody() data: SendChat) {
-    console.log('run sendChat...');
     const { chat, reciverId, senderId, senderName } = data;
 
     const reciver = this.getUser(reciverId);
 
     this.socketServer
-      // .to(reciver.socketId)
+      .to(reciver.socketId)
       .emit('receiveChat', { chat, senderId, senderName });
   }
 
@@ -90,6 +86,7 @@ export class SocketGateway
     @MessageBody() data: SendNotification,
   ): Promise<WsResponse<Boolean>> {
     const { postId, senderId, senderName, reciverId, value, type } = data;
+    console.log('data: ', data);
 
     const interactions = await this.prismaService.interactions.findUnique({
       where: {
@@ -101,38 +98,16 @@ export class SocketGateway
     });
 
     if (!interactions) {
-      const post = await this.prismaService.post.findUnique({
-        where: { id: postId },
-        select: { title: true },
-      });
+    } else if (interactions) {
+      let activityStatus: boolean | null = null;
+      if (type === 'vote') activityStatus = interactions.voteStatus;
+      if (type === 'laugh') activityStatus = interactions.laughStatus;
+      if (type === 'like') activityStatus = interactions.likeStatus;
 
-      const reciver = this.getUser(reciverId);
-
-      if (reciver) {
-        const res = this.socketServer
-          // .to(reciver.socketId)
-          .emit('ReceiveNotification', {
-            postId: postId,
-            title: post.title,
-            senderId: senderId,
-            senderName: senderName,
-            type,
-          });
-
-        if (!res) return { event: 'SendNotification', data: false };
-      }
-
-      return { event: 'SendNotification', data: true };
+      // Negative value or cancel action from sender does not inform reciver
+      if (!value || activityStatus === true || type === 'confused')
+        return { event: 'SendNotification', data: false };
     }
-
-    let activityStatus: boolean | null = null;
-    if (type === 'vote') activityStatus = interactions.voteStatus;
-    if (type === 'laugh') activityStatus = interactions.laughStatus;
-    if (type === 'like') activityStatus = interactions.likeStatus;
-
-    // Negative value or cancel action from sender does not inform reciver
-    if (!value || activityStatus === true || type === 'confused')
-      return { event: 'SendNotification', data: false };
 
     const post = await this.prismaService.post.findUnique({
       where: { id: postId },
@@ -143,7 +118,7 @@ export class SocketGateway
 
     if (reciver) {
       const res = this.socketServer
-        // .to(reciver.socketId)
+        .to(reciver.socketId)
         .emit('ReceiveNotification', {
           postId: postId,
           title: post.title,

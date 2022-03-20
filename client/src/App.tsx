@@ -19,17 +19,21 @@ function App() {
     me(userDispatch);
     fetchPaginatedPosts(postDispatch);
 
-    setSocket(io("http://localhost:3119", { withCredentials: true }));
+    const connectSocket = io("http://localhost:3119");
+
+    setSocket(connectSocket);
   }, []);
 
-  // useEffect(() => {
-  //   socket?.emit("MsgToServer", { msg: "hello world from client" });
-  //   socket?.on("MsgToClient", (data) => {
-  //     console.log("MsgToClient: ", data);
-  //   });
+  useEffect(() => {
+    if (userState.user) socket?.emit("Login", userState.user?.id);
+  }, [socket, userState]);
 
-  //   socket?.emit("Login", userState.user?.id);
-  // }, [socket]);
+  useEffect(() => {
+    socket?.emit("MsgToServer", { msg: "hello world from client" });
+    socket?.on("MsgToClient", (data) => {
+      console.log("MsgToClient: ", data);
+    });
+  }, [socket]);
 
   return (
     <div style={{ backgroundColor: "#dae0e6" }}>
