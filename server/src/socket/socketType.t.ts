@@ -1,11 +1,9 @@
-// on
 export interface ServerToClientEvents {
   MsgToClient: (data: HelloWorld) => void;
   ReceiveNotification: (data: ReceiveNotification) => void;
   receiveChat: (data: ReciveChat) => void;
 }
 
-// emit
 export interface ClientToServerEvents {
   MsgToServer: (data: HelloWorld) => void;
   Login: (userId: number | undefined) => void;

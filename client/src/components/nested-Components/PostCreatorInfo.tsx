@@ -8,6 +8,7 @@ import {
   UserPostAndInteractions,
 } from "../../contexts/User/types/UserTypes";
 import { calculateTime } from "../../utils/calculaTime";
+import ProfileCard from "./ProfileCard";
 
 interface PostCreatorInfoProps {
   postAndInteractions: PostAndInteractions | UserPostAndInteractions;
@@ -67,12 +68,7 @@ const PostCreatorInfo: React.FC<PostCreatorInfoProps> = ({
           {visible && (
             <div ref={setTooltipRef} {...getTooltipProps({ className: "" })}>
               <div {...getArrowProps({ className: "tooltip-arrow" })} />
-              <div>
-                {user
-                  ? ""
-                  : // <ProfileCard user={user}  />
-                    null}
-              </div>
+              <div>{user ? <ProfileCard user={user} /> : ""}</div>
             </div>
           )}
         </span>

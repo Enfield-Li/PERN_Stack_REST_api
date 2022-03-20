@@ -156,6 +156,6 @@ export class PostController {
   remove(@Req() req: Request, @Param('id') id: string): Promise<Boolean> {
     if (!req.session.userId) throw new HttpException('Not authenticated', 401);
 
-    return this.postService.deletePost(+id);
+    return this.postService.deletePost(+id, req.session.userId);
   }
 }

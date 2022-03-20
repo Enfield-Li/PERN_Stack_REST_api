@@ -1,5 +1,6 @@
 import axios from "axios";
 import {
+  Interactives,
   ReceiveNotification,
   SendNotification,
   SocketInitialType,
@@ -21,9 +22,13 @@ export const receiveNotification = (
   });
 };
 
-export async function fetchInteractives(getAll: boolean = false) {
-  const res = await axios.get(
+export async function fetchInteractives(
+  setInteractives: React.Dispatch<React.SetStateAction<Interactives>>,
+  getAll: boolean = false
+) {
+  const res = await axios.get<Interactives>(
     `http://localhost:3119/user/interactives?getAll=${getAll}`,
     { withCredentials: true }
   );
+  setInteractives(res.data);
 }

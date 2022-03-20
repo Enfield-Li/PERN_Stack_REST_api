@@ -225,8 +225,17 @@ export class PostService {
     return { post: updatedPost, interactions };
   }
 
-  async deletePost(id: number): Promise<Boolean> {
-    await this.prismaService.post.delete({ where: { id } });
+  async deletePost(postId: number, userId: number): Promise<Boolean> {
+    const deletePost = this.prismaService.post.delete({
+      where: { id: postId },
+    });
+
+    const userPostAmountDecrementOne = this.prismaService.user.update({
+      where: { id: userId },
+      data: { postAmounts: { decrement: 1 } },
+    });
+
+    this.prismaService.$transaction([deletePost, userPostAmountDecrementOne]);
 
     return true;
   }

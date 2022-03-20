@@ -139,6 +139,7 @@ export class UserService {
       // Fetch based on Post's creator ie. userId
       where: {
         post: { userId },
+
         // Exclude oneself's interactives with it's own post
         userId: { not: userId },
 
@@ -146,10 +147,15 @@ export class UserService {
         OR: [
           { voteStatus: { not: null } },
           { laughStatus: { not: null } },
-          { confusedStatus: { not: null } },
           { likeStatus: { not: null } },
         ],
       },
+
+      // Plus voting user's name
+      include: {
+        user: { select: { username: true } },
+      },
+
       orderBy: { updatedAt: 'desc' },
       take: getAll === true ? undefined : 5,
     });

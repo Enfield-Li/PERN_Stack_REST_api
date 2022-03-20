@@ -1,13 +1,11 @@
 import { Socket } from "socket.io-client";
 
-// on
 export interface ServerToClientEvents {
   MsgToClient: (data: HelloWorld) => void;
   ReceiveNotification: (data: ReceiveNotification) => void;
   receiveChat: (data: ReciveChat) => void;
 }
 
-// emit
 export interface ClientToServerEvents {
   MsgToServer: (data: HelloWorld) => void;
   Login: (userId: number | undefined) => void;
@@ -26,10 +24,12 @@ export type Interactives = {
   laughStatus: boolean | null;
   confusedStatus: boolean | null;
   createdAt: Date;
+  updatedAt: Date;
   userId: number;
   postId: number;
   read: boolean;
   checked: boolean;
+  user: { username: string };
 }[];
 
 export type HelloWorld = {
