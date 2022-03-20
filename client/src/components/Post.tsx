@@ -5,7 +5,7 @@ import { PostAndInteractions } from "../contexts/Post/types/PostTypes";
 import ContentPlaceholder from "./layout/placeHolders/ContentPlaceholder";
 import EditSection from "./nested-Components/postSection/EditSection";
 import InteractionDisplay from "./nested-Components/postSection/InteractionDisplay";
-import PostCreatorInfo from "./nested-Components/postSection/PostCreatorInfo";
+import PostCreatorInfo from "./nested-Components/user/PostCreatorInfo";
 import VoteSection from "./nested-Components/postSection/voteSection";
 
 interface PostPageProps {}

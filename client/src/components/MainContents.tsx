@@ -7,7 +7,7 @@ import ContentPlaceholder from "./layout/placeHolders/ContentPlaceholder";
 import CreatePostArea from "./layout/CreatePostArea";
 import EditSection from "./nested-Components/postSection/EditSection";
 import PostCardSection from "./nested-Components/postSection/PostCardSection";
-import PostCreatorInfo from "./nested-Components/postSection/PostCreatorInfo";
+import PostCreatorInfo from "./nested-Components/user/PostCreatorInfo";
 import VoteSection from "./nested-Components/postSection/voteSection";
 import SortSection from "./layout/SortSection";
 

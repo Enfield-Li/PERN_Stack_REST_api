@@ -10,6 +10,7 @@ import { useSocket } from "./contexts/SocketIo/actions/useSocket";
 import { me, useUser } from "./contexts/User/actions/UserAction";
 import PageRoutes from "./routes/PageRoutes";
 import "react-toastify/dist/ReactToastify.css";
+import "react-popper-tooltip/dist/styles.css";
 
 function App() {
   const [userState, userDispatch] = useUser();

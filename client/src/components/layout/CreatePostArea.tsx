@@ -9,7 +9,7 @@ const CreatePostArea: React.FC<searchBarProps> = ({}) => {
   const navigate = useNavigate();
 
   return (
-    <div className="card my-3" role="button">
+    <div className="card my-3">
       <div className="card-body d-flex align-items-center">
         {/* userProfile */}
         {userState ? (

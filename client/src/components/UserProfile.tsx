@@ -3,7 +3,7 @@ import { useParams } from "react-router-dom";
 import { getUserProfile, useUser } from "../contexts/User/actions/UserAction";
 import EditSection from "./nested-Components/postSection/EditSection";
 import PostCardSection from "./nested-Components/postSection/PostCardSection";
-import PostCreatorInfo from "./nested-Components/postSection/PostCreatorInfo";
+import PostCreatorInfo from "./nested-Components/user/PostCreatorInfo";
 import ProfileCard from "./nested-Components/user/ProfileCard";
 import VoteSection from "./nested-Components/postSection/voteSection";
 
