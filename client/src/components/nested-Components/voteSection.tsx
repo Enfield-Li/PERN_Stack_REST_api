@@ -30,21 +30,13 @@ const VoteSection: React.FC<VoteSectionProps> = ({
   const [{ user }, userDispatch] = useUser();
   const navigate = useNavigate();
   const { socket, notifications, setNotifications } = useSocket();
-
-  useEffect(() => {
-    // receiveNotification(socket, notifications, setNotifications);
-    socket?.on("ReceiveNotification", (data) => {
-      console.log("ReceiveNotification: ", data);
-      setNotifications((prev) => [data, ...prev]);
-      console.log("notifications: ", notifications);
-    });
-  }, [socket]);
+  const [state, setState] = useState<ReceiveNotification | null>(null);
 
   const post = postAndInteractions.post;
   const postId = post.id;
   const interactions = postAndInteractions.interactions;
 
-  const vote = (bool: boolean) => {
+  const vote = (voteValue: boolean) => {
     if (!user) {
       navigate("/login");
       return;
@@ -54,17 +46,17 @@ const VoteSection: React.FC<VoteSectionProps> = ({
       postId,
       reciverId: post.userId,
       senderId: user.id,
-      value: bool,
+      value: voteValue,
       senderName: user.username,
       type: "vote",
     });
 
     if (isInProfile) {
-      interactWithPostFromUserProfile(userDispatch, postId, bool, "vote");
+      interactWithPostFromUserProfile(userDispatch, postId, voteValue, "vote");
       return;
     }
 
-    interactWithPost(postDispatch, postId, bool, "vote");
+    interactWithPost(postDispatch, postId, voteValue, "vote");
   };
 
   return (

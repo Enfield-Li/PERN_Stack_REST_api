@@ -76,9 +76,10 @@ export class SocketGateway
 
     const reciver = this.getUser(reciverId);
 
-    this.socketServer
-      .to(reciver.socketId)
-      .emit('receiveChat', { chat, senderId, senderName });
+    if (reciver)
+      this.socketServer
+        .to(reciver.socketId)
+        .emit('receiveChat', { chat, senderId, senderName });
   }
 
   @SubscribeMessage('SendNotification')
@@ -86,7 +87,6 @@ export class SocketGateway
     @MessageBody() data: SendNotification,
   ): Promise<WsResponse<Boolean>> {
     const { postId, senderId, senderName, reciverId, value, type } = data;
-    console.log('data: ', data);
 
     const interactions = await this.prismaService.interactions.findUnique({
       where: {
@@ -106,7 +106,8 @@ export class SocketGateway
 
       // Negative value or cancel action from sender does not inform reciver
       if (!value || activityStatus === true || type === 'confused')
-        return { event: 'SendNotification', data: false };
+        // return { event: 'SendNotification', data: false };
+        return;
     }
 
     const post = await this.prismaService.post.findUnique({
@@ -127,10 +128,11 @@ export class SocketGateway
           type,
         });
 
-      if (!res) return { event: 'SendNotification', data: false };
+      // if (!res) return { event: 'SendNotification', data: false };
     }
 
-    return { event: 'SendNotification', data: true };
+    // return { event: 'SendNotification', data: true };
+    return;
   }
 
   private addNewUser(userId: number, socketId: string) {

@@ -16,7 +16,7 @@ const Chat: React.FC<ChatProps> = ({}) => {
 
   useEffect(() => {
     socket?.on("receiveChat", (data) => {
-      console.log("receiveChat...");
+      console.log("receiveChat...", data);
       setChat(data.chat);
       setSenderId(data.senderId);
       setSenderName(data.senderName);

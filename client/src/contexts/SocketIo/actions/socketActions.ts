@@ -2,7 +2,7 @@ import axios from "axios";
 import {
   ReceiveNotification,
   SendNotification,
-  SocketInitialType
+  SocketInitialType,
 } from "../types/socketTypes";
 
 export const sendNotification = (
@@ -14,13 +14,10 @@ export const sendNotification = (
 
 export const receiveNotification = (
   socket: SocketInitialType,
-  notifications: ReceiveNotification[],
   setNotifications: React.Dispatch<React.SetStateAction<ReceiveNotification[]>>
 ) => {
   socket?.on("ReceiveNotification", (data) => {
-    console.log("ReceiveNotification: ", data);
     setNotifications((prev) => [data, ...prev]);
-    console.log("notifications: ", notifications);
   });
 };
 
