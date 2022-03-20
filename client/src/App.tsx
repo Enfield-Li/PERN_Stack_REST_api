@@ -1,5 +1,6 @@
 import { useEffect } from "react";
 import { io } from "socket.io-client";
+import Chat from "./components/experiment/Chat";
 import Navbar from "./components/Navbar";
 import {
   fetchPaginatedPosts,
@@ -7,7 +8,7 @@ import {
 } from "./contexts/Post/actions/PostAction";
 import { useSocket } from "./contexts/SocketIo/actions/useSocket";
 import { me, useUser } from "./contexts/User/actions/UserAction";
-import PageRoutes from "./PageRoutes";
+import PageRoutes from "./routes/PageRoutes";
 
 function App() {
   const [userState, userDispatch] = useUser();
@@ -21,19 +22,20 @@ function App() {
     setSocket(io("http://localhost:3119", { withCredentials: true }));
   }, []);
 
-  useEffect(() => {
-    // socket?.emit("MsgToServer", { msg: "hello world from client" });
-    // socket?.on("MsgToClient", (data) => {
-    //   console.log("MsgToClient: ", data);
-    // });
+  // useEffect(() => {
+  //   socket?.emit("MsgToServer", { msg: "hello world from client" });
+  //   socket?.on("MsgToClient", (data) => {
+  //     console.log("MsgToClient: ", data);
+  //   });
 
-    socket?.emit("Login", userState.user?.id);
-  }, [socket, userState]);
+  //   socket?.emit("Login", userState.user?.id);
+  // }, [socket]);
 
   return (
     <div style={{ backgroundColor: "#dae0e6" }}>
       <div className="bg-white">
         <Navbar />
+        <Chat />
       </div>
       <PageRoutes />
     </div>

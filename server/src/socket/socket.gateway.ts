@@ -1,21 +1,20 @@
-import { Injectable, Logger, Req, Session } from '@nestjs/common';
-
+import { Logger, Req } from '@nestjs/common';
 import {
-  WebSocketGateway,
-  WebSocketServer,
-  SubscribeMessage,
   MessageBody,
-  WsResponse,
-  OnGatewayInit,
   OnGatewayConnection,
   OnGatewayDisconnect,
+  OnGatewayInit,
+  SubscribeMessage,
+  WebSocketGateway,
+  WebSocketServer,
+  WsResponse,
 } from '@nestjs/websockets';
-
 import { Server, Socket } from 'socket.io';
 import { PrismaService } from 'src/config/prisma.service';
 import {
   ClientToServerEvents,
   HelloWorld,
+  SendChat,
   SendNotification,
   ServerToClientEvents,
 } from './socketType.t';
@@ -39,16 +38,18 @@ export class SocketGateway
   private logger: Logger = new Logger('SocketGateway');
 
   afterInit(server: Server) {
+    console.log('Initialzed!');
     this.logger.log('Initialzed!');
   }
 
   handleConnection(socket: Socket, ...args: any[]) {
+    console.log(`Socket Connected: ${socket.id}`);
     this.logger.log(`Socket Connected: ${socket.id}`);
   }
 
   handleDisconnect(socket: Socket) {
     this.logger.log(`Socket Disconnected: ${socket.id}`);
-    // this.removeUser(socket.id);
+    this.removeUser(socket.id);
   }
 
   @WebSocketServer()
@@ -59,6 +60,7 @@ export class SocketGateway
     @MessageBody() data: HelloWorld,
     @Req() socket: Socket,
   ): WsResponse<HelloWorld> {
+    console.log('MsgToServer: ', data);
     // only send to the client who send message
     return { event: 'MsgToClient', data: { msg: 'hello world from server' } };
   }
@@ -69,6 +71,18 @@ export class SocketGateway
       this.addNewUser(userId, socket.id);
     }
     console.log('onlineUser: ', this.onlineUsers);
+  }
+
+  @SubscribeMessage('sendChat')
+  chatting(@MessageBody() data: SendChat) {
+    console.log('run sendChat...');
+    const { chat, reciverId, senderId, senderName } = data;
+
+    const reciver = this.getUser(reciverId);
+
+    this.socketServer
+      // .to(reciver.socketId)
+      .emit('receiveChat', { chat, senderId, senderName });
   }
 
   @SubscribeMessage('SendNotification')
@@ -86,13 +100,39 @@ export class SocketGateway
       },
     });
 
+    if (!interactions) {
+      const post = await this.prismaService.post.findUnique({
+        where: { id: postId },
+        select: { title: true },
+      });
+
+      const reciver = this.getUser(reciverId);
+
+      if (reciver) {
+        const res = this.socketServer
+          // .to(reciver.socketId)
+          .emit('ReceiveNotification', {
+            postId: postId,
+            title: post.title,
+            senderId: senderId,
+            senderName: senderName,
+            type,
+          });
+
+        if (!res) return { event: 'SendNotification', data: false };
+      }
+
+      return { event: 'SendNotification', data: true };
+    }
+
     let activityStatus: boolean | null = null;
     if (type === 'vote') activityStatus = interactions.voteStatus;
     if (type === 'laugh') activityStatus = interactions.laughStatus;
     if (type === 'like') activityStatus = interactions.likeStatus;
 
     // Negative value or cancel action from sender does not inform reciver
-    if (!value || activityStatus === true || type === 'confused') return;
+    if (!value || activityStatus === true || type === 'confused')
+      return { event: 'SendNotification', data: false };
 
     const post = await this.prismaService.post.findUnique({
       where: { id: postId },
@@ -103,7 +143,7 @@ export class SocketGateway
 
     if (reciver) {
       const res = this.socketServer
-        .to(reciver.socketId)
+        // .to(reciver.socketId)
         .emit('ReceiveNotification', {
           postId: postId,
           title: post.title,
@@ -124,10 +164,9 @@ export class SocketGateway
     if (!userExist) this.onlineUsers.push({ userId, socketId });
   }
 
-  getUser(userId: number) {
-    if (this.onlineUsers) {
-      return this.onlineUsers.find((user) => user.userId === userId);
-    }
+  private getUser(userId: number) {
+    const findone = this.onlineUsers.find((user) => user.userId === userId);
+    return findone;
   }
 
   private removeUser(socketId: string) {

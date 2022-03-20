@@ -15,10 +15,8 @@ import { voteManipulation } from "../../utils/voteManipulation";
 import { interactionManipulation } from "../../utils/interactionManipulation";
 
 export default function PostReducer(state: PostState, action: PostActionType) {
-  console.log("post reducer called");
   switch (action.type) {
     case CLEAR_CACHE: {
-      console.log("CLEAR_CACHE reducer here");
       return produce(state, (draftState) => {
         draftState.paginatedPosts.postAndInteractions = [];
         // draftState.currentPost = null;
@@ -26,8 +24,6 @@ export default function PostReducer(state: PostState, action: PostActionType) {
     }
 
     case FETCH_PAGINATED_POSTS: {
-      console.log("FETCH_PAGINATED_POSTS reducer here");
-
       return produce(state, (draftState) => {
         draftState.paginatedPosts.hasMore = action.payload.hasMore;
         draftState.paginatedPosts.postAndInteractions.push(
@@ -37,7 +33,6 @@ export default function PostReducer(state: PostState, action: PostActionType) {
     }
 
     case CREATE_POST: {
-      console.log("CREATE_POST reducer here");
       return produce(state, (draftState) => {
         draftState.currentPost = action.payload;
       });

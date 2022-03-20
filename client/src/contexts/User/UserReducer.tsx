@@ -14,10 +14,8 @@ import { voteManipulation } from "../../utils/voteManipulation";
 import { interactionManipulation } from "../../utils/interactionManipulation";
 
 export default function UserReducer(state: UserState, action: UserActionType) {
-  console.log("UserReducer reducer called");
   switch (action.type) {
     case LOGIN_USER: {
-      console.log("LOGIN_USER");
       return {
         ...state,
         user: action.payload,
@@ -25,7 +23,6 @@ export default function UserReducer(state: UserState, action: UserActionType) {
     }
 
     case LOGOUT_USER: {
-      console.log("LOGOUT_USER");
       return {
         ...state,
         user: null,
@@ -33,7 +30,6 @@ export default function UserReducer(state: UserState, action: UserActionType) {
     }
 
     case USER_PROFILE: {
-      console.log("USER_PROFILE");
       return produce(state, (draftState) => {
         if (draftState.userProfile) {
           draftState.userProfile.user = action.payload.user;
@@ -57,8 +53,6 @@ export default function UserReducer(state: UserState, action: UserActionType) {
 
     case VOTE_CURRENT_POST: {
       return produce(state, (draftState) => {
-        console.log("VOTE_CURRENT_POST userReducer...");
-
         if (draftState.userProfile) {
           draftState.userProfile.userPaginatedPost.postAndInteractions =
             draftState.userProfile.userPaginatedPost.postAndInteractions.filter(
@@ -87,8 +81,6 @@ export default function UserReducer(state: UserState, action: UserActionType) {
 
     case LIKE_CURRENT_POST: {
       return produce(state, (draftState) => {
-        console.log("LIKE_CURRENT_POST userReducer...");
-
         if (draftState.userProfile) {
           draftState.userProfile.userPaginatedPost.postAndInteractions =
             draftState.userProfile.userPaginatedPost.postAndInteractions.filter(
@@ -115,8 +107,6 @@ export default function UserReducer(state: UserState, action: UserActionType) {
 
     case LAUGH_CURRENT_POST: {
       return produce(state, (draftState) => {
-        console.log("LAUGH_CURRENT_POST userReducer...");
-
         if (draftState.userProfile) {
           draftState.userProfile.userPaginatedPost.postAndInteractions =
             draftState.userProfile.userPaginatedPost.postAndInteractions.filter(
@@ -144,8 +134,6 @@ export default function UserReducer(state: UserState, action: UserActionType) {
 
     case CONFUSE_CURRENT_POST: {
       return produce(state, (draftState) => {
-        console.log("CONFUSE_CURRENT_POST userReducer...");
-
         if (draftState.userProfile) {
           draftState.userProfile.userPaginatedPost.postAndInteractions =
             draftState.userProfile.userPaginatedPost.postAndInteractions.filter(

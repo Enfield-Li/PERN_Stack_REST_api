@@ -1,15 +1,13 @@
-import React, { useEffect } from "react";
-import { useLocation, useNavigate } from "react-router-dom";
+import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import {
   interactWithPost,
   usePost,
 } from "../../contexts/Post/actions/PostAction";
 import { PostAndInteractions } from "../../contexts/Post/types/PostTypes";
-import {
-  receiveNotification,
-  sendNotification,
-} from "../../contexts/SocketIo/actions/socketActions";
+import { sendNotification } from "../../contexts/SocketIo/actions/socketActions";
 import { useSocket } from "../../contexts/SocketIo/actions/useSocket";
+import { ReceiveNotification } from "../../contexts/SocketIo/types/socketTypes";
 import {
   interactWithPostFromUserProfile,
   useUser,
@@ -28,7 +26,8 @@ const VoteSection: React.FC<VoteSectionProps> = ({
   const [_, postDispatch] = usePost();
   const [{ user }, userDispatch] = useUser();
   const navigate = useNavigate();
-  const { socket, setInteractives, interactives } = useSocket();
+  const { socket, notifications, setNotifications } = useSocket();
+  const [state, setState] = useState<ReceiveNotification | null>(null);
 
   const post = postAndInteractions.post;
   const postId = post.id;
@@ -57,9 +56,9 @@ const VoteSection: React.FC<VoteSectionProps> = ({
     interactWithPost(postDispatch, postId, bool, "vote");
   };
 
-  useEffect(() => {
-    receiveNotification(socket);
-  }, [socket]);
+  // useEffect(() => {
+  //   receiveNotification(socket, notifications, setNotifications);
+  // }, [socket]);
 
   return (
     <div className="me-3 mt-2">

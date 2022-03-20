@@ -1,12 +1,13 @@
 import React from "react";
-import { Routes, Route, useLocation } from "react-router-dom";
-import CreatePost from "./components/CreatePost";
-import EditPost from "./components/EditPost";
-import Login from "./components/Login";
-import MainContents from "./components/MainContents";
-import PostPage from "./components/Post";
-import Register from "./components/register";
-import UserProfile from "./components/UserProfile";
+import { Route, Routes, useLocation } from "react-router-dom";
+import CreatePost from "../components/CreatePost";
+import EditPost from "../components/EditPost";
+import Login from "../components/Login";
+import MainContents from "../components/MainContents";
+import PostPage from "../components/Post";
+import Register from "../components/register";
+import UserProfile from "../components/UserProfile";
+
 
 interface PageRoutesProps {}
 

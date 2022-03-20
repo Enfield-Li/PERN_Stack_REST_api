@@ -31,7 +31,6 @@ export async function registerUser(
   dispatch: React.Dispatch<UserActionType>,
   userCredential: UserRegister
 ) {
-  console.log("register User...");
   const res = await axios.post<UserRO>(
     "http://localhost:3119/user/register",
     userCredential,
@@ -48,8 +47,6 @@ export async function loginUser(
   dispatch: React.Dispatch<UserActionType>,
   userCredential: UserCredential
 ) {
-  console.log("login User...");
-
   const res = await axios.put<UserRO>(
     "http://localhost:3119/user/login",
     userCredential,
@@ -67,7 +64,6 @@ export async function loginUser(
 }
 
 export async function me(dispatch: React.Dispatch<UserActionType>) {
-  console.log("me...");
   const res = await axios.get<UserRO>("http://localhost:3119/user/me", {
     withCredentials: true,
   });
@@ -79,9 +75,12 @@ export async function me(dispatch: React.Dispatch<UserActionType>) {
 }
 
 export async function getUserInfo(id: number) {
-  const res = await axios.get<User>(`http://localhost:3119/user/userInfo/${id}`, {
-    withCredentials: true,
-  });
+  const res = await axios.get<User>(
+    `http://localhost:3119/user/userInfo/${id}`,
+    {
+      withCredentials: true,
+    }
+  );
 
   return res.data;
 }
@@ -91,8 +90,6 @@ export async function getUserProfile(
   id: number,
   cursor?: Date
 ) {
-  console.log("getUserProfile...");
-
   let res: AxiosResponse<UserProfileRO, any> | null = null;
 
   if (cursor) {
@@ -162,7 +159,6 @@ export async function interactWithPostFromUserProfile(
 }
 
 export async function logout(dispatch: React.Dispatch<UserActionType>) {
-  console.log("logout...");
   dispatch({
     type: LOGOUT_USER,
   });
