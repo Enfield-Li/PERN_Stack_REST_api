@@ -2,8 +2,8 @@ import { Formik } from "formik";
 import React from "react";
 import { useNavigate } from "react-router-dom";
 import { registerUser, useUser } from "../contexts/User/actions/UserAction";
-import FormWrapper from "./nested-Components/FormWrapper";
-import InputWrapper from "./nested-Components/InputWrapper";
+import FormWrapper from "./nested-Components/forms/FormWrapper";
+import InputWrapper from "./nested-Components/forms/InputWrapper";
 import * as Yup from "yup";
 
 interface RegisterProps {}

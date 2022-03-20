@@ -1,7 +1,7 @@
-import { PostAndInteractions } from "../../contexts/Post/types/PostTypes";
+import { PostAndInteractions } from "../../../contexts/Post/types/PostTypes";
 import InteractionDisplay from "./InteractionDisplay";
 import { Link } from "react-router-dom";
-import { UserPostAndInteractions } from "../../contexts/User/types/UserTypes";
+import { UserPostAndInteractions } from "../../../contexts/User/types/UserTypes";
 
 interface PostCardSectionProps {
   postAndInteractions: PostAndInteractions | UserPostAndInteractions;

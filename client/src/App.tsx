@@ -9,6 +9,7 @@ import { receiveNotification } from "./contexts/SocketIo/actions/socketActions";
 import { useSocket } from "./contexts/SocketIo/actions/useSocket";
 import { me, useUser } from "./contexts/User/actions/UserAction";
 import PageRoutes from "./routes/PageRoutes";
+import "react-toastify/dist/ReactToastify.css";
 
 function App() {
   const [userState, userDispatch] = useUser();
@@ -39,6 +40,7 @@ function App() {
       <div className="bg-white">
         <Navbar />
       </div>
+
       <PageRoutes />
     </div>
   );

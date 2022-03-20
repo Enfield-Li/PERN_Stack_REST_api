@@ -3,13 +3,13 @@ import {
   fetchPaginatedPosts,
   usePost,
 } from "../contexts/Post/actions/PostAction";
-import ContentPlaceholder from "./layout/ContentPlaceholder";
+import ContentPlaceholder from "./layout/placeHolders/ContentPlaceholder";
 import CreatePostArea from "./layout/CreatePostArea";
-import EditSection from "./nested-Components/EditSection";
-import PostCardSection from "./nested-Components/PostCardSection";
-import PostCreatorInfo from "./nested-Components/PostCreatorInfo";
-import VoteSection from "./nested-Components/voteSection";
-import SortSection from "./nested-Components/SortSection";
+import EditSection from "./nested-Components/postSection/EditSection";
+import PostCardSection from "./nested-Components/postSection/PostCardSection";
+import PostCreatorInfo from "./nested-Components/postSection/PostCreatorInfo";
+import VoteSection from "./nested-Components/postSection/voteSection";
+import SortSection from "./layout/SortSection";
 
 interface MainContentsProps {}
 

@@ -1,17 +1,18 @@
 import { useState } from "react";
 import { usePopperTooltip } from "react-popper-tooltip";
 import { useNavigate } from "react-router-dom";
+import { toast, ToastContainer } from "react-toastify";
 import {
   deletePost,
   interactWithPost,
   usePost,
-} from "../../contexts/Post/actions/PostAction";
-import { PostAndInteractions } from "../../contexts/Post/types/PostTypes";
+} from "../../../contexts/Post/actions/PostAction";
+import { PostAndInteractions } from "../../../contexts/Post/types/PostTypes";
 import {
   interactWithPostFromUserProfile,
   useUser,
-} from "../../contexts/User/actions/UserAction";
-import { UserPostAndInteractions } from "../../contexts/User/types/UserTypes";
+} from "../../../contexts/User/actions/UserAction";
+import { UserPostAndInteractions } from "../../../contexts/User/types/UserTypes";
 
 interface EditSectionProps {
   postAndInteractions: PostAndInteractions | UserPostAndInteractions;
@@ -41,6 +42,8 @@ const EditSection: React.FC<EditSectionProps> = ({
     visible: controlledVisible,
     onVisibleChange: setControlledVisible,
   });
+
+  const notify = () => toast("Post deleted");
 
   const interact = (field: "like" | "laugh" | "confused") => {
     if (!user) {
@@ -147,6 +150,7 @@ const EditSection: React.FC<EditSectionProps> = ({
                 if (isNotMain) {
                   deletePost(postDispatch, postAndInteractions.post.id);
                   navigate("/");
+                  notify();
                 } else {
                   navigate(`/post/${postAndInteractions.post.id}`);
                 }

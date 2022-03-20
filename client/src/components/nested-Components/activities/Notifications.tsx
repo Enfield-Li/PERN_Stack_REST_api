@@ -1,11 +1,13 @@
 import React from "react";
-import { fetchInteractives } from "../../contexts/SocketIo/actions/socketActions";
-import { useSocket } from "../../contexts/SocketIo/actions/useSocket";
+import { toast } from "react-toastify";
+import { fetchInteractives } from "../../../contexts/SocketIo/actions/socketActions";
+import { useSocket } from "../../../contexts/SocketIo/actions/useSocket";
 
 interface NotificationsProps {}
 
 const Notifications: React.FC<NotificationsProps> = ({}) => {
   const { notifications, setNotifications, setInteractives } = useSocket();
+  const latestNotifications = notifications[0];
 
   return (
     <i

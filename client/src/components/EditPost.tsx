@@ -3,8 +3,8 @@ import React from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import * as Yup from "yup";
 import { editCurrentPost, usePost } from "../contexts/Post/actions/PostAction";
-import FormWrapper from "./nested-Components/FormWrapper";
-import InputWrapper from "./nested-Components/InputWrapper";
+import FormWrapper from "./nested-Components/forms/FormWrapper";
+import InputWrapper from "./nested-Components/forms/InputWrapper";
 
 interface EditPostProps {}
 

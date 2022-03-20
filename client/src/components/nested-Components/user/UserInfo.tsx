@@ -4,8 +4,8 @@ import {
   clearCache,
   fetchPaginatedPosts,
   usePost,
-} from "../../contexts/Post/actions/PostAction";
-import { logout, useUser } from "../../contexts/User/actions/UserAction";
+} from "../../../contexts/Post/actions/PostAction";
+import { logout, useUser } from "../../../contexts/User/actions/UserAction";
 
 interface UserInfoProps {}
 

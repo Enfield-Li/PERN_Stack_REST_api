@@ -6,8 +6,8 @@ import {
   usePost,
 } from "../contexts/Post/actions/PostAction";
 import { useUser } from "../contexts/User/actions/UserAction";
-import Notifications from "./nested-Components/Notifications";
-import UserInfo from "./nested-Components/UserInfo";
+import Notifications from "./nested-Components/activities/Notifications";
+import UserInfo from "./nested-Components/user/UserInfo";
 
 interface navbarProps {}
 

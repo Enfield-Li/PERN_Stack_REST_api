@@ -3,19 +3,19 @@ import { useNavigate } from "react-router-dom";
 import {
   interactWithPost,
   usePost,
-} from "../../contexts/Post/actions/PostAction";
-import { PostAndInteractions } from "../../contexts/Post/types/PostTypes";
+} from "../../../contexts/Post/actions/PostAction";
+import { PostAndInteractions } from "../../../contexts/Post/types/PostTypes";
 import {
   receiveNotification,
   sendNotification,
-} from "../../contexts/SocketIo/actions/socketActions";
-import { useSocket } from "../../contexts/SocketIo/actions/useSocket";
-import { ReceiveNotification } from "../../contexts/SocketIo/types/socketTypes";
+} from "../../../contexts/SocketIo/actions/socketActions";
+import { useSocket } from "../../../contexts/SocketIo/actions/useSocket";
+import { ReceiveNotification } from "../../../contexts/SocketIo/types/socketTypes";
 import {
   interactWithPostFromUserProfile,
   useUser,
-} from "../../contexts/User/actions/UserAction";
-import { UserPostAndInteractions } from "../../contexts/User/types/UserTypes";
+} from "../../../contexts/User/actions/UserAction";
+import { UserPostAndInteractions } from "../../../contexts/User/types/UserTypes";
 
 interface VoteSectionProps {
   postAndInteractions: PostAndInteractions | UserPostAndInteractions;

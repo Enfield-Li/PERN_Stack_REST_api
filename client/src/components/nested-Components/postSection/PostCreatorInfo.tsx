@@ -1,14 +1,14 @@
 import { useState } from "react";
 import { usePopperTooltip } from "react-popper-tooltip";
 import { Link } from "react-router-dom";
-import { PostAndInteractions } from "../../contexts/Post/types/PostTypes";
-import { getUserInfo } from "../../contexts/User/actions/UserAction";
+import { PostAndInteractions } from "../../../contexts/Post/types/PostTypes";
+import { getUserInfo } from "../../../contexts/User/actions/UserAction";
 import {
   User,
   UserPostAndInteractions,
-} from "../../contexts/User/types/UserTypes";
-import { calculateTime } from "../../utils/calculaTime";
-import ProfileCard from "./ProfileCard";
+} from "../../../contexts/User/types/UserTypes";
+import { calculateTime } from "../../../utils/calculaTime";
+import ProfileCard from "../user/ProfileCard";
 
 interface PostCreatorInfoProps {
   postAndInteractions: PostAndInteractions | UserPostAndInteractions;

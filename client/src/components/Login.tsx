@@ -3,8 +3,8 @@ import React from "react";
 import { useNavigate } from "react-router-dom";
 import { loginUser, useUser } from "../contexts/User/actions/UserAction";
 import { mapToError } from "../utils/toError";
-import FormWrapper from "./nested-Components/FormWrapper";
-import InputWrapper from "./nested-Components/InputWrapper";
+import FormWrapper from "./nested-Components/forms/FormWrapper";
+import InputWrapper from "./nested-Components/forms/InputWrapper";
 import * as Yup from "yup";
 import {
   clearCache,

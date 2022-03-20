@@ -2,11 +2,11 @@ import React, { useEffect } from "react";
 import { useParams } from "react-router-dom";
 import { fetchSinglePost, usePost } from "../contexts/Post/actions/PostAction";
 import { PostAndInteractions } from "../contexts/Post/types/PostTypes";
-import ContentPlaceholder from "./layout/ContentPlaceholder";
-import EditSection from "./nested-Components/EditSection";
-import InteractionDisplay from "./nested-Components/InteractionDisplay";
-import PostCreatorInfo from "./nested-Components/PostCreatorInfo";
-import VoteSection from "./nested-Components/voteSection";
+import ContentPlaceholder from "./layout/placeHolders/ContentPlaceholder";
+import EditSection from "./nested-Components/postSection/EditSection";
+import InteractionDisplay from "./nested-Components/postSection/InteractionDisplay";
+import PostCreatorInfo from "./nested-Components/postSection/PostCreatorInfo";
+import VoteSection from "./nested-Components/postSection/voteSection";
 
 interface PostPageProps {}
 
