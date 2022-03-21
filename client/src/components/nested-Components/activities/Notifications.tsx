@@ -1,18 +1,28 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { usePopperTooltip } from "react-popper-tooltip";
 import {
   clearNotifications,
   fetchInteractives,
+  setPostChecked,
   useSocket,
 } from "../../../contexts/SocketIo/actions/socketActions";
+import { collectPostToBeChecked } from "../../../utils/collectPostToBeChecked";
 import Interacitivities from "./Interacitivities";
 
 interface NotificationsProps {}
 
 const Notifications: React.FC<NotificationsProps> = ({}) => {
-  const { socketState, socketDispatch } = useSocket();
-  const { notifications, interactives } = socketState;
+  const { socketState, socketDispatch, uncheckedAmount, setUncheckedAmount } =
+    useSocket();
 
+  useEffect(() => {
+    if (socketState.interactives.length) {
+      const formatedposts = collectPostToBeChecked(socketState.interactives);
+      setPostChecked(formatedposts);
+    }
+  }, [socketState.interactives]);
+
+  // Controlled tool tip
   const [controlledVisible, setControlledVisible] = useState(false);
   const {
     getArrowProps,
@@ -39,10 +49,11 @@ const Notifications: React.FC<NotificationsProps> = ({}) => {
         onClick={() => {
           clearNotifications(socketDispatch);
           fetchInteractives(socketDispatch);
+          setUncheckedAmount(0);
         }}
       >
         <span className="fs-6 position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
-          {notifications.length ? notifications.length : null}
+          {uncheckedAmount ? uncheckedAmount : null}
         </span>
       </div>
 

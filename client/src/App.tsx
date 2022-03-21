@@ -6,6 +6,7 @@ import {
   usePost,
 } from "./contexts/Post/actions/PostAction";
 import {
+  fetchInteractives,
   receiveNotification,
   useSocket,
 } from "./contexts/SocketIo/actions/socketActions";
@@ -19,10 +20,11 @@ import { toast } from "react-toastify";
 function App() {
   const { userState, userDispatch } = useUser();
   const { postDispatch } = usePost();
-  const { socket, setSocket, socketDispatch, socketState } = useSocket();
+  const { socket, setSocket, socketDispatch, setUncheckedAmount, socketState } =
+    useSocket();
   const [notifications, setNotifications] = useState<ReceiveNotification[]>([]);
 
-  // Initialize login, fetch posts, socket connection
+  // Initialize login, fetch posts, socket connection, interactives
   useEffect(() => {
     me(userDispatch);
     fetchPaginatedPosts(postDispatch);
@@ -31,14 +33,25 @@ function App() {
     setSocket(connectSocket);
   }, []);
 
+  useEffect(() => {
+    if (userState.user) {
+      fetchInteractives(socketDispatch, setUncheckedAmount);
+    }
+  }, [userState.user]);
+
   // Create user instance in socket server
   useEffect(() => {
     if (userState.user) socket?.emit("Login", userState.user?.id);
-  }, [socket, userState]);
+  }, [socket, userState.user]);
 
   // Capture socket response
   useEffect(() => {
-    receiveNotification(socket, socketDispatch, setNotifications);
+    receiveNotification(
+      socket,
+      socketDispatch,
+      setNotifications,
+      setUncheckedAmount
+    );
   }, [socket]);
 
   useEffect(() => {

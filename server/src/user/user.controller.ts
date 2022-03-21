@@ -17,11 +17,13 @@ import {
   CreateUserDto,
   interactions,
   LoginUserDto,
+  PostForChecked,
   userProfileRO as UserProfileRO,
   UserRO,
 } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import {
+  ApiBody,
   ApiCreatedResponse,
   ApiOkResponse,
   ApiQuery,
@@ -68,6 +70,17 @@ export class UserController {
       +take,
       cursor,
     );
+  }
+
+  @ApiBody({
+    type: [PostForChecked],
+  })
+  @ApiCreatedResponse({ type: Boolean })
+  @Patch('/setNotificationChecked')
+  async setChecked(@Body() ids: PostForChecked[], @Req() req: Request) {
+    if (!req.session.userId) return;
+
+    return this.userService.setNotificationChecked(ids);
   }
 
   @Get('/userInfo/:id')

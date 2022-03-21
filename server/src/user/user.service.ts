@@ -8,6 +8,7 @@ import {
   ResUser,
   UserRO,
   userProfileRO,
+  PostForChecked,
 } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { Request } from 'express';
@@ -49,6 +50,19 @@ export class UserService {
 
     req.session.userId = user.id;
     return { user: this.buildResUser(user) };
+  }
+
+  async setNotificationChecked(ids: PostForChecked[]) {
+    for (let i = 0; i < ids.length; i++) {
+      const { userId, postId } = ids[i];
+
+      await this.prismaService.interactions.update({
+        data: { checked: true },
+        where: { userId_postId: { userId, postId } },
+      });
+    }
+
+    return true;
   }
 
   private async findUser(usernameOrEmail: string): Promise<user> {

@@ -90,3 +90,10 @@ export class interactions {
   @ApiProperty()
   checked: boolean;
 }
+
+export class PostForChecked {
+  @ApiProperty()
+  userId: number;
+  @ApiProperty()
+  postId: number;
+}

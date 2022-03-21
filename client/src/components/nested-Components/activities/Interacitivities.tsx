@@ -1,5 +1,6 @@
-import React from "react";
+import React, { useEffect } from "react";
 import {
+  fetchInteractives,
   setAllInteractivesRead,
   setInteractiveRead,
   useSocket,
@@ -8,7 +9,7 @@ import {
 interface InteracitivitiesProps {}
 
 const Interacitivities: React.FC<InteracitivitiesProps> = ({}) => {
-  const { socketState, socketDispatch } = useSocket();
+  const { socketState, socketDispatch, setUncheckedAmount } = useSocket();
   const { interactives } = socketState;
 
   return (

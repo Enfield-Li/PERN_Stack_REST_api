@@ -8,6 +8,7 @@ import {
 } from "../../constant";
 import {
   Interactives,
+  PostsForChecked,
   ReceiveNotification,
   SendNotification,
   SocketActionType,
@@ -18,9 +19,23 @@ import { useContext } from "react";
 import SocketContext from "../SocketContext";
 
 export const useSocket = () => {
-  const { socket, setSocket, state, dispatch } = useContext(SocketContext);
+  const {
+    socket,
+    setSocket,
+    state,
+    dispatch,
+    uncheckedAmount,
+    setUncheckedAmount,
+  } = useContext(SocketContext);
 
-  return { socket, setSocket, socketState: state, socketDispatch: dispatch };
+  return {
+    socket,
+    setSocket,
+    socketState: state,
+    socketDispatch: dispatch,
+    uncheckedAmount,
+    setUncheckedAmount,
+  };
 };
 
 export const sendNotification = (
@@ -33,10 +48,13 @@ export const sendNotification = (
 export const receiveNotification = (
   socket: SocketInitialType,
   socketDispatch: React.Dispatch<SocketActionType>,
-  setNotifications: React.Dispatch<React.SetStateAction<ReceiveNotification[]>>
+  setNotifications: React.Dispatch<React.SetStateAction<ReceiveNotification[]>>,
+  setUncheckedAmount: React.Dispatch<React.SetStateAction<number>>
 ) => {
   socket?.on("ReceiveNotification", (data) => {
     setNotifications((prev) => [data, ...prev]);
+
+    setUncheckedAmount((prev) => prev + 1);
 
     socketDispatch({
       type: SET_NOTIFICATIONS,
@@ -47,6 +65,7 @@ export const receiveNotification = (
 
 export async function fetchInteractives(
   dispatch: React.Dispatch<SocketActionType>,
+  setUncheckedAmount?: React.Dispatch<React.SetStateAction<number>>,
   getAll: boolean = false
 ) {
   const res = await axios.get<Interactives>(
@@ -54,10 +73,27 @@ export async function fetchInteractives(
     { withCredentials: true }
   );
 
+  // Set unchecked message amount
+  if (setUncheckedAmount) {
+    for (let i = 0; i < res.data.length; i++) {
+      if (res.data[i].checked === false) {
+        setUncheckedAmount((prev) => prev + 1);
+      }
+    }
+  }
+
   dispatch({
     type: SET_INTERACTIVES,
     payload: res.data,
   });
+}
+
+export async function setPostChecked(postsForChecked: PostsForChecked) {
+  const res = await axios.patch<PostsForChecked>(
+    "http://localhost:3119/user/setNotificationChecked",
+    postsForChecked,
+    { withCredentials: true }
+  );
 }
 
 export function clearNotifications(dispatch: React.Dispatch<SocketActionType>) {

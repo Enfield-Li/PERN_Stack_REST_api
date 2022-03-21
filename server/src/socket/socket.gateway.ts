@@ -67,7 +67,7 @@ export class SocketGateway
     if (userId) {
       this.addNewUser(userId, socket.id);
     }
-    console.log('onlineUser: ', this.onlineUsers);
+    // console.log('onlineUser: ', this.onlineUsers);
   }
 
   @SubscribeMessage('sendChat')
@@ -99,10 +99,12 @@ export class SocketGateway
         },
       },
     });
+    console.log('interactions: ', interactions);
 
     if (!interactions) {
     } else if (interactions) {
       let activityStatus: boolean | null = null;
+
       if (type === 'vote') activityStatus = interactions.voteStatus;
       if (type === 'laugh') activityStatus = interactions.laughStatus;
       if (type === 'like') activityStatus = interactions.likeStatus;
