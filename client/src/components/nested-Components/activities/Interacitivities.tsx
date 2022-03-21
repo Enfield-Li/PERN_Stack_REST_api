@@ -1,10 +1,11 @@
 import React from "react";
-import { useSocket } from "../../../contexts/SocketIo/actions/useSocket";
+import { useSocket } from "../../../contexts/SocketIo/actions/socketActions";
 
 interface InteracitivitiesProps {}
 
 const Interacitivities: React.FC<InteracitivitiesProps> = ({}) => {
-  const { interactives, setInteractives } = useSocket();
+  const { socketState } = useSocket();
+  const { interactives } = socketState;
 
   return (
     <div style={{ height: 300, width: 340, overflow: "scroll" }}>

@@ -9,8 +9,10 @@ import {
 } from "../../../contexts/User/actions/UserAction";
 import { PostAndInteractions } from "../../../contexts/Post/types/PostTypes";
 import { UserPostAndInteractions } from "../../../contexts/User/types/UserTypes";
-import { sendNotification } from "../../../contexts/SocketIo/actions/socketActions";
-import { useSocket } from "../../../contexts/SocketIo/actions/useSocket";
+import {
+  sendNotification,
+  useSocket,
+} from "../../../contexts/SocketIo/actions/socketActions";
 
 interface InteractionDisplayProps {
   postAndInteractions: PostAndInteractions | UserPostAndInteractions;

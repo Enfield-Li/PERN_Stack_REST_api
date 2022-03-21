@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { useNavigate } from "react-router-dom";
 import {
   interactWithPost,
@@ -6,11 +6,9 @@ import {
 } from "../../../contexts/Post/actions/PostAction";
 import { PostAndInteractions } from "../../../contexts/Post/types/PostTypes";
 import {
-  receiveNotification,
   sendNotification,
+  useSocket,
 } from "../../../contexts/SocketIo/actions/socketActions";
-import { useSocket } from "../../../contexts/SocketIo/actions/useSocket";
-import { ReceiveNotification } from "../../../contexts/SocketIo/types/socketTypes";
 import {
   interactWithPostFromUserProfile,
   useUser,
@@ -28,8 +26,8 @@ const VoteSection: React.FC<VoteSectionProps> = ({
 }) => {
   const { postDispatch } = usePost();
   const { userState, userDispatch } = useUser();
-  const navigate = useNavigate();
   const { socket } = useSocket();
+  const navigate = useNavigate();
 
   const { user } = userState;
   const post = postAndInteractions.post;

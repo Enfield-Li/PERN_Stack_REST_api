@@ -5,8 +5,10 @@ import {
   fetchPaginatedPosts,
   usePost,
 } from "./contexts/Post/actions/PostAction";
-import { receiveNotification } from "./contexts/SocketIo/actions/socketActions";
-import { useSocket } from "./contexts/SocketIo/actions/useSocket";
+import {
+  receiveNotification,
+  useSocket,
+} from "./contexts/SocketIo/actions/socketActions";
 import { me, useUser } from "./contexts/User/actions/UserAction";
 import PageRoutes from "./routes/PageRoutes";
 import "react-toastify/dist/ReactToastify.css";
@@ -15,7 +17,7 @@ import "react-popper-tooltip/dist/styles.css";
 function App() {
   const { userState, userDispatch } = useUser();
   const { postDispatch } = usePost();
-  const { socket, setSocket, setNotifications } = useSocket();
+  const { socket, setSocket, socketDispatch, socketState } = useSocket();
 
   // Initialize login, fetch posts, socket connection
   useEffect(() => {
@@ -33,7 +35,7 @@ function App() {
 
   // Capture socket response
   useEffect(() => {
-    receiveNotification(socket, setNotifications);
+    receiveNotification(socket, socketDispatch);
   }, [socket]);
 
   return (

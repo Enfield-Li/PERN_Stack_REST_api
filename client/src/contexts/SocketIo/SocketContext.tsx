@@ -1,26 +1,21 @@
 import { createContext } from "react";
 import {
   SocketInitialType,
-  ReceiveNotification,
-  Interactives,
+  SocketActionType,
+  socketInitialState,
+  SocketInitialStateType,
 } from "./types/socketTypes";
 
 const SocketContext = createContext<{
   socket: SocketInitialType;
   setSocket: React.Dispatch<React.SetStateAction<SocketInitialType>>;
-  notifications: ReceiveNotification[];
-  setNotifications: React.Dispatch<
-    React.SetStateAction<ReceiveNotification[]>
-  >;
-  interactives: Interactives;
-  setInteractives: React.Dispatch<React.SetStateAction<Interactives>>;
+  state: SocketInitialStateType;
+  dispatch: React.Dispatch<SocketActionType>;
 }>({
   socket: null,
   setSocket: () => {},
-  notifications: [],
-  setNotifications: () => {},
-  interactives: [],
-  setInteractives: () => {},
+  state: socketInitialState,
+  dispatch: () => {},
 });
 
 export default SocketContext;

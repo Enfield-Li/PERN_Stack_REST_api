@@ -1,10 +1,21 @@
 import axios from "axios";
+import { SET_INTERACTIVES, SET_NOTIFICATIONS } from "../../constant";
 import {
   Interactives,
   ReceiveNotification,
   SendNotification,
+  SocketActionType,
   SocketInitialType,
 } from "../types/socketTypes";
+
+import { useContext } from "react";
+import SocketContext from "../SocketContext";
+
+export const useSocket = () => {
+  const { socket, setSocket, state, dispatch } = useContext(SocketContext);
+
+  return { socket, setSocket, socketState: state, socketDispatch: dispatch };
+};
 
 export const sendNotification = (
   socket: SocketInitialType,
@@ -15,20 +26,27 @@ export const sendNotification = (
 
 export const receiveNotification = (
   socket: SocketInitialType,
-  setNotifications: React.Dispatch<React.SetStateAction<ReceiveNotification[]>>
+  dispatch: React.Dispatch<SocketActionType>
 ) => {
   socket?.on("ReceiveNotification", (data) => {
-    setNotifications((prev) => [data, ...prev]);
+    dispatch({
+      type: SET_NOTIFICATIONS,
+      payload: data,
+    });
   });
 };
 
 export async function fetchInteractives(
-  setInteractives: React.Dispatch<React.SetStateAction<Interactives>>,
+  dispatch: React.Dispatch<SocketActionType>,
   getAll: boolean = false
 ) {
   const res = await axios.get<Interactives>(
     `http://localhost:3119/user/interactives?getAll=${getAll}`,
     { withCredentials: true }
   );
-  setInteractives(res.data);
+
+  dispatch({
+    type: SET_INTERACTIVES,
+    payload: res.data,
+  });
 }

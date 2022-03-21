@@ -1,4 +1,5 @@
 import { Socket } from "socket.io-client";
+import { SET_INTERACTIVES, SET_NOTIFICATIONS } from "../../constant";
 
 export interface ServerToClientEvents {
   MsgToClient: (data: HelloWorld) => void;
@@ -17,6 +18,16 @@ export type SocketInitialType = Socket<
   ServerToClientEvents,
   ClientToServerEvents
 > | null;
+
+export type SocketInitialStateType = {
+  interactives: Interactives;
+  notifications: ReceiveNotification[];
+};
+
+export const socketInitialState: SocketInitialStateType = {
+  interactives: [],
+  notifications: [],
+};
 
 export type Interactives = {
   voteStatus: boolean | null;
@@ -64,4 +75,16 @@ export type ReciveChat = {
   senderId: number;
   senderName: string;
   chat: string;
+};
+
+export type SocketActionType = SetNotifications | SetInteractives;
+
+export type SetNotifications = {
+  type: typeof SET_INTERACTIVES;
+  payload: Interactives;
+};
+
+export type SetInteractives = {
+  type: typeof SET_NOTIFICATIONS;
+  payload: ReceiveNotification;
 };

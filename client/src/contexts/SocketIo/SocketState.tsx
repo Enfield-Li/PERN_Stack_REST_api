@@ -1,14 +1,18 @@
-import React, { useState } from "react";
+import React, { useReducer, useState } from "react";
 import SocketContext from "./SocketContext";
+import SocketReducer from "./SocketReducer";
 import {
   SocketInitialType,
   ReceiveNotification,
   Interactives,
+  socketInitialState,
 } from "./types/socketTypes";
 
 interface ProviderType {}
 
 const SocketProvider: React.FC<ProviderType> = ({ children }) => {
+  const [state, dispatch] = useReducer(SocketReducer, socketInitialState);
+
   const [socket, setSocket] = useState<SocketInitialType>(null);
   const [notifications, setNotifications] = useState<ReceiveNotification[]>([]);
   const [interactives, setInteractives] = useState<Interactives>([]);
@@ -18,10 +22,8 @@ const SocketProvider: React.FC<ProviderType> = ({ children }) => {
       value={{
         socket,
         setSocket,
-        notifications,
-        setNotifications,
-        interactives,
-        setInteractives,
+        state,
+        dispatch,
       }}
     >
       {children}

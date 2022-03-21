@@ -15,3 +15,6 @@ export const VOTE_CURRENT_POST = "votes_Current_Post";
 export const LIKE_CURRENT_POST = "likes_Current_Post";
 export const LAUGH_CURRENT_POST = "laughes_Current_Post";
 export const CONFUSE_CURRENT_POST = "confuses_Current_Post";
+
+export const SET_NOTIFICATIONS = "set_Notifications";
+export const SET_INTERACTIVES = "set_Interactives";

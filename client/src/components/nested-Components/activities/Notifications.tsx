@@ -1,15 +1,17 @@
-import React, { useState } from "react";
+import React from "react";
 import { usePopperTooltip } from "react-popper-tooltip";
-import { fetchInteractives } from "../../../contexts/SocketIo/actions/socketActions";
-import { useSocket } from "../../../contexts/SocketIo/actions/useSocket";
+import {
+  fetchInteractives,
+  useSocket,
+} from "../../../contexts/SocketIo/actions/socketActions";
 import Interacitivities from "./Interacitivities";
 
 interface NotificationsProps {}
 
 const Notifications: React.FC<NotificationsProps> = ({}) => {
-  const { notifications, setNotifications, setInteractives } = useSocket();
+  const { socketState, socketDispatch } = useSocket();
+  const { notifications } = socketState;
 
-  const [decoration, setDecoration] = useState(false);
   const {
     getArrowProps,
     getTooltipProps,
@@ -30,8 +32,7 @@ const Notifications: React.FC<NotificationsProps> = ({}) => {
         ref={setTriggerRef}
         className="bi bi-bell position-relative mx-4 fs-3"
         onClick={() => {
-          setNotifications([]);
-          fetchInteractives(setInteractives);
+          fetchInteractives(socketDispatch);
         }}
       >
         <span className="fs-6 position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
