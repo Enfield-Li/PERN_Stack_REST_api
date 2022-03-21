@@ -48,11 +48,13 @@ export const sendNotification = (
 export const receiveNotification = (
   socket: SocketInitialType,
   socketDispatch: React.Dispatch<SocketActionType>,
-  setNotifications: React.Dispatch<React.SetStateAction<ReceiveNotification[]>>,
+  setToastNotifications: React.Dispatch<
+    React.SetStateAction<ReceiveNotification[]>
+  >,
   setUncheckedAmount: React.Dispatch<React.SetStateAction<number>>
 ) => {
   socket?.on("ReceiveNotification", (data) => {
-    setNotifications((prev) => [data, ...prev]);
+    setToastNotifications((prev) => [data, ...prev]);
 
     setUncheckedAmount((prev) => prev + 1);
 
