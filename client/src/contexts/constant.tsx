@@ -18,3 +18,4 @@ export const CONFUSE_CURRENT_POST = "confuses_Current_Post";
 
 export const SET_NOTIFICATIONS = "set_Notifications";
 export const SET_INTERACTIVES = "set_Interactives";
+export const CLEAR_NOTIFICATIONS = "clear_Notifications";

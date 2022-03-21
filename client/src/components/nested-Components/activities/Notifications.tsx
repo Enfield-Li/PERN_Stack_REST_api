@@ -1,6 +1,7 @@
 import React from "react";
 import { usePopperTooltip } from "react-popper-tooltip";
 import {
+  clearNotifications,
   fetchInteractives,
   useSocket,
 } from "../../../contexts/SocketIo/actions/socketActions";
@@ -32,6 +33,7 @@ const Notifications: React.FC<NotificationsProps> = ({}) => {
         ref={setTriggerRef}
         className="bi bi-bell position-relative mx-4 fs-3"
         onClick={() => {
+          clearNotifications(socketDispatch);
           fetchInteractives(socketDispatch);
         }}
       >

@@ -1,4 +1,8 @@
-import { SET_INTERACTIVES, SET_NOTIFICATIONS } from "../constant";
+import {
+  CLEAR_NOTIFICATIONS,
+  SET_INTERACTIVES,
+  SET_NOTIFICATIONS,
+} from "../constant";
 import { SocketActionType, SocketInitialStateType } from "./types/socketTypes";
 import produce from "immer";
 
@@ -18,6 +22,13 @@ export default function SocketReducer(
       return {
         ...state,
         notifications: [action.payload, ...state.notifications],
+      };
+    }
+
+    case CLEAR_NOTIFICATIONS: {
+      return {
+        ...state,
+        notifications: [],
       };
     }
 

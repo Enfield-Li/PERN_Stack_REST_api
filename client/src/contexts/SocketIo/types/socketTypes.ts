@@ -1,5 +1,9 @@
 import { Socket } from "socket.io-client";
-import { SET_INTERACTIVES, SET_NOTIFICATIONS } from "../../constant";
+import {
+  CLEAR_NOTIFICATIONS,
+  SET_INTERACTIVES,
+  SET_NOTIFICATIONS,
+} from "../../constant";
 
 export interface ServerToClientEvents {
   MsgToClient: (data: HelloWorld) => void;
@@ -77,7 +81,10 @@ export type ReciveChat = {
   chat: string;
 };
 
-export type SocketActionType = SetNotifications | SetInteractives;
+export type SocketActionType =
+  | SetNotifications
+  | SetInteractives
+  | ClearNotifications;
 
 export type SetNotifications = {
   type: typeof SET_INTERACTIVES;
@@ -87,4 +94,8 @@ export type SetNotifications = {
 export type SetInteractives = {
   type: typeof SET_NOTIFICATIONS;
   payload: ReceiveNotification;
+};
+
+export type ClearNotifications = {
+  type: typeof CLEAR_NOTIFICATIONS;
 };
