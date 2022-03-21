@@ -26,12 +26,12 @@ const VoteSection: React.FC<VoteSectionProps> = ({
   postAndInteractions,
   isInProfile = false,
 }) => {
-  const [_, postDispatch] = usePost();
-  const [{ user }, userDispatch] = useUser();
+  const { postDispatch } = usePost();
+  const { userState, userDispatch } = useUser();
   const navigate = useNavigate();
-  const { socket, notifications, setNotifications } = useSocket();
-  const [state, setState] = useState<ReceiveNotification | null>(null);
+  const { socket } = useSocket();
 
+  const { user } = userState;
   const post = postAndInteractions.post;
   const postId = post.id;
   const interactions = postAndInteractions.interactions;

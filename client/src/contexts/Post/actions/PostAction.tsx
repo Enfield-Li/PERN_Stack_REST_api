@@ -24,9 +24,9 @@ import {
   populateWithMockData,
 } from "../../../utils/populateWithMockData";
 
-export const usePost = (): [PostState, React.Dispatch<PostActionType>] => {
+export const usePost = () => {
   const { state, dispatch } = useContext(PostContext);
-  return [state, dispatch];
+  return { postState: state, postDispatch: dispatch };
 };
 
 export async function interactWithPost(

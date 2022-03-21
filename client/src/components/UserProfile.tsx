@@ -9,7 +9,8 @@ import VoteSection from "./nested-Components/postSection/voteSection";
 
 const UserProfile: React.FC = ({}) => {
   const { id } = useParams();
-  const [{ user, userProfile }, userDispatch] = useUser();
+  const { userState, userDispatch } = useUser();
+  const { user, userProfile } = userState;
 
   useEffect(() => {
     if (id) getUserProfile(userDispatch, +id);

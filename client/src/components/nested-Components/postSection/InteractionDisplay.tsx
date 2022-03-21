@@ -22,11 +22,12 @@ const InteractionDisplay: React.FC<InteractionDisplayProps> = ({
   isInProfile = false,
 }) => {
   const userInteractions = postAndInteractions.interactions;
-  const [_, postDispatch] = usePost();
-  const [{ user }, userDispatch] = useUser();
+  const { postDispatch } = usePost();
+  const { userState, userDispatch } = useUser();
   const navigate = useNavigate();
   const { socket } = useSocket();
 
+  const { user } = userState;
   const post = postAndInteractions.post;
 
   const interact = (field: "like" | "laugh" | "confused") => {

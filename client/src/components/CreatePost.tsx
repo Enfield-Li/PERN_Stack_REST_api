@@ -9,7 +9,7 @@ import * as Yup from "yup";
 interface CreatePostProps {}
 
 const CreatePost: React.FC<CreatePostProps> = ({}) => {
-  const [state, dispatch] = usePost();
+  const { postDispatch } = usePost();
   const navigate = useNavigate();
 
   const validationSchema = Yup.object({
@@ -23,7 +23,7 @@ const CreatePost: React.FC<CreatePostProps> = ({}) => {
     <Formik
       initialValues={{ title: "", content: "" }}
       onSubmit={async (values) => {
-        const res = await createPost(dispatch, values);
+        const res = await createPost(postDispatch, values);
         if (res) navigate(`/post/${res.post.id}`, { replace: true });
       }}
       validationSchema={validationSchema}

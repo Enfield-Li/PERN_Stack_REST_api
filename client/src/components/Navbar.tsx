@@ -12,8 +12,10 @@ import UserInfo from "./nested-Components/user/UserInfo";
 interface navbarProps {}
 
 const Navbar: React.FC<navbarProps> = ({}) => {
-  const [_, postDispatch] = usePost();
-  const [{ user }, userDispatch] = useUser();
+  const { postDispatch } = usePost();
+  const { userState, userDispatch } = useUser();
+
+  const { user } = userState;
 
   return (
     <div className="nav justify-content-between container align-items-center py-1">

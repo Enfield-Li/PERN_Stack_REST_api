@@ -22,9 +22,9 @@ import {
 } from "../types/UserTypes";
 import UserContext from "../UserContext";
 
-export const useUser = (): [UserState, React.Dispatch<UserActionType>] => {
+export const useUser = () => {
   const { state, dispatch } = useContext(UserContext);
-  return [state, dispatch];
+  return { userState: state, userDispatch: dispatch };
 };
 
 export async function registerUser(

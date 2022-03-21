@@ -15,8 +15,8 @@ import {
 interface LoginProps {}
 
 const Login: React.FC<LoginProps> = ({}) => {
-  const [_, dispatch] = useUser();
-  const [__, postDispatch] = usePost();
+  const { userDispatch } = useUser();
+  const { postDispatch } = usePost();
 
   const navigate = useNavigate();
 
@@ -33,7 +33,7 @@ const Login: React.FC<LoginProps> = ({}) => {
     <Formik
       initialValues={{ usernameOrEmail: "", password: "" }}
       onSubmit={async (values, { setErrors }) => {
-        const errorRes = await loginUser(dispatch, values);
+        const errorRes = await loginUser(userDispatch, values);
 
         if (errorRes) {
           setErrors(mapToError(errorRes));

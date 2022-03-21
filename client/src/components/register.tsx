@@ -9,7 +9,7 @@ import * as Yup from "yup";
 interface RegisterProps {}
 
 const Register: React.FC<RegisterProps> = ({}) => {
-  const [state, dispatch] = useUser();
+  const { userDispatch } = useUser();
   const navigate = useNavigate();
 
   const validationSchema = Yup.object({
@@ -31,7 +31,7 @@ const Register: React.FC<RegisterProps> = ({}) => {
           password: "",
         }}
         onSubmit={async (values) => {
-          await registerUser(dispatch, values);
+          await registerUser(userDispatch, values);
           navigate("/");
         }}
         validationSchema={validationSchema}

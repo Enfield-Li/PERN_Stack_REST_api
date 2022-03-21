@@ -11,7 +11,9 @@ import VoteSection from "./nested-Components/postSection/voteSection";
 interface PostPageProps {}
 
 const PostPage: React.FC<PostPageProps> = ({}) => {
-  const [{ currentPost }, postDispatch] = usePost();
+  const { postState, postDispatch } = usePost();
+  const { currentPost } = postState;
+
   const { id } = useParams();
 
   useEffect(() => {

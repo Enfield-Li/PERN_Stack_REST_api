@@ -10,7 +10,7 @@ interface EditPostProps {}
 
 const EditPost: React.FC<EditPostProps> = ({}) => {
   const { id } = useParams();
-  const [postState, postDispatch] = usePost();
+  const { postState, postDispatch } = usePost();
   const navigate = useNavigate();
 
   const validationSchema = Yup.object({

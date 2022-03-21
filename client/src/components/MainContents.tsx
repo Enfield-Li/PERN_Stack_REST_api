@@ -14,8 +14,10 @@ import SortSection from "./layout/SortSection";
 interface MainContentsProps {}
 
 const MainContents: React.FC<MainContentsProps> = ({}) => {
-  const [{ paginatedPosts }, postDispatch] = usePost();
-  const postAndInteractions = paginatedPosts.postAndInteractions;
+  const { postState, postDispatch } = usePost();
+
+  const paginatedPosts = postState.paginatedPosts;
+  const postAndInteractions = postState.paginatedPosts.postAndInteractions;
 
   const [topYear, setTopYear] = useState<"half-year" | "one-year" | "all-time">(
     "half-year"

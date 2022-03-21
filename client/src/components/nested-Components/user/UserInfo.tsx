@@ -10,8 +10,9 @@ import { logout, useUser } from "../../../contexts/User/actions/UserAction";
 interface UserInfoProps {}
 
 const UserInfo: React.FC<UserInfoProps> = ({}) => {
-  const [_, postDispatch] = usePost();
-  const [{ user }, userDispatch] = useUser();
+  const { postDispatch } = usePost();
+  const { userState, userDispatch } = useUser();
+  const { user } = userState;
 
   return (
     <div>

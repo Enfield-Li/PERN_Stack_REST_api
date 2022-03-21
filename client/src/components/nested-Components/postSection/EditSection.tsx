@@ -25,8 +25,10 @@ const EditSection: React.FC<EditSectionProps> = ({
   isNotMain,
   isInProfile = false,
 }) => {
-  const [_, postDispatch] = usePost();
-  const [{ user }, userDispatch] = useUser();
+  const { postDispatch } = usePost();
+  const { userState, userDispatch } = useUser();
+
+  const { user } = userState;
   const navigate = useNavigate();
 
   const [controlledVisible, setControlledVisible] = useState(false);

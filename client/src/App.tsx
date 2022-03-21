@@ -13,9 +13,9 @@ import "react-toastify/dist/ReactToastify.css";
 import "react-popper-tooltip/dist/styles.css";
 
 function App() {
-  const [userState, userDispatch] = useUser();
-  const [postState, postDispatch] = usePost();
-  const { socket, setSocket, notifications, setNotifications } = useSocket();
+  const { userState, userDispatch } = useUser();
+  const { postDispatch } = usePost();
+  const { socket, setSocket, setNotifications } = useSocket();
 
   // Initialize login, fetch posts, socket connection
   useEffect(() => {

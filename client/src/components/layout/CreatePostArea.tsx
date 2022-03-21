@@ -5,19 +5,21 @@ import { useUser } from "../../contexts/User/actions/UserAction";
 interface searchBarProps {}
 
 const CreatePostArea: React.FC<searchBarProps> = ({}) => {
-  const [{ user: userState }] = useUser();
+  const { userState } = useUser();
   const navigate = useNavigate();
+
+  const { user } = userState;
 
   return (
     <div className="card my-3">
       <div className="card-body d-flex align-items-center">
         {/* userProfile */}
-        {userState ? (
+        {user ? (
           <div
             role="button"
             className="fs-5 ms-2"
             onClick={() => {
-              navigate(`user-profile/${userState.id}`);
+              navigate(`user-profile/${user.id}`);
             }}
           >
             <i className="bi bi-person-circle fs-2"></i>

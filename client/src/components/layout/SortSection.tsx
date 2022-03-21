@@ -21,7 +21,7 @@ const SortSection: React.FC<SortByProps> = ({
   topYear,
   setTopYear,
 }) => {
-  const [_, postDispatch] = usePost();
+  const { postDispatch } = usePost();
 
   const fontAndBg = "rounded-pill text-primary";
   const selectedBg = { background: "#f6f7f8" };
