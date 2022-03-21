@@ -1,8 +1,10 @@
 import axios from "axios";
 import {
   CLEAR_NOTIFICATIONS,
+  SET_ALL_NOTIFICATION_READ,
   SET_INTERACTIVES,
   SET_NOTIFICATIONS,
+  SET_NOTIFICATION_READ,
 } from "../../constant";
 import {
   Interactives,
@@ -57,4 +59,22 @@ export async function fetchInteractives(
 
 export function clearNotifications(dispatch: React.Dispatch<SocketActionType>) {
   dispatch({ type: CLEAR_NOTIFICATIONS });
+}
+
+export function setInteractiveRead(
+  postId: number,
+  dispatch: React.Dispatch<SocketActionType>
+) {
+  dispatch({
+    type: SET_NOTIFICATION_READ,
+    payload: postId,
+  });
+}
+
+export function setAllInteractivesRead(
+  dispatch: React.Dispatch<SocketActionType>
+) {
+  dispatch({
+    type: SET_ALL_NOTIFICATION_READ,
+  });
 }

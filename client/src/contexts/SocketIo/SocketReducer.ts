@@ -1,7 +1,9 @@
 import {
   CLEAR_NOTIFICATIONS,
+  SET_ALL_NOTIFICATION_READ,
   SET_INTERACTIVES,
   SET_NOTIFICATIONS,
+  SET_NOTIFICATION_READ,
 } from "../constant";
 import { SocketActionType, SocketInitialStateType } from "./types/socketTypes";
 import produce from "immer";
@@ -30,6 +32,30 @@ export default function SocketReducer(
         ...state,
         notifications: [],
       };
+    }
+
+    case SET_NOTIFICATION_READ: {
+      return produce(state, (draftState) => {
+        draftState.interactives = draftState.interactives.filter(
+          (interactive) => {
+            if (interactive.postId === action.payload) {
+              interactive.read = true;
+            }
+
+            return interactive;
+          }
+        );
+      });
+    }
+
+    case SET_ALL_NOTIFICATION_READ: {
+      return produce(state, (draftState) => {
+        draftState.interactives = draftState.interactives.map((interactive) => {
+          interactive.read = true;
+
+          return interactive;
+        });
+      });
     }
 
     default:

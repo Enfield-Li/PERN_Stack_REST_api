@@ -154,6 +154,7 @@ export class UserService {
       // Plus voting user's name
       include: {
         user: { select: { username: true } },
+        post: { select: { title: true } },
       },
 
       orderBy: { updatedAt: 'desc' },
