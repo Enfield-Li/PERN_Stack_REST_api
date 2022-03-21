@@ -10,12 +10,17 @@ const Interacitivities: React.FC<InteracitivitiesProps> = ({}) => {
   return (
     <div style={{ height: 300, width: 340, overflow: "scroll" }}>
       {interactives.map((interactive, index) => (
-        <div key={index}>
+        <div key={index} role="button" onClick={() => console.log("clicked")}>
           <div>Receive</div>
-          {interactive.laughStatus && <span>laughter </span>}
-          {interactive.voteStatus && <span>upvote </span>}
-          {interactive.likeStatus && <span>likes </span>}
-          <span>from {interactive.user.username}</span>
+          <span>checked: {interactive.checked ? "true" : "false"} </span>
+          <span>read: {interactive.read ? "true" : "false"} </span>
+          <div>
+            {interactive.laughStatus && <span>laughter </span>}
+            {interactive.voteStatus && <span>upvote </span>}
+            {interactive.likeStatus && <span>likes </span>}
+            <span>from {interactive.user.username}</span>
+          </div>
+          <br />
         </div>
       ))}
     </div>

@@ -11,7 +11,7 @@ interface NotificationsProps {}
 
 const Notifications: React.FC<NotificationsProps> = ({}) => {
   const { socketState, socketDispatch } = useSocket();
-  const { notifications } = socketState;
+  const { notifications, interactives } = socketState;
 
   const {
     getArrowProps,
@@ -23,6 +23,7 @@ const Notifications: React.FC<NotificationsProps> = ({}) => {
     trigger: "click",
     delayHide: 100,
     placement: "bottom",
+    interactive: true,
     closeOnOutsideClick: true,
   });
 
@@ -41,13 +42,14 @@ const Notifications: React.FC<NotificationsProps> = ({}) => {
           {notifications.length ? notifications.length : null}
         </span>
       </div>
+
       {visible && (
         <div
           ref={setTooltipRef}
           {...getTooltipProps({ className: "tooltip-container" })}
         >
-          <div {...getArrowProps({ className: "tooltip-arrow" })} />
           <Interacitivities />
+          <div {...getArrowProps({ className: "tooltip-arrow" })} />
         </div>
       )}
     </div>

@@ -8,6 +8,7 @@ import {
   UserPostAndInteractions,
 } from "../../../contexts/User/types/UserTypes";
 import { calculateTime } from "../../../utils/calculaTime";
+import Interacitivities from "../activities/Interacitivities";
 import ProfileCard from "./ProfileCard";
 
 interface PostCreatorInfoProps {
@@ -19,7 +20,7 @@ const PostCreatorInfo: React.FC<PostCreatorInfoProps> = ({
 }) => {
   const [user, setuser] = useState<User | null>(null);
 
-  const [decoration, setDecoration] = useState(false);
+  const [textDecoration, setTextDecoration] = useState(false);
   const {
     getArrowProps,
     getTooltipProps,
@@ -39,18 +40,18 @@ const PostCreatorInfo: React.FC<PostCreatorInfoProps> = ({
       {postAndInteractions.post.user && (
         <span
           onMouseOver={async () => {
-            setDecoration(true);
+            setTextDecoration(true);
             const user = await getUserInfo(postAndInteractions.post.userId);
             setuser(user);
           }}
-          onMouseLeave={() => setDecoration(false)}
+          onMouseLeave={() => setTextDecoration(false)}
         >
           <span role="button" ref={setTriggerRef}>
             <span> by </span>
             <span
               role="button"
               className={`fw-light text-dark ${
-                decoration
+                textDecoration
                   ? "text-decoration-underline"
                   : "text-decoration-none"
               }`}
