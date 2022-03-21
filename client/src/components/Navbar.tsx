@@ -6,14 +6,13 @@ import {
   usePost,
 } from "../contexts/Post/actions/PostAction";
 import { useUser } from "../contexts/User/actions/UserAction";
-import Notifications from "./nested-Components/activities/Notifications";
 import UserInfo from "./nested-Components/user/UserInfo";
 
 interface navbarProps {}
 
 const Navbar: React.FC<navbarProps> = ({}) => {
   const { postDispatch } = usePost();
-  const { userState, userDispatch } = useUser();
+  const { userState } = useUser();
 
   const { user } = userState;
 
@@ -43,8 +42,6 @@ const Navbar: React.FC<navbarProps> = ({}) => {
         <Link to={user ? "/create-post" : "/login"} style={{ color: "black" }}>
           <i className="bi bi-plus-square fs-3 mx-3"></i>
         </Link>
-
-        <Notifications />
 
         <UserInfo />
       </div>

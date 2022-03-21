@@ -25,7 +25,9 @@ const MainContents: React.FC<MainContentsProps> = ({}) => {
   const [sortState, setSortState] = useState<"new" | "hot" | "best" | "top">(
     "best"
   );
-  const [cursorCount, setCursorCount] = useState(1);
+
+  // off set based pagination
+  const [offSetCount, setOffSetCount] = useState(1);
 
   useEffect(() => {
     setSortState("best");
@@ -95,10 +97,10 @@ const MainContents: React.FC<MainContentsProps> = ({}) => {
                 fetchPaginatedPosts(
                   postDispatch,
                   sortState,
-                  cursorCount.toString(),
+                  offSetCount.toString(),
                   topYear
                 );
-                setCursorCount(cursorCount + 1);
+                setOffSetCount(offSetCount + 1);
                 return;
               }
               fetchPaginatedPosts(postDispatch, sortState, cursor);

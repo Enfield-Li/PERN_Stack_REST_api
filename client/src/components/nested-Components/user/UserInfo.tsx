@@ -5,7 +5,12 @@ import {
   fetchPaginatedPosts,
   usePost,
 } from "../../../contexts/Post/actions/PostAction";
+import {
+  clearNotifications,
+  useSocket,
+} from "../../../contexts/SocketIo/actions/socketActions";
 import { logout, useUser } from "../../../contexts/User/actions/UserAction";
+import Notifications from "../activities/Notifications";
 
 interface UserInfoProps {}
 
@@ -13,65 +18,73 @@ const UserInfo: React.FC<UserInfoProps> = ({}) => {
   const { postDispatch } = usePost();
   const { userState, userDispatch } = useUser();
   const { user } = userState;
+  const { socketDispatch, setUncheckedAmount } = useSocket();
 
   return (
     <div>
       {user ? (
         //   User is loged in
-        <div className="dropdown">
-          <div
-            className="dropdown-toggle border px-3 py-1 my-2 d-flex justify-content-center align-items-center"
-            role="button"
-            id="dropDowns"
-            data-bs-toggle="dropdown"
-            aria-expanded="false"
-          >
-            <i className="bi bi-person-circle fs-2"></i>
-            <div className="ms-3 me-2 d-flex flex-column align-items-center justify-content-center">
-              <div>
-                <i className="bi bi-bookmark-star me-1"></i>
-                {user.username}
-              </div>
-              <div>{user.email}</div>
-            </div>
-          </div>
+        <div className="d-flex justify-content-center align-items-center">
+          <Notifications />
 
-          {/* dropDowns */}
-          <ul
-            className="dropdown-menu"
-            aria-labelledby="dropDowns"
-            style={{ width: 240 }}
-          >
-            <li>
-              <div className="ms-3">MY STUFF</div>
-
-              {/* Profile */}
-              <Link
-                to={`/user-profile/${user.id}`}
-                style={{ color: "black", textDecoration: "none" }}
-                role="button"
-              >
-                <div className="dropdown-item">
-                  <i className="bi bi-person-circle fs-5 me-2"></i> Profile
+          {/* dropDown userInfo */}
+          <div className="dropdown">
+            <div
+              className="dropdown-toggle border px-3 py-1 my-2 d-flex justify-content-center align-items-center"
+              role="button"
+              id="dropDowns"
+              data-bs-toggle="dropdown"
+              aria-expanded="false"
+            >
+              <i className="bi bi-person-circle fs-2"></i>
+              <div className="ms-3 me-2 d-flex flex-column align-items-center justify-content-center">
+                <div>
+                  <i className="bi bi-bookmark-star me-1"></i>
+                  {user.username}
                 </div>
-              </Link>
-
-              {/* LogOut */}
-              <div
-                className="dropdown-item"
-                role="button"
-                onClick={async () => {
-                  clearCache(postDispatch);
-                  setTimeout(() => {
-                    fetchPaginatedPosts(postDispatch);
-                  }, 1);
-                  logout(userDispatch);
-                }}
-              >
-                <i className="bi bi-box-arrow-right fs-5 me-2"></i> Logout
+                <div>{user.email}</div>
               </div>
-            </li>
-          </ul>
+            </div>
+
+            {/* dropDowns */}
+            <ul
+              className="dropdown-menu"
+              aria-labelledby="dropDowns"
+              style={{ width: 240 }}
+            >
+              <li>
+                <div className="ms-3">MY STUFF</div>
+
+                {/* Profile */}
+                <Link
+                  to={`/user-profile/${user.id}`}
+                  style={{ color: "black", textDecoration: "none" }}
+                  role="button"
+                >
+                  <div className="dropdown-item">
+                    <i className="bi bi-person-circle fs-5 me-2"></i> Profile
+                  </div>
+                </Link>
+
+                {/* LogOut */}
+                <div
+                  className="dropdown-item"
+                  role="button"
+                  onClick={async () => {
+                    clearCache(postDispatch);
+                    clearNotifications(socketDispatch);
+                    setUncheckedAmount(0);
+                    logout(userDispatch);
+                    setTimeout(() => {
+                      fetchPaginatedPosts(postDispatch);
+                    }, 1);
+                  }}
+                >
+                  <i className="bi bi-box-arrow-right fs-5 me-2"></i> Logout
+                </div>
+              </li>
+            </ul>
+          </div>
         </div>
       ) : (
         //   user is not loged in

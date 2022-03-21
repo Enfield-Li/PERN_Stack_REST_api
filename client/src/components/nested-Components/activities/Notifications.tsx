@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { usePopperTooltip } from "react-popper-tooltip";
 import {
   clearNotifications,
@@ -14,13 +14,6 @@ interface NotificationsProps {}
 const Notifications: React.FC<NotificationsProps> = ({}) => {
   const { socketState, socketDispatch, uncheckedAmount, setUncheckedAmount } =
     useSocket();
-
-  useEffect(() => {
-    if (socketState.interactives.length) {
-      const formatedposts = collectPostToBeChecked(socketState.interactives);
-      setPostChecked(formatedposts);
-    }
-  }, [socketState.interactives]);
 
   // Controlled tool tip
   const [controlledVisible, setControlledVisible] = useState(false);
@@ -50,6 +43,12 @@ const Notifications: React.FC<NotificationsProps> = ({}) => {
           clearNotifications(socketDispatch);
           fetchInteractives(socketDispatch);
           setUncheckedAmount(0);
+
+          const formatedPosts = collectPostToBeChecked(
+            socketState.interactives
+          );
+
+          if (formatedPosts.length) setPostChecked(formatedPosts);
         }}
       >
         <span className="fs-6 position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
