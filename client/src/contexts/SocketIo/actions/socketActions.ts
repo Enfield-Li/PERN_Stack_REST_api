@@ -32,10 +32,13 @@ export const sendNotification = (
 
 export const receiveNotification = (
   socket: SocketInitialType,
-  dispatch: React.Dispatch<SocketActionType>
+  socketDispatch: React.Dispatch<SocketActionType>,
+  setNotifications: React.Dispatch<React.SetStateAction<ReceiveNotification[]>>
 ) => {
   socket?.on("ReceiveNotification", (data) => {
-    dispatch({
+    setNotifications((prev) => [data, ...prev]);
+
+    socketDispatch({
       type: SET_NOTIFICATIONS,
       payload: data,
     });

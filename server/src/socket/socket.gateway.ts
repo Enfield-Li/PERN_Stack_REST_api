@@ -88,6 +88,9 @@ export class SocketGateway
   ): Promise<WsResponse<Boolean>> {
     const { postId, senderId, senderName, reciverId, value, type } = data;
 
+    // Won't send notification back to oneself
+    if (reciverId === senderId) return;
+
     const interactions = await this.prismaService.interactions.findUnique({
       where: {
         userId_postId: {

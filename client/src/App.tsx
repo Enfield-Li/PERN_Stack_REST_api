@@ -13,11 +13,14 @@ import { me, useUser } from "./contexts/User/actions/UserAction";
 import PageRoutes from "./routes/PageRoutes";
 import "react-toastify/dist/ReactToastify.css";
 import "react-popper-tooltip/dist/styles.css";
+import { ReceiveNotification } from "./contexts/SocketIo/types/socketTypes";
+import { toast } from "react-toastify";
 
 function App() {
   const { userState, userDispatch } = useUser();
   const { postDispatch } = usePost();
   const { socket, setSocket, socketDispatch, socketState } = useSocket();
+  const [notifications, setNotifications] = useState<ReceiveNotification[]>([]);
 
   // Initialize login, fetch posts, socket connection
   useEffect(() => {
@@ -35,8 +38,24 @@ function App() {
 
   // Capture socket response
   useEffect(() => {
-    receiveNotification(socket, socketDispatch);
+    receiveNotification(socket, socketDispatch, setNotifications);
   }, [socket]);
+
+  useEffect(() => {
+    if (notifications[0]) {
+      const event = notifications[0];
+      let action = "";
+      if (event.type === "laugh") action = "😄";
+      if (event.type === "vote") action = "⇧";
+      if (event.type === "like") action = "❤";
+
+      const text = `Receive a ${action} from ${event.senderName}!`;
+
+      const notify = () => toast(text);
+
+      notify();
+    }
+  }, [notifications]);
 
   return (
     <div style={{ backgroundColor: "#dae0e6" }}>

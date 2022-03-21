@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { usePopperTooltip } from "react-popper-tooltip";
 import {
   clearNotifications,
@@ -13,6 +13,7 @@ const Notifications: React.FC<NotificationsProps> = ({}) => {
   const { socketState, socketDispatch } = useSocket();
   const { notifications, interactives } = socketState;
 
+  const [controlledVisible, setControlledVisible] = useState(false);
   const {
     getArrowProps,
     getTooltipProps,
@@ -25,6 +26,8 @@ const Notifications: React.FC<NotificationsProps> = ({}) => {
     placement: "bottom",
     interactive: true,
     closeOnOutsideClick: true,
+    visible: controlledVisible,
+    onVisibleChange: setControlledVisible,
   });
 
   return (
@@ -52,6 +55,10 @@ const Notifications: React.FC<NotificationsProps> = ({}) => {
           <div {...getArrowProps({ className: "tooltip-arrow" })} />
         </div>
       )}
+
+      {/* <button onClick={() => setControlledVisible(!controlledVisible)}>
+        External control
+      </button> */}
     </div>
   );
 };
