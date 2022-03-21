@@ -15,7 +15,8 @@ import {
   PaginatedPost,
   PostAndInteractions,
   PostActionType,
-  PostState,
+  VotingTypes,
+  PostSorting,
 } from "../types/PostTypes";
 import PostContext from "../PostContext";
 import { useContext } from "react";
@@ -25,15 +26,15 @@ import {
 } from "../../../utils/populateWithMockData";
 
 export const usePost = () => {
-  const { state, dispatch } = useContext(PostContext);
-  return { postState: state, postDispatch: dispatch };
+  const { state, dispatch, sortPost, setSortPost } = useContext(PostContext);
+  return { postState: state, postDispatch: dispatch, sortPost, setSortPost };
 };
 
 export async function interactWithPost(
   dispatch: React.Dispatch<PostActionType>,
   id: number,
   value: boolean,
-  field: "vote" | "like" | "laugh" | "confused"
+  field: VotingTypes
 ) {
   await axios.get<boolean>(
     `http://localhost:3119/post/interact/${id}?value=${value}&field=${field}`,
@@ -100,7 +101,7 @@ export function setCurrentPost(
 
 export const fetchPaginatedPosts = async (
   dispatch: React.Dispatch<PostActionType>,
-  sortBy: "new" | "hot" | "best" | "top" = "best",
+  sortBy: PostSorting = "best",
   cursor?: string, // date string or number string
   time?: "half-year" | "one-year" | "all-time"
 ) => {

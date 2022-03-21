@@ -11,7 +11,7 @@ import UserInfo from "./nested-Components/user/UserInfo";
 interface navbarProps {}
 
 const Navbar: React.FC<navbarProps> = ({}) => {
-  const { postDispatch } = usePost();
+  const { postDispatch, setSortPost } = usePost();
   const { userState } = useUser();
 
   const { user } = userState;
@@ -30,6 +30,7 @@ const Navbar: React.FC<navbarProps> = ({}) => {
           onClick={async () => {
             clearCache(postDispatch);
             fetchPaginatedPosts(postDispatch);
+            setSortPost("best");
           }}
         >
           <i className="bi bi-reddit text-danger fs-1"></i>

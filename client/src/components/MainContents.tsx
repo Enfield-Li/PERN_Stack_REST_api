@@ -10,11 +10,12 @@ import PostCardSection from "./nested-Components/postSection/PostCardSection";
 import PostCreatorInfo from "./nested-Components/user/PostCreatorInfo";
 import VoteSection from "./nested-Components/postSection/voteSection";
 import SortSection from "./layout/SortSection";
+import { PostSorting } from "../contexts/Post/types/PostTypes";
 
 interface MainContentsProps {}
 
 const MainContents: React.FC<MainContentsProps> = ({}) => {
-  const { postState, postDispatch } = usePost();
+  const { postState, postDispatch, setSortPost, sortPost } = usePost();
 
   const paginatedPosts = postState.paginatedPosts;
   const postAndInteractions = postState.paginatedPosts.postAndInteractions;
@@ -22,15 +23,12 @@ const MainContents: React.FC<MainContentsProps> = ({}) => {
   const [topYear, setTopYear] = useState<"half-year" | "one-year" | "all-time">(
     "half-year"
   );
-  const [sortState, setSortState] = useState<"new" | "hot" | "best" | "top">(
-    "best"
-  );
 
   // off set based pagination
   const [offSetCount, setOffSetCount] = useState(1);
 
   useEffect(() => {
-    setSortState("best");
+    setSortPost("best");
   }, []);
 
   let cursor = new Date(Date.now()).toISOString();
@@ -47,12 +45,7 @@ const MainContents: React.FC<MainContentsProps> = ({}) => {
   return (
     <div>
       <CreatePostArea />
-      <SortSection
-        sortState={sortState}
-        setSortState={setSortState}
-        topYear={topYear}
-        setTopYear={setTopYear}
-      />
+      <SortSection topYear={topYear} setTopYear={setTopYear} />
 
       {postAndInteractions.length > 0 ? (
         postAndInteractions.map((postAndInteraction) => (
@@ -93,17 +86,17 @@ const MainContents: React.FC<MainContentsProps> = ({}) => {
           <button
             className="btn btn-primary"
             onClick={() => {
-              if (sortState === "top") {
+              if (sortPost === "top") {
                 fetchPaginatedPosts(
                   postDispatch,
-                  sortState,
+                  sortPost,
                   offSetCount.toString(),
                   topYear
                 );
                 setOffSetCount(offSetCount + 1);
                 return;
               }
-              fetchPaginatedPosts(postDispatch, sortState, cursor);
+              fetchPaginatedPosts(postDispatch, sortPost, cursor);
             }}
           >
             More Posts

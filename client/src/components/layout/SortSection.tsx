@@ -3,34 +3,21 @@ import {
   fetchPaginatedPosts,
   usePost,
 } from "../../contexts/Post/actions/PostAction";
+import { PostSorting, TopPostSort } from "../../contexts/Post/types/PostTypes";
 
 interface SortByProps {
-  sortState: "new" | "hot" | "best" | "top";
-  setSortState: React.Dispatch<
-    React.SetStateAction<"new" | "hot" | "best" | "top">
-  >;
-  topYear: "half-year" | "one-year" | "all-time";
-  setTopYear: React.Dispatch<
-    React.SetStateAction<"half-year" | "one-year" | "all-time">
-  >;
+  topYear: TopPostSort;
+  setTopYear: React.Dispatch<React.SetStateAction<TopPostSort>>;
 }
 
-const SortSection: React.FC<SortByProps> = ({
-  sortState,
-  setSortState,
-  topYear,
-  setTopYear,
-}) => {
-  const { postDispatch } = usePost();
+const SortSection: React.FC<SortByProps> = ({ topYear, setTopYear }) => {
+  const { postDispatch, sortPost, setSortPost } = usePost();
 
   const fontAndBg = "rounded-pill text-primary";
   const selectedBg = { background: "#f6f7f8" };
 
-  const fetchSortedPost = (
-    categ: "new" | "hot" | "best" | "top",
-    time?: "half-year" | "one-year" | "all-time"
-  ) => {
-    setSortState(categ);
+  const fetchSortedPost = (categ: PostSorting, time?: TopPostSort) => {
+    setSortPost(categ);
 
     if (categ === "top" && time) {
       setTopYear(time);
@@ -46,10 +33,10 @@ const SortSection: React.FC<SortByProps> = ({
       {/* best */}
       <div
         className={`p-2 fs-4 ${
-          sortState === "best" ? fontAndBg : "text-secondary"
+          sortPost === "best" ? fontAndBg : "text-secondary"
         }`}
         role="button"
-        style={sortState === "best" ? selectedBg : undefined}
+        style={sortPost === "best" ? selectedBg : undefined}
         onClick={() => fetchSortedPost("best")}
       >
         <i className="bi bi-capslock-fill"></i>
@@ -59,9 +46,9 @@ const SortSection: React.FC<SortByProps> = ({
       {/* hot */}
       <div
         className={`p-2  fs-4 ${
-          sortState === "hot" ? fontAndBg : "text-secondary"
+          sortPost === "hot" ? fontAndBg : "text-secondary"
         }`}
-        style={sortState === "hot" ? selectedBg : undefined}
+        style={sortPost === "hot" ? selectedBg : undefined}
         role="button"
         onClick={() => fetchSortedPost("hot")}
       >
@@ -72,9 +59,9 @@ const SortSection: React.FC<SortByProps> = ({
       {/* new */}
       <div
         className={`p-2  fs-4 ${
-          sortState === "new" ? fontAndBg : "text-secondary"
+          sortPost === "new" ? fontAndBg : "text-secondary"
         }`}
-        style={sortState === "new" ? selectedBg : undefined}
+        style={sortPost === "new" ? selectedBg : undefined}
         role="button"
         onClick={() => fetchSortedPost("new")}
       >
@@ -85,9 +72,9 @@ const SortSection: React.FC<SortByProps> = ({
       {/* top */}
       <div
         className={`p-2  fs-4 ${
-          sortState === "top" ? fontAndBg : "text-secondary"
+          sortPost === "top" ? fontAndBg : "text-secondary"
         }`}
-        style={sortState === "top" ? selectedBg : undefined}
+        style={sortPost === "top" ? selectedBg : undefined}
         role="button"
       >
         <span
@@ -99,7 +86,7 @@ const SortSection: React.FC<SortByProps> = ({
         </span>
 
         {/* dropdown */}
-        {sortState === "top" ? (
+        {sortPost === "top" ? (
           <div className="btn-group">
             <button
               type="button"

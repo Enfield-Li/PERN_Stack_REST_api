@@ -1,9 +1,21 @@
 import { createContext } from "react";
-import { PostActionType, postInitialState, PostState } from "./types/PostTypes";
+import {
+  PostActionType,
+  postInitialState,
+  PostSorting,
+  PostState,
+} from "./types/PostTypes";
 
 const PostContext = createContext<{
   state: PostState;
   dispatch: React.Dispatch<PostActionType>;
-}>({ state: postInitialState, dispatch: () => {} });
+  sortPost: PostSorting;
+  setSortPost: React.Dispatch<React.SetStateAction<PostSorting>>;
+}>({
+  state: postInitialState,
+  dispatch: () => {},
+  sortPost: "best",
+  setSortPost: () => {},
+});
 
 export default PostContext;

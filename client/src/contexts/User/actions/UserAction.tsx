@@ -11,6 +11,7 @@ import {
   USER_PROFILE,
   VOTE_CURRENT_POST,
 } from "../../constant";
+import { VotingTypes } from "../../Post/types/PostTypes";
 import {
   User,
   UserActionType,
@@ -122,7 +123,7 @@ export async function interactWithPostFromUserProfile(
   dispatch: React.Dispatch<UserActionType>,
   id: number,
   value: boolean,
-  field: "vote" | "like" | "laugh" | "confused"
+  field: VotingTypes
 ) {
   await axios.get<boolean>(
     `http://localhost:3119/post/interact/${id}?value=${value}&field=${field}`,
