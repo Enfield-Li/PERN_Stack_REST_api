@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import "./app.css";
 import { io } from "socket.io-client";
 import Navbar from "./components/Navbar";
 import {
@@ -54,6 +55,7 @@ function App() {
     );
   }, [socket]);
 
+  // Notify with toast when receive interactions
   useEffect(() => {
     if (notifications[0]) {
       const event = notifications[0];
@@ -71,7 +73,7 @@ function App() {
   }, [notifications]);
 
   return (
-    <div style={{ backgroundColor: "#dae0e6" }}>
+    <div style={{ background: "#dae0e6" }}>
       <div className="bg-white">
         <Navbar />
       </div>
