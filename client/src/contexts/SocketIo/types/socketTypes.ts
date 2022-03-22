@@ -36,7 +36,9 @@ export const socketInitialState: SocketInitialStateType = {
   notifications: [],
 };
 
-export type Interactives = {
+export type Interactives = Interactive[];
+
+export type Interactive = {
   voteStatus: boolean | null;
   likeStatus: boolean | null;
   laughStatus: boolean | null;
@@ -49,7 +51,7 @@ export type Interactives = {
   checked: boolean;
   user: { username: string };
   post: { title: string };
-}[];
+};
 
 export type HelloWorld = {
   msg: string;

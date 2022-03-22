@@ -5,14 +5,37 @@ import {
   setServerInteractionRead,
   setServerNotificationCheckedOrRead,
   useSocket,
-} from "../../../contexts/SocketIo/actions/socketActions";
-import { collectPostToBeCheckedOrRead } from "../../../utils/collectPostToBeChecked";
+} from "../../contexts/SocketIo/actions/socketActions";
+import { Interactive } from "../../contexts/SocketIo/types/socketTypes";
+import { collectPostToBeCheckedOrRead } from "../../utils/collectPostToBeChecked";
 
 interface InteracitivitiesProps {}
 
 const Interacitivities: React.FC<InteracitivitiesProps> = ({}) => {
-  const { socketState, socketDispatch, setUncheckedAmount } = useSocket();
+  const { socketState, socketDispatch } = useSocket();
   const { interactives } = socketState;
+
+  const setAllCheckedOrRead = () => {
+    // Update client cache
+    setAllInteractivesRead(socketDispatch);
+
+    // Update server data
+    const formatedPosts = collectPostToBeCheckedOrRead(
+      socketState.interactives,
+      false
+    );
+    if (formatedPosts.length)
+      setServerNotificationCheckedOrRead(formatedPosts, false);
+  };
+
+  const setSingleRead = (interactive: Interactive) => {
+    // Update client cache
+    const { userId, postId } = interactive;
+    setClientInteractionRead(postId, userId, socketDispatch);
+
+    // Update server data
+    setServerInteractionRead({ postId, userId });
+  };
 
   return (
     <div style={{ height: 300, width: 340, overflow: "scroll" }}>
@@ -20,19 +43,7 @@ const Interacitivities: React.FC<InteracitivitiesProps> = ({}) => {
       <button
         role="button"
         className="btn btn-primary"
-        onClick={() => {
-          // Update client cache
-          setAllInteractivesRead(socketDispatch);
-
-          // Update server data
-          const formatedPosts = collectPostToBeCheckedOrRead(
-            socketState.interactives,
-            false
-          );
-
-          if (formatedPosts.length)
-            setServerNotificationCheckedOrRead(formatedPosts, false);
-        }}
+        onClick={() => setAllCheckedOrRead()}
       >
         Set all read
       </button>
@@ -42,14 +53,7 @@ const Interacitivities: React.FC<InteracitivitiesProps> = ({}) => {
         <div
           key={index}
           role="button"
-          onClick={() => {
-            // Update client cache
-            const { userId, postId } = interactive;
-            setClientInteractionRead(postId, userId, socketDispatch);
-
-            // Update server data
-            setServerInteractionRead({ postId, userId });
-          }}
+          onClick={() => setSingleRead(interactive)}
         >
           <div>{interactive.postId} Receive</div>
           <span>checked: {interactive.checked ? "true" : "false"} </span>

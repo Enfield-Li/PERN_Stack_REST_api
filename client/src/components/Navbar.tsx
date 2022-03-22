@@ -6,7 +6,7 @@ import {
   usePost,
 } from "../contexts/Post/actions/PostAction";
 import { useUser } from "../contexts/User/actions/UserAction";
-import UserInfo from "./nested-Components/user/UserInfo";
+import UserInfo from "./user-related/UserInfo";
 
 interface navbarProps {}
 
@@ -15,6 +15,12 @@ const Navbar: React.FC<navbarProps> = ({}) => {
   const { userState } = useUser();
 
   const { user } = userState;
+
+  const refreshHome = () => {
+    clearCache(postDispatch);
+    fetchPaginatedPosts(postDispatch);
+    setSortPost("best");
+  };
 
   return (
     <div className="nav justify-content-between container align-items-center py-1">
@@ -27,11 +33,7 @@ const Navbar: React.FC<navbarProps> = ({}) => {
         <Link
           to="/"
           style={{ color: "black", textDecoration: "none" }}
-          onClick={async () => {
-            clearCache(postDispatch);
-            fetchPaginatedPosts(postDispatch);
-            setSortPost("best");
-          }}
+          onClick={() => refreshHome()}
         >
           <i className="bi bi-reddit text-danger fs-1"></i>
           <span className="text-danger"> Reddit</span>
@@ -44,6 +46,7 @@ const Navbar: React.FC<navbarProps> = ({}) => {
           <i className="bi bi-plus-square fs-3 mx-3"></i>
         </Link>
 
+        {/* UserInfo */}
         <UserInfo />
       </div>
     </div>

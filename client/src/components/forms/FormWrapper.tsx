@@ -19,28 +19,21 @@ const FormWrapper = <Values,>({
   props,
   formUsage,
 }: FormWrapperProps<Values>) => {
-  // interface FormWrapperProps {
-  //   children: React.ReactNode;
-  //   props: FormikProps<unknown>;
-  //   formUsage?: FormUsage;
-  // }
-
-  // const FormWrapper = ({ children, props, formUsage }: FormWrapperProps) => {
+  // Form bottom assist msg
   let addtionalAssist = null;
 
-  if (formUsage === "Login")
+  if (formUsage === "Login") {
     addtionalAssist = (
       <div className="d-flex justify-content-between">
         <Link to={"/forgot-password"}>Forgot password?</Link>
         <Link to={"/register"}>Regester!</Link>
       </div>
     );
-
-  if (formUsage === "Register")
+  } else if (formUsage === "Register") {
     addtionalAssist = <Link to={"/login"}>Got an account?</Link>;
-
-  if (formUsage === "Change password")
+  } else if (formUsage === "Change password") {
     addtionalAssist = <Link to={"/change-password"}>Or you can login!</Link>;
+  }
 
   return (
     <Form className="container mt-2 py-3 w-50 fs-5">

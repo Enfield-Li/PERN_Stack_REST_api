@@ -1,12 +1,14 @@
 import React, { useEffect } from "react";
 import { useParams } from "react-router-dom";
-import { fetchSinglePost, usePost } from "../contexts/Post/actions/PostAction";
-import { PostAndInteractions } from "../contexts/Post/types/PostTypes";
-import ContentPlaceholder from "./layout/placeHolders/ContentPlaceholder";
-import EditSection from "./nested-Components/postSection/EditSection";
-import InteractionDisplay from "./nested-Components/postSection/InteractionDisplay";
-import PostCreatorInfo from "./nested-Components/user/PostCreatorInfo";
-import VoteSection from "./nested-Components/postSection/voteSection";
+import PostCreatorInfo from "../user-related/PostCreatorInfo";
+import VoteSection from "./sections/voteSection";
+import {
+  usePost,
+  fetchSinglePost,
+} from "../../contexts/Post/actions/PostAction";
+import ContentPlaceholder from "../placeholders/ContentPlaceholder";
+import EditSection from "./sections/EditSection";
+import InteractionDisplay from "./sections/InteractionDisplay";
 
 interface PostPageProps {}
 

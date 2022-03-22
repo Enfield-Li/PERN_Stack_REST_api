@@ -2,17 +2,12 @@ import { useState } from "react";
 import { usePopperTooltip } from "react-popper-tooltip";
 import { useNavigate } from "react-router-dom";
 import { toast, ToastContainer } from "react-toastify";
-import {
-  deletePost,
-  interactWithPost,
-  usePost,
-} from "../../../contexts/Post/actions/PostAction";
+import { usePost, interactWithPost, deletePost } from "../../../contexts/Post/actions/PostAction";
 import { PostAndInteractions } from "../../../contexts/Post/types/PostTypes";
-import {
-  interactWithPostFromUserProfile,
-  useUser,
-} from "../../../contexts/User/actions/UserAction";
+import { useUser, interactWithPostFromUserProfile } from "../../../contexts/User/actions/UserAction";
 import { UserPostAndInteractions } from "../../../contexts/User/types/UserTypes";
+
+
 
 interface EditSectionProps {
   postAndInteractions: PostAndInteractions | UserPostAndInteractions;

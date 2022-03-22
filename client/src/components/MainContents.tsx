@@ -3,13 +3,14 @@ import {
   fetchPaginatedPosts,
   usePost,
 } from "../contexts/Post/actions/PostAction";
-import ContentPlaceholder from "./layout/placeHolders/ContentPlaceholder";
-import CreatePostArea from "./layout/CreatePostArea";
-import EditSection from "./nested-Components/postSection/EditSection";
-import PostCardSection from "./nested-Components/postSection/PostCardSection";
-import PostCreatorInfo from "./nested-Components/user/PostCreatorInfo";
-import VoteSection from "./nested-Components/postSection/voteSection";
-import SortSection from "./layout/SortSection";
+import ContentPlaceholder from "./placeholders/ContentPlaceholder";
+import PostCreatorInfo from "./user-related/PostCreatorInfo";
+import VoteSection from "./post/sections/voteSection";
+import SortSection from "./SortSection";
+import { SortPostWithTop } from "../contexts/Post/types/PostTypes";
+import CreatePostArea from "./CreatePostArea";
+import EditSection from "./post/sections/EditSection";
+import PostCardSection from "./post/sections/PostCardSection";
 
 interface MainContentsProps {}
 
@@ -19,17 +20,16 @@ const MainContents: React.FC<MainContentsProps> = ({}) => {
   const paginatedPosts = postState.paginatedPosts;
   const postAndInteractions = postState.paginatedPosts.postAndInteractions;
 
-  const [topYear, setTopYear] = useState<"half-year" | "one-year" | "all-time">(
-    "half-year"
-  );
-
-  // off set based pagination
-  const [offSetCount, setOffSetCount] = useState(1);
+  const [topYear, setTopYear] = useState<SortPostWithTop>("half-year");
 
   useEffect(() => {
     setSortPost("best");
   }, []);
 
+  // Off set based pagination set up
+  const [offSetCount, setOffSetCount] = useState(1);
+
+  // Cursor based pagination set up
   let cursor = new Date(Date.now()).toISOString();
   for (let i = 0; i < postAndInteractions.length; i++) {
     const postDate = new Date(
@@ -40,6 +40,20 @@ const MainContents: React.FC<MainContentsProps> = ({}) => {
       cursor = postDate;
     }
   }
+
+  const fetchMorePosts = () => {
+    if (sortPost === "top") {
+      fetchPaginatedPosts(
+        postDispatch,
+        sortPost,
+        offSetCount.toString(),
+        topYear
+      );
+      setOffSetCount(offSetCount + 1);
+      return;
+    }
+    fetchPaginatedPosts(postDispatch, sortPost, cursor);
+  };
 
   return (
     <div>
@@ -83,20 +97,8 @@ const MainContents: React.FC<MainContentsProps> = ({}) => {
       <div className="d-flex justify-content-center">
         {paginatedPosts.hasMore ? (
           <button
-            className="btn btn-primary"
-            onClick={() => {
-              if (sortPost === "top") {
-                fetchPaginatedPosts(
-                  postDispatch,
-                  sortPost,
-                  offSetCount.toString(),
-                  topYear
-                );
-                setOffSetCount(offSetCount + 1);
-                return;
-              }
-              fetchPaginatedPosts(postDispatch, sortPost, cursor);
-            }}
+            className="btn btn-primary mb-3"
+            onClick={() => fetchMorePosts()}
           >
             More Posts
           </button>

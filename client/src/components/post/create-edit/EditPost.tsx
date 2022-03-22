@@ -2,9 +2,10 @@ import { Formik } from "formik";
 import React from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import * as Yup from "yup";
-import { editCurrentPost, usePost } from "../contexts/Post/actions/PostAction";
-import FormWrapper from "./nested-Components/forms/FormWrapper";
-import InputWrapper from "./nested-Components/forms/InputWrapper";
+import { usePost, editCurrentPost } from "../../../contexts/Post/actions/PostAction";
+import FormWrapper from "../../forms/FormWrapper";
+import InputWrapper from "../../forms/InputWrapper";
+
 
 interface EditPostProps {}
 
@@ -22,6 +23,7 @@ const EditPost: React.FC<EditPostProps> = ({}) => {
 
   return (
     <Formik
+      validationSchema={validationSchema}
       initialValues={{
         title: postState.currentPost?.post.title
           ? postState.currentPost?.post.title
@@ -34,7 +36,6 @@ const EditPost: React.FC<EditPostProps> = ({}) => {
         const res = await editCurrentPost(postDispatch, +id!, values);
         if (res) navigate(`/post/${res.post.id}`, { replace: true });
       }}
-      validationSchema={validationSchema}
     >
       {(props) => (
         <FormWrapper props={props} formUsage="Create Post">

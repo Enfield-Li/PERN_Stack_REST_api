@@ -1,11 +1,14 @@
 import React, { useEffect } from "react";
 import { useParams } from "react-router-dom";
-import { getUserProfile, useUser } from "../contexts/User/actions/UserAction";
-import EditSection from "./nested-Components/postSection/EditSection";
-import PostCardSection from "./nested-Components/postSection/PostCardSection";
-import PostCreatorInfo from "./nested-Components/user/PostCreatorInfo";
-import ProfileCard from "./nested-Components/user/ProfileCard";
-import VoteSection from "./nested-Components/postSection/voteSection";
+import PostCreatorInfo from "./PostCreatorInfo";
+import ProfileCard from "./ProfileCard";
+import VoteSection from "../post/sections/voteSection";
+import {
+  useUser,
+  getUserProfile,
+} from "../../contexts/User/actions/UserAction";
+import EditSection from "../post/sections/EditSection";
+import PostCardSection from "../post/sections/PostCardSection";
 
 const UserProfile: React.FC = ({}) => {
   const { id } = useParams();

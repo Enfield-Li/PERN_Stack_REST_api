@@ -1,16 +1,16 @@
 import { Formik } from "formik";
 import React from "react";
 import { useNavigate } from "react-router-dom";
-import { loginUser, useUser } from "../contexts/User/actions/UserAction";
-import { mapToError } from "../utils/toError";
-import FormWrapper from "./nested-Components/forms/FormWrapper";
-import InputWrapper from "./nested-Components/forms/InputWrapper";
+import { loginUser, useUser } from "../../contexts/User/actions/UserAction";
+import { mapToError } from "../../utils/toError";
+import FormWrapper from "../forms/FormWrapper";
+import InputWrapper from "../forms/InputWrapper";
 import * as Yup from "yup";
 import {
   clearCache,
   fetchPaginatedPosts,
   usePost,
-} from "../contexts/Post/actions/PostAction";
+} from "../../contexts/Post/actions/PostAction";
 
 interface LoginProps {}
 
@@ -31,6 +31,7 @@ const Login: React.FC<LoginProps> = ({}) => {
 
   return (
     <Formik
+      validationSchema={validationSchema}
       initialValues={{ usernameOrEmail: "", password: "" }}
       onSubmit={async (values, { setErrors }) => {
         const errorRes = await loginUser(userDispatch, values);
@@ -45,7 +46,6 @@ const Login: React.FC<LoginProps> = ({}) => {
           return;
         }
       }}
-      validationSchema={validationSchema}
     >
       {(props) => (
         <FormWrapper props={props} formUsage="Login">

@@ -1,7 +1,7 @@
 import moment from "moment";
 import React from "react";
 import { Link } from "react-router-dom";
-import { User } from "../../../contexts/User/types/UserTypes";
+import { User } from "../../contexts/User/types/UserTypes";
 
 interface ProfileCardProps {
   user: User | undefined;

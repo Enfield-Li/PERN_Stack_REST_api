@@ -20,7 +20,7 @@ export const postInitialState: PostState = {
   currentPost: null,
 };
 
-export type TopPostSort = "half-year" | "one-year" | "all-time";
+export type SortPostWithTop = "half-year" | "one-year" | "all-time";
 
 export type PostSorting = "new" | "hot" | "best" | "top";
 

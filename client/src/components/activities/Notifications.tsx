@@ -5,8 +5,8 @@ import {
   fetchInteractives,
   setServerNotificationCheckedOrRead,
   useSocket,
-} from "../../../contexts/SocketIo/actions/socketActions";
-import { collectPostToBeCheckedOrRead } from "../../../utils/collectPostToBeChecked";
+} from "../../contexts/SocketIo/actions/socketActions";
+import { collectPostToBeCheckedOrRead } from "../../utils/collectPostToBeChecked";
 import Interacitivities from "./Interacitivities";
 
 interface NotificationsProps {}
@@ -33,6 +33,21 @@ const Notifications: React.FC<NotificationsProps> = ({}) => {
     onVisibleChange: setControlledVisible,
   });
 
+  const clickBellButton = () => {
+    // Update client cache
+    clearNotifications(socketDispatch);
+    fetchInteractives(socketDispatch);
+    setUncheckedAmount(0);
+
+    // Update server data
+    const formatedPosts = collectPostToBeCheckedOrRead(
+      socketState.interactives,
+      true
+    );
+    if (formatedPosts.length)
+      setServerNotificationCheckedOrRead(formatedPosts, true);
+  };
+
   return (
     <div>
       {/* bell button */}
@@ -40,19 +55,7 @@ const Notifications: React.FC<NotificationsProps> = ({}) => {
         role="button"
         ref={setTriggerRef}
         className="bi bi-bell position-relative mx-4 fs-3"
-        onClick={() => {
-          clearNotifications(socketDispatch);
-          fetchInteractives(socketDispatch);
-          setUncheckedAmount(0);
-
-          const formatedPosts = collectPostToBeCheckedOrRead(
-            socketState.interactives,
-            true
-          );
-
-          if (formatedPosts.length)
-            setServerNotificationCheckedOrRead(formatedPosts,true);
-        }}
+        onClick={() => clickBellButton()}
       >
         <span className="fs-6 position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
           {uncheckedAmount ? uncheckedAmount : null}

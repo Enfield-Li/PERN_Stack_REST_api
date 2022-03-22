@@ -1,10 +1,10 @@
 import { Formik } from "formik";
 import React from "react";
 import { useNavigate } from "react-router-dom";
-import { createPost, usePost } from "../contexts/Post/actions/PostAction";
-import FormWrapper from "./nested-Components/forms/FormWrapper";
-import InputWrapper from "./nested-Components/forms/InputWrapper";
+import FormWrapper from "../../forms/FormWrapper";
+import InputWrapper from "../../forms/InputWrapper";
 import * as Yup from "yup";
+import { createPost, usePost } from "../../../contexts/Post/actions/PostAction";
 
 interface CreatePostProps {}
 
@@ -21,12 +21,12 @@ const CreatePost: React.FC<CreatePostProps> = ({}) => {
 
   return (
     <Formik
+      validationSchema={validationSchema}
       initialValues={{ title: "", content: "" }}
       onSubmit={async (values) => {
         const res = await createPost(postDispatch, values);
         if (res) navigate(`/post/${res.post.id}`, { replace: true });
       }}
-      validationSchema={validationSchema}
     >
       {(props) => (
         <FormWrapper props={props} formUsage="Create Post">

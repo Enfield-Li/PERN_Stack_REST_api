@@ -2,12 +2,15 @@ import React, { useState } from "react";
 import {
   fetchPaginatedPosts,
   usePost,
-} from "../../contexts/Post/actions/PostAction";
-import { PostSorting, TopPostSort } from "../../contexts/Post/types/PostTypes";
+} from "../contexts/Post/actions/PostAction";
+import {
+  PostSorting,
+  SortPostWithTop,
+} from "../contexts/Post/types/PostTypes";
 
 interface SortByProps {
-  topYear: TopPostSort;
-  setTopYear: React.Dispatch<React.SetStateAction<TopPostSort>>;
+  topYear: SortPostWithTop;
+  setTopYear: React.Dispatch<React.SetStateAction<SortPostWithTop>>;
 }
 
 const SortSection: React.FC<SortByProps> = ({ topYear, setTopYear }) => {
@@ -16,7 +19,7 @@ const SortSection: React.FC<SortByProps> = ({ topYear, setTopYear }) => {
   const fontAndBg = "rounded-pill text-primary";
   const selectedBg = { background: "#f6f7f8" };
 
-  const fetchSortedPost = (categ: PostSorting, time?: TopPostSort) => {
+  const fetchSortedPost = (categ: PostSorting, time?: SortPostWithTop) => {
     setSortPost(categ);
 
     if (categ === "top" && time) {

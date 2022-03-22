@@ -1,9 +1,9 @@
 import { Formik } from "formik";
 import React from "react";
 import { useNavigate } from "react-router-dom";
-import { registerUser, useUser } from "../contexts/User/actions/UserAction";
-import FormWrapper from "./nested-Components/forms/FormWrapper";
-import InputWrapper from "./nested-Components/forms/InputWrapper";
+import { registerUser, useUser } from "../../contexts/User/actions/UserAction";
+import FormWrapper from "../forms/FormWrapper";
+import InputWrapper from "../forms/InputWrapper";
 import * as Yup from "yup";
 
 interface RegisterProps {}
@@ -25,6 +25,7 @@ const Register: React.FC<RegisterProps> = ({}) => {
   return (
     <div className="space-align-block">
       <Formik
+        validationSchema={validationSchema}
         initialValues={{
           username: "",
           email: "",
@@ -34,7 +35,6 @@ const Register: React.FC<RegisterProps> = ({}) => {
           await registerUser(userDispatch, values);
           navigate("/");
         }}
-        validationSchema={validationSchema}
       >
         {(props) => (
           <FormWrapper props={props} formUsage="Register">

@@ -1,18 +1,18 @@
 import { useNavigate } from "react-router-dom";
 import {
-  interactWithPost,
   usePost,
+  interactWithPost,
 } from "../../../contexts/Post/actions/PostAction";
-import {
-  interactWithPostFromUserProfile,
-  useUser,
-} from "../../../contexts/User/actions/UserAction";
 import { PostAndInteractions } from "../../../contexts/Post/types/PostTypes";
-import { UserPostAndInteractions } from "../../../contexts/User/types/UserTypes";
 import {
-  sendNotification,
   useSocket,
+  sendNotification,
 } from "../../../contexts/SocketIo/actions/socketActions";
+import {
+  useUser,
+  interactWithPostFromUserProfile,
+} from "../../../contexts/User/actions/UserAction";
+import { UserPostAndInteractions } from "../../../contexts/User/types/UserTypes";
 
 interface InteractionDisplayProps {
   postAndInteractions: PostAndInteractions | UserPostAndInteractions;

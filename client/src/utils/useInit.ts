@@ -18,9 +18,6 @@ export function useInit() {
   const { postDispatch } = usePost();
   const { socket, setSocket, socketDispatch, setUncheckedAmount } = useSocket();
 
-  // For invoking Toast notifications
-  const [toastNotifications, setToastNotifications] = useState<ReceiveNotification[]>([]);
-
   // Initialize login, fetch posts, socket connection, interactives
   useEffect(() => {
     me(userDispatch);
@@ -30,6 +27,7 @@ export function useInit() {
     setSocket(connectSocket);
   }, []);
 
+  // Once login, fetch user's interactivties
   useEffect(() => {
     if (userState.user) {
       fetchInteractives(socketDispatch, setUncheckedAmount);
@@ -40,6 +38,11 @@ export function useInit() {
   useEffect(() => {
     if (userState.user) socket?.emit("Login", userState.user?.id);
   }, [socket, userState.user]);
+
+  // For invoking Toast notifications
+  const [toastNotifications, setToastNotifications] = useState<
+    ReceiveNotification[]
+  >([]);
 
   // Capture socket response
   useEffect(() => {

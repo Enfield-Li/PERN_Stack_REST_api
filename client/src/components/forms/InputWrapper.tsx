@@ -23,6 +23,7 @@ const InputWrapper: React.FC<InputWrapperProps> = ({
       <label htmlFor={field.name} className="form-label">
         {label}:
       </label>
+
       <InputType
         required={required}
         type={type ? type : "text"}
@@ -32,6 +33,7 @@ const InputWrapper: React.FC<InputWrapperProps> = ({
         {...field}
         aria-describedby="textHelp"
       />
+
       {error && (
         <div className="text-danger" id="feedback">
           {error}

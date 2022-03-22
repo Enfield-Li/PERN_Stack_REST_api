@@ -17,6 +17,7 @@ import {
   PostActionType,
   VotingTypes,
   PostSorting,
+  SortPostWithTop,
 } from "../types/PostTypes";
 import PostContext from "../PostContext";
 import { useContext } from "react";
@@ -103,7 +104,7 @@ export const fetchPaginatedPosts = async (
   dispatch: React.Dispatch<PostActionType>,
   sortBy: PostSorting = "best",
   cursor?: string, // date string or number string
-  time?: "half-year" | "one-year" | "all-time"
+  time?: SortPostWithTop
 ) => {
   let res: AxiosResponse<PaginatedPost, any> | null = null;
 

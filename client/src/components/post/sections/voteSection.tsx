@@ -1,19 +1,11 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
-import {
-  interactWithPost,
-  usePost,
-} from "../../../contexts/Post/actions/PostAction";
+import { usePost, interactWithPost } from "../../../contexts/Post/actions/PostAction";
 import { PostAndInteractions } from "../../../contexts/Post/types/PostTypes";
-import {
-  sendNotification,
-  useSocket,
-} from "../../../contexts/SocketIo/actions/socketActions";
-import {
-  interactWithPostFromUserProfile,
-  useUser,
-} from "../../../contexts/User/actions/UserAction";
+import { useSocket, sendNotification } from "../../../contexts/SocketIo/actions/socketActions";
+import { useUser, interactWithPostFromUserProfile } from "../../../contexts/User/actions/UserAction";
 import { UserPostAndInteractions } from "../../../contexts/User/types/UserTypes";
+
 
 interface VoteSectionProps {
   postAndInteractions: PostAndInteractions | UserPostAndInteractions;

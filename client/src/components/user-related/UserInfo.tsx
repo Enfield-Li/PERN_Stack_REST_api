@@ -1,15 +1,9 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import {
-  clearCache,
-  fetchPaginatedPosts,
-  usePost,
-} from "../../../contexts/Post/actions/PostAction";
-import {
-  clearNotifications,
-  useSocket,
-} from "../../../contexts/SocketIo/actions/socketActions";
-import { logout, useUser } from "../../../contexts/User/actions/UserAction";
+import { usePost, clearCache, fetchPaginatedPosts } from "../../contexts/Post/actions/PostAction";
+import { useSocket, clearNotifications } from "../../contexts/SocketIo/actions/socketActions";
+import { useUser, logout } from "../../contexts/User/actions/UserAction";
+
 import Notifications from "../activities/Notifications";
 
 interface UserInfoProps {}
