@@ -3,10 +3,10 @@ import { usePopperTooltip } from "react-popper-tooltip";
 import {
   clearNotifications,
   fetchInteractives,
-  setPostChecked,
+  setNotificationChecked as setServerNotificationChecked,
   useSocket,
 } from "../../../contexts/SocketIo/actions/socketActions";
-import { collectPostToBeChecked } from "../../../utils/collectPostToBeChecked";
+import { collectPostToBeCheckedOrRead } from "../../../utils/collectPostToBeChecked";
 import Interacitivities from "./Interacitivities";
 
 interface NotificationsProps {}
@@ -44,11 +44,11 @@ const Notifications: React.FC<NotificationsProps> = ({}) => {
           fetchInteractives(socketDispatch);
           setUncheckedAmount(0);
 
-          const formatedPosts = collectPostToBeChecked(
+          const formatedPosts = collectPostToBeCheckedOrRead(
             socketState.interactives
           );
 
-          if (formatedPosts.length) setPostChecked(formatedPosts);
+          if (formatedPosts.length) setServerNotificationChecked(formatedPosts);
         }}
       >
         <span className="fs-6 position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">

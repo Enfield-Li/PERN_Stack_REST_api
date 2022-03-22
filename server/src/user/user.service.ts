@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { interactions, user } from '@prisma/client';
+import { user } from '@prisma/client';
 import { PrismaService } from 'src/config/prisma.service';
 import {
   CreateUserDto,
@@ -7,8 +7,7 @@ import {
   ResUserError,
   ResUser,
   UserRO,
-  userProfileRO,
-  PostForChecked,
+  UserProfileRO,
 } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { Request } from 'express';
@@ -41,7 +40,6 @@ export class UserService {
   async loginUser(loginUserDto: LoginUserDto, req: Request): Promise<UserRO> {
     const { usernameOrEmail, password } = loginUserDto;
     const user = await this.findUser(usernameOrEmail);
-    // console.log('user: ', user);
 
     if (!user) return { errors: this.buildErrorRo('usernameOrEmail') };
 
@@ -50,19 +48,6 @@ export class UserService {
 
     req.session.userId = user.id;
     return { user: this.buildResUser(user) };
-  }
-
-  async setNotificationChecked(ids: PostForChecked[]) {
-    for (let i = 0; i < ids.length; i++) {
-      const { userId, postId } = ids[i];
-
-      await this.prismaService.interactions.update({
-        data: { checked: true },
-        where: { userId_postId: { userId, postId } },
-      });
-    }
-
-    return true;
   }
 
   private async findUser(usernameOrEmail: string): Promise<user> {
@@ -102,7 +87,7 @@ export class UserService {
     meId: number,
     take: number,
     cursor?: Date,
-  ): Promise<userProfileRO> {
+  ): Promise<UserProfileRO> {
     const takeLimit = Math.min(25, take);
     const takeLimitPlusOne = takeLimit + 1;
 
@@ -143,39 +128,6 @@ export class UserService {
       user: this.buildResUser(userProfile, meId),
       userPaginatedPost: { hasMore, postAndInteractions },
     };
-  }
-
-  async fetchInteractives(
-    userId: number,
-    getAll: boolean,
-  ): Promise<interactions[]> {
-    const interactives = await this.prismaService.interactions.findMany({
-      // Fetch based on Post's creator ie. userId
-      where: {
-        post: { userId },
-
-        // Exclude oneself's interactives with it's own post
-        userId: { not: userId },
-
-        // One or more conditions must return true.
-        OR: [
-          { voteStatus: { not: null } },
-          { laughStatus: { not: null } },
-          { likeStatus: { not: null } },
-        ],
-      },
-
-      // Plus voting user's name
-      include: {
-        user: { select: { username: true } },
-        post: { select: { title: true } },
-      },
-
-      orderBy: { updatedAt: 'desc' },
-      take: getAll === true ? undefined : 5,
-    });
-
-    return interactives;
   }
 
   async updateUser(id: number, updateUserDto: UpdateUserDto): Promise<UserRO> {

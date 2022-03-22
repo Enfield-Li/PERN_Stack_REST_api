@@ -1,9 +1,11 @@
-import React, { useEffect } from "react";
+import React from "react";
 import {
   setAllInteractivesRead,
-  setInteractiveRead,
+  setClientInteractionRead,
+  setServerInteractionRead,
   useSocket,
 } from "../../../contexts/SocketIo/actions/socketActions";
+import { collectPostToBeCheckedOrRead } from "../../../utils/collectPostToBeChecked";
 
 interface InteracitivitiesProps {}
 
@@ -17,7 +19,14 @@ const Interacitivities: React.FC<InteracitivitiesProps> = ({}) => {
         role="button"
         className="btn btn-primary"
         onClick={() => {
+          // Update client cache
           setAllInteractivesRead(socketDispatch);
+
+          // Update server data
+          const formatedPosts = collectPostToBeCheckedOrRead(
+            socketState.interactives
+          );
+          
         }}
       >
         Set all read
@@ -27,7 +36,12 @@ const Interacitivities: React.FC<InteracitivitiesProps> = ({}) => {
           key={index}
           role="button"
           onClick={() => {
-            setInteractiveRead(interactive.postId, socketDispatch);
+            // Update client cache
+            const { userId, postId } = interactive;
+            setClientInteractionRead(postId, socketDispatch);
+
+            // Update server data
+            setServerInteractionRead({ postId, userId });
           }}
         >
           <div>Receive</div>

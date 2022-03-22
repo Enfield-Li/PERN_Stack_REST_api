@@ -58,7 +58,7 @@ export type HelloWorld = {
 export type PostsForChecked = {
   userId: number;
   postId: number;
-}[];
+};
 
 export type SendNotification = {
   postId: number;

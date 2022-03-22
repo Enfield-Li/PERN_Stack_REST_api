@@ -8,7 +8,7 @@ import {
 } from "../../constant";
 import {
   Interactives,
-  PostsForChecked,
+  PostsForChecked as InteractionIds,
   ReceiveNotification,
   SendNotification,
   SocketActionType,
@@ -71,7 +71,7 @@ export async function fetchInteractives(
   getAll: boolean = false
 ) {
   const res = await axios.get<Interactives>(
-    `http://localhost:3119/user/interactives?getAll=${getAll}`,
+    `http://localhost:3119/interactions/interactives?getAll=${getAll}`,
     { withCredentials: true }
   );
 
@@ -90,10 +90,18 @@ export async function fetchInteractives(
   });
 }
 
-export async function setPostChecked(postsForChecked: PostsForChecked) {
-  const res = await axios.patch<PostsForChecked>(
-    "http://localhost:3119/user/setNotificationChecked",
-    postsForChecked,
+export async function setNotificationChecked(interactionIds: InteractionIds[]) {
+  const res = await axios.patch<InteractionIds[]>(
+    "http://localhost:3119/interactions/setNotificationChecked",
+    interactionIds,
+    { withCredentials: true }
+  );
+}
+
+export async function setServerInteractionRead(interactionIds: InteractionIds) {
+  const res = await axios.patch<InteractionIds>(
+    "http://localhost:3119/interactions/setInteractionRead",
+    interactionIds,
     { withCredentials: true }
   );
 }
@@ -102,7 +110,7 @@ export function clearNotifications(dispatch: React.Dispatch<SocketActionType>) {
   dispatch({ type: CLEAR_NOTIFICATIONS });
 }
 
-export function setInteractiveRead(
+export function setClientInteractionRead(
   postId: number,
   dispatch: React.Dispatch<SocketActionType>
 ) {

@@ -15,10 +15,8 @@ import {
 import { UserService } from './user.service';
 import {
   CreateUserDto,
-  interactions,
   LoginUserDto,
-  PostForChecked,
-  userProfileRO as UserProfileRO,
+  UserProfileRO,
   UserRO,
 } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
@@ -72,17 +70,6 @@ export class UserController {
     );
   }
 
-  @ApiBody({
-    type: [PostForChecked],
-  })
-  @ApiCreatedResponse({ type: Boolean })
-  @Patch('/setNotificationChecked')
-  async setChecked(@Body() ids: PostForChecked[], @Req() req: Request) {
-    if (!req.session.userId) return;
-
-    return this.userService.setNotificationChecked(ids);
-  }
-
   @Get('/userInfo/:id')
   async fetchUserInfo(@Param('id') id: string, @Req() req: Request) {
     const user = await this.userService.fetchUserInfo(+id, req.session.userId);
@@ -100,24 +87,6 @@ export class UserController {
     @Req() req: Request,
   ): Promise<UserRO> {
     return this.userService.loginUser(loginUserDto, req);
-  }
-
-  @ApiQuery({
-    name: 'getAll',
-    required: false,
-    type: Boolean,
-  })
-  @Get('/interactives')
-  @ApiCreatedResponse({ type: [interactions] })
-  async getInteractives(
-    @Req() req: Request,
-    @Query('getAll') getAll: string = 'false',
-  ) {
-    if (!req.session.userId) return;
-
-    const getAllIsTrue = getAll === 'true';
-
-    return this.userService.fetchInteractives(req.session.userId, getAllIsTrue);
   }
 
   @Get('/me')

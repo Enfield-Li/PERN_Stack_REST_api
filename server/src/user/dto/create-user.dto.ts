@@ -62,7 +62,7 @@ export class UserRO {
   errors?: ResUserError;
 }
 
-export class userProfileRO {
+export class UserProfileRO {
   @ApiProperty()
   user: ResUser;
 
@@ -89,11 +89,4 @@ export class interactions {
   read: boolean;
   @ApiProperty()
   checked: boolean;
-}
-
-export class PostForChecked {
-  @ApiProperty()
-  userId: number;
-  @ApiProperty()
-  postId: number;
 }

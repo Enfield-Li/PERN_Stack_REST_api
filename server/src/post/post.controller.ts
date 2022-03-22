@@ -9,7 +9,6 @@ import {
   Req,
   HttpException,
   Query,
-  Put,
 } from '@nestjs/common';
 import { PostService } from './post.service';
 import {
@@ -25,7 +24,6 @@ import {
   ApiQuery,
   ApiTags,
 } from '@nestjs/swagger';
-import { post } from '@prisma/client';
 
 @ApiTags('Post')
 @Controller('post')
@@ -66,7 +64,7 @@ export class PostController {
     @Query('sortBy') sortBy: 'new' | 'hot' | 'best' = 'best',
     @Query('cursor') cursor?: string,
   ): Promise<PaginatedPost> {
-    return this.postService.getPaginatedPost(
+    return this.postService.fetchPaginatedPost(
       sortBy,
       req.session.userId,
       +take,
@@ -105,30 +103,6 @@ export class PostController {
     @Param('id') id: string,
   ): Promise<PostAndInteraction> {
     return this.postService.fetchOnePost(req.session.userId, +id);
-  }
-
-  @ApiQuery({
-    name: 'value',
-    type: Boolean,
-  })
-  @ApiQuery({
-    name: 'field',
-    enum: ['vote', 'like', 'laugh', 'confused'],
-  })
-  @Get('interact/:id')
-  @ApiOkResponse({ type: Boolean })
-  votings(
-    @Param('id') id: string,
-    @Query('value') value: string,
-    @Query('field') field: 'vote' | 'like' | 'laugh' | 'confused',
-    @Req() req: Request,
-  ): Promise<Boolean> {
-    return this.postService.voteAndInteractWithPost(
-      +id,
-      req.session.userId,
-      value === 'true' ? true : value === 'false' ? false : null,
-      field,
-    );
   }
 
   @ApiCreatedResponse({ type: PostAndInteraction })
