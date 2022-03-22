@@ -11,13 +11,13 @@ import EditSection from "../post/sections/EditSection";
 import PostCardSection from "../post/sections/PostCardSection";
 import ContentPlaceholder from "../placeholders/ContentPlaceholder";
 import InfiniteScroll from "react-infinite-scroll-component";
+import { useGoTop } from "../../utils/useGoTop";
 
 const UserProfile: React.FC = ({}) => {
   const { id } = useParams();
+  const { isVisible, scrollToTop } = useGoTop();
   const { userState, userDispatch } = useUser();
   const { user, userProfile } = userState;
-  const postAndInteractions =
-    userProfile?.userPaginatedPost.postAndInteractions;
 
   useEffect(() => {
     if (id) getUserProfile(userDispatch, +id);
@@ -25,54 +25,53 @@ const UserProfile: React.FC = ({}) => {
 
   // Check if user exist
   if (id && userProfile?.userPaginatedPost) {
+    const postAndInteractions =
+      userProfile?.userPaginatedPost.postAndInteractions;
+
     const fetchMorePosts = () => {
       getUserProfile(
         userDispatch,
         +id,
-        userProfile?.userPaginatedPost.postAndInteractions[
-          userProfile?.userPaginatedPost.postAndInteractions.length - 1
-        ].post.createdAt
+        postAndInteractions[postAndInteractions.length - 1].post.createdAt
       );
     };
 
     return (
-      <div className="row">
-        <div className="col-9">
-          <InfiniteScroll
-            dataLength={
-              userProfile?.userPaginatedPost.postAndInteractions.length
-            }
-            next={fetchMorePosts}
-            hasMore={userProfile?.userPaginatedPost.hasMore}
-            loader={<ContentPlaceholder />}
-            endMessage={
-              <p style={{ textAlign: "center" }}>
-                <b>Yay! You have seen it all</b>
-              </p>
-            }
-          >
-            {userProfile?.userPaginatedPost.postAndInteractions.map(
-              (postAndInteraction) => (
-                <div className="card my-3 " key={postAndInteraction.post.id}>
+      <>
+        <div className="row">
+          <div className="col-9">
+            <InfiniteScroll
+              dataLength={postAndInteractions.length}
+              next={fetchMorePosts}
+              hasMore={userProfile?.userPaginatedPost.hasMore}
+              loader={<ContentPlaceholder />}
+              endMessage={
+                <p style={{ textAlign: "center" }}>
+                  <b>Yay! You have seen it all</b>
+                </p>
+              }
+            >
+              {postAndInteractions.map((postAndInteractions) => (
+                <div className="card my-3 " key={postAndInteractions.post.id}>
                   <div className="card-body">
                     <div className="d-flex justify-content-between">
                       {/* left */}
                       <div className="d-flex justify-content-between">
                         <VoteSection
-                          postAndInteractions={postAndInteraction}
+                          postAndInteractions={postAndInteractions}
                           isInProfile={true}
                         />
 
                         <div>
                           <PostCreatorInfo
-                            postAndInteractions={postAndInteraction}
+                            postAndInteractions={postAndInteractions}
                           />
                           <div
                             className="d-flex flex-column justify-content-between"
                             style={{ color: "gray" }}
                           >
                             <PostCardSection
-                              postAndInteractions={postAndInteraction}
+                              postAndInteractions={postAndInteractions}
                               isInProfile={true}
                             />
                           </div>
@@ -81,27 +80,36 @@ const UserProfile: React.FC = ({}) => {
 
                       {/* right */}
                       <EditSection
-                        postAndInteractions={postAndInteraction}
+                        postAndInteractions={postAndInteractions}
                         isNotMain={true}
                         isInProfile={true}
                       />
                     </div>
                   </div>
                 </div>
-              )
-            )}
-          </InfiniteScroll>
-          ;
+              ))}
+            </InfiniteScroll>
+            ;
+          </div>
+
+          {/* User profile */}
+          <div className="col-3 mt-2">
+            <ProfileCard
+              user={userProfile?.user}
+              isMe={user?.id === userProfile?.user.id}
+            />
+          </div>
         </div>
 
-        {/* User profile */}
-        <div className="col-3 mt-2">
-          <ProfileCard
-            user={userProfile?.user}
-            isMe={user?.id === userProfile?.user.id}
-          />
+        {/* Back to top */}
+        <div className="scroll-to-top">
+          {isVisible && (
+            <div onClick={scrollToTop}>
+              <div className="btn btn-primary">Back to top</div>
+            </div>
+          )}
         </div>
-      </div>
+      </>
     );
   }
 

@@ -7,3 +7,9 @@ body {
 body {
   background-color: #dae0e6;
 }
+
+.scroll-to-top {
+  position: fixed;
+  bottom: 2rem;
+  right: 6rem;
+}

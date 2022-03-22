@@ -12,11 +12,13 @@ import CreatePostArea from "./CreatePostArea";
 import EditSection from "./post/sections/EditSection";
 import PostCardSection from "./post/sections/PostCardSection";
 import InfiniteScroll from "react-infinite-scroll-component";
+import { useGoTop } from "../utils/useGoTop";
 
 interface MainContentsProps {}
 
 const MainContents: React.FC<MainContentsProps> = ({}) => {
   const { postState, postDispatch, setSortPost, sortPost } = usePost();
+  const { isVisible, scrollToTop } = useGoTop();
 
   const paginatedPosts = postState.paginatedPosts;
   const postAndInteractions = postState.paginatedPosts.postAndInteractions;
@@ -111,7 +113,15 @@ const MainContents: React.FC<MainContentsProps> = ({}) => {
           </div>
         )}
       </InfiniteScroll>
-      ;
+
+      {/* Back to top */}
+      <div className="scroll-to-top">
+        {isVisible && (
+          <div onClick={scrollToTop}>
+            <div className="btn btn-primary">Back to top</div>
+          </div>
+        )}
+      </div>
     </div>
   );
 };
