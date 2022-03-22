@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import {
   fetchPaginatedPosts,
   usePost,
@@ -11,6 +11,7 @@ import { SortPostWithTop } from "../contexts/Post/types/PostTypes";
 import CreatePostArea from "./CreatePostArea";
 import EditSection from "./post/sections/EditSection";
 import PostCardSection from "./post/sections/PostCardSection";
+import InfiniteScroll from "react-infinite-scroll-component";
 
 interface MainContentsProps {}
 
@@ -21,11 +22,6 @@ const MainContents: React.FC<MainContentsProps> = ({}) => {
   const postAndInteractions = postState.paginatedPosts.postAndInteractions;
 
   const [topYear, setTopYear] = useState<SortPostWithTop>("half-year");
-
-  //
-  useEffect(() => {
-    setSortPost("best");
-  }, []);
 
   // Off set based pagination set up
   const [offSetCount, setOffSetCount] = useState(1);
@@ -63,56 +59,59 @@ const MainContents: React.FC<MainContentsProps> = ({}) => {
     <div>
       <CreatePostArea />
       <SortSection topYear={topYear} setTopYear={setTopYear} />
-
-      {postAndInteractions.length > 0 ? (
-        postAndInteractions.map((postAndInteraction) => (
-          <div className="card my-3 " key={postAndInteraction.post.id}>
-            <div className="card-body">
-              <div className="d-flex justify-content-between">
-                {/* left */}
+      {/* Content area */}
+      <InfiniteScroll
+        dataLength={postAndInteractions.length}
+        next={fetchMorePosts}
+        hasMore={paginatedPosts.hasMore}
+        loader={<ContentPlaceholder />}
+        endMessage={
+          <p style={{ textAlign: "center" }}>
+            <b>Yo! You have seen it all</b>
+          </p>
+        }
+      >
+        {postAndInteractions.length > 0 ? (
+          postAndInteractions.map((postAndInteraction) => (
+            <div className="card my-3 " key={postAndInteraction.post.id}>
+              <div className="card-body">
                 <div className="d-flex justify-content-between">
-                  <VoteSection postAndInteractions={postAndInteraction} />
+                  {/* left */}
+                  <div className="d-flex justify-content-between">
+                    <VoteSection postAndInteractions={postAndInteraction} />
 
-                  <div>
-                    <PostCreatorInfo postAndInteractions={postAndInteraction} />
-                    <div
-                      className="d-flex flex-column justify-content-between"
-                      style={{ color: "gray" }}
-                    >
-                      <PostCardSection
+                    <div>
+                      <PostCreatorInfo
                         postAndInteractions={postAndInteraction}
                       />
+                      <div
+                        className="d-flex flex-column justify-content-between"
+                        style={{ color: "gray" }}
+                      >
+                        <PostCardSection
+                          postAndInteractions={postAndInteraction}
+                        />
+                      </div>
                     </div>
                   </div>
-                </div>
 
-                {/* right */}
-                <EditSection
-                  postAndInteractions={postAndInteraction}
-                  isNotMain={false}
-                />
+                  {/* right */}
+                  <EditSection
+                    postAndInteractions={postAndInteraction}
+                    isNotMain={false}
+                  />
+                </div>
               </div>
             </div>
+          ))
+        ) : (
+          <div>
+            <ContentPlaceholder />
+            <ContentPlaceholder />
           </div>
-        ))
-      ) : (
-        <div>
-          <ContentPlaceholder />
-          <ContentPlaceholder />
-        </div>
-      )}
-
-      {/* Fetch more */}
-      <div className="d-flex justify-content-center">
-        {paginatedPosts.hasMore ? (
-          <button
-            className="btn btn-primary mb-3"
-            onClick={() => fetchMorePosts()}
-          >
-            More Posts
-          </button>
-        ) : null}
-      </div>
+        )}
+      </InfiniteScroll>
+      ;
     </div>
   );
 };

@@ -121,7 +121,7 @@ export const fetchPaginatedPosts = async (
       );
     }
 
-    // Clear cache first when switch sortBy
+    // Clear cache first when switching sortBy
     dispatch({
       type: CLEAR_CACHE,
     });

@@ -9,89 +9,103 @@ import {
 } from "../../contexts/User/actions/UserAction";
 import EditSection from "../post/sections/EditSection";
 import PostCardSection from "../post/sections/PostCardSection";
+import ContentPlaceholder from "../placeholders/ContentPlaceholder";
+import InfiniteScroll from "react-infinite-scroll-component";
 
 const UserProfile: React.FC = ({}) => {
   const { id } = useParams();
   const { userState, userDispatch } = useUser();
   const { user, userProfile } = userState;
+  const postAndInteractions =
+    userProfile?.userPaginatedPost.postAndInteractions;
 
   useEffect(() => {
     if (id) getUserProfile(userDispatch, +id);
   }, [id]);
 
-  const fetchMorePosts = (id: string) => {
-    getUserProfile(
-      userDispatch,
-      +id,
-      userProfile?.userPaginatedPost.postAndInteractions[
-        userProfile?.userPaginatedPost.postAndInteractions.length - 1
-      ].post.createdAt
-    );
-  };
+  // Check if user exist
+  if (id && userProfile?.userPaginatedPost) {
+    const fetchMorePosts = () => {
+      getUserProfile(
+        userDispatch,
+        +id,
+        userProfile?.userPaginatedPost.postAndInteractions[
+          userProfile?.userPaginatedPost.postAndInteractions.length - 1
+        ].post.createdAt
+      );
+    };
 
-  return (
-    <div className="row">
-      <div className="col-9">
-        {userProfile?.userPaginatedPost.postAndInteractions.map(
-          (postAndInteraction) => (
-            <div className="card my-3 " key={postAndInteraction.post.id}>
-              <div className="card-body">
-                <div className="d-flex justify-content-between">
-                  {/* left */}
-                  <div className="d-flex justify-content-between">
-                    <VoteSection
-                      postAndInteractions={postAndInteraction}
-                      isInProfile={true}
-                    />
-
-                    <div>
-                      <PostCreatorInfo
-                        postAndInteractions={postAndInteraction}
-                      />
-                      <div
-                        className="d-flex flex-column justify-content-between"
-                        style={{ color: "gray" }}
-                      >
-                        <PostCardSection
+    return (
+      <div className="row">
+        <div className="col-9">
+          <InfiniteScroll
+            dataLength={
+              userProfile?.userPaginatedPost.postAndInteractions.length
+            }
+            next={fetchMorePosts}
+            hasMore={userProfile?.userPaginatedPost.hasMore}
+            loader={<ContentPlaceholder />}
+            endMessage={
+              <p style={{ textAlign: "center" }}>
+                <b>Yay! You have seen it all</b>
+              </p>
+            }
+          >
+            {userProfile?.userPaginatedPost.postAndInteractions.map(
+              (postAndInteraction) => (
+                <div className="card my-3 " key={postAndInteraction.post.id}>
+                  <div className="card-body">
+                    <div className="d-flex justify-content-between">
+                      {/* left */}
+                      <div className="d-flex justify-content-between">
+                        <VoteSection
                           postAndInteractions={postAndInteraction}
                           isInProfile={true}
                         />
+
+                        <div>
+                          <PostCreatorInfo
+                            postAndInteractions={postAndInteraction}
+                          />
+                          <div
+                            className="d-flex flex-column justify-content-between"
+                            style={{ color: "gray" }}
+                          >
+                            <PostCardSection
+                              postAndInteractions={postAndInteraction}
+                              isInProfile={true}
+                            />
+                          </div>
+                        </div>
                       </div>
+
+                      {/* right */}
+                      <EditSection
+                        postAndInteractions={postAndInteraction}
+                        isNotMain={true}
+                        isInProfile={true}
+                      />
                     </div>
                   </div>
-
-                  {/* right */}
-                  <EditSection
-                    postAndInteractions={postAndInteraction}
-                    isNotMain={true}
-                    isInProfile={true}
-                  />
                 </div>
-              </div>
-            </div>
-          )
-        )}
+              )
+            )}
+          </InfiniteScroll>
+          ;
+        </div>
 
-        {/* Fetch More */}
-        <div className="d-flex justify-content-center my-2">
-          {userProfile?.userPaginatedPost.hasMore && id ? (
-            <button
-              className="btn btn-primary"
-              onClick={() => fetchMorePosts(id)}
-            >
-              More Posts
-            </button>
-          ) : null}
+        {/* User profile */}
+        <div className="col-3 mt-2">
+          <ProfileCard
+            user={userProfile?.user}
+            isMe={user?.id === userProfile?.user.id}
+          />
         </div>
       </div>
-      <div className="col-3 mt-2">
-        <ProfileCard
-          user={userProfile?.user}
-          isMe={user?.id === userProfile?.user.id}
-        />
-      </div>
-    </div>
-  );
+    );
+  }
+
+  return <div>User does not exist!</div>;
 };
 
 export default UserProfile;
