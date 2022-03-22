@@ -1,7 +1,14 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import { usePost, clearCache, fetchPaginatedPosts } from "../../contexts/Post/actions/PostAction";
-import { useSocket, clearNotifications } from "../../contexts/SocketIo/actions/socketActions";
+import {
+  usePost,
+  clearCache,
+  fetchPaginatedPosts,
+} from "../../contexts/Post/actions/PostAction";
+import {
+  useSocket,
+  clearNotifications,
+} from "../../contexts/SocketIo/actions/socketActions";
 import { useUser, logout } from "../../contexts/User/actions/UserAction";
 
 import Notifications from "../activities/Notifications";
@@ -13,6 +20,17 @@ const UserInfo: React.FC<UserInfoProps> = ({}) => {
   const { userState, userDispatch } = useUser();
   const { user } = userState;
   const { socketDispatch, setUncheckedAmount } = useSocket();
+
+  const logoutAndClearCache = () => {
+    clearCache(postDispatch);
+    clearNotifications(socketDispatch);
+    setUncheckedAmount(0);
+    logout(userDispatch);
+    setTimeout(() => {
+      // Prevent fetch posts before clearing cache
+      fetchPaginatedPosts(postDispatch);
+    }, 1);
+  };
 
   return (
     <div>
@@ -64,15 +82,7 @@ const UserInfo: React.FC<UserInfoProps> = ({}) => {
                 <div
                   className="dropdown-item"
                   role="button"
-                  onClick={async () => {
-                    clearCache(postDispatch);
-                    clearNotifications(socketDispatch);
-                    setUncheckedAmount(0);
-                    logout(userDispatch);
-                    setTimeout(() => {
-                      fetchPaginatedPosts(postDispatch);
-                    }, 1);
-                  }}
+                  onClick={async () => logoutAndClearCache()}
                 >
                   <i className="bi bi-box-arrow-right fs-5 me-2"></i> Logout
                 </div>

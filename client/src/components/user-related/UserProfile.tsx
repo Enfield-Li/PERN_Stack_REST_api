@@ -19,6 +19,16 @@ const UserProfile: React.FC = ({}) => {
     if (id) getUserProfile(userDispatch, +id);
   }, [id]);
 
+  const fetchMorePosts = (id: string) => {
+    getUserProfile(
+      userDispatch,
+      +id,
+      userProfile?.userPaginatedPost.postAndInteractions[
+        userProfile?.userPaginatedPost.postAndInteractions.length - 1
+      ].post.createdAt
+    );
+  };
+
   return (
     <div className="row">
       <div className="col-9">
@@ -27,11 +37,13 @@ const UserProfile: React.FC = ({}) => {
             <div className="card my-3 " key={postAndInteraction.post.id}>
               <div className="card-body">
                 <div className="d-flex justify-content-between">
+                  {/* left */}
                   <div className="d-flex justify-content-between">
                     <VoteSection
                       postAndInteractions={postAndInteraction}
                       isInProfile={true}
                     />
+
                     <div>
                       <PostCreatorInfo
                         postAndInteractions={postAndInteraction}
@@ -47,6 +59,8 @@ const UserProfile: React.FC = ({}) => {
                       </div>
                     </div>
                   </div>
+
+                  {/* right */}
                   <EditSection
                     postAndInteractions={postAndInteraction}
                     isNotMain={true}
@@ -58,20 +72,12 @@ const UserProfile: React.FC = ({}) => {
           )
         )}
 
+        {/* Fetch More */}
         <div className="d-flex justify-content-center my-2">
           {userProfile?.userPaginatedPost.hasMore && id ? (
             <button
               className="btn btn-primary"
-              onClick={() => {
-                getUserProfile(
-                  userDispatch,
-                  +id,
-                  userProfile?.userPaginatedPost.postAndInteractions[
-                    userProfile?.userPaginatedPost.postAndInteractions.length -
-                      1
-                  ].post.createdAt
-                );
-              }}
+              onClick={() => fetchMorePosts(id)}
             >
               More Posts
             </button>

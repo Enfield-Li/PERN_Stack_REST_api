@@ -2,8 +2,11 @@ import { useState } from "react";
 import { usePopperTooltip } from "react-popper-tooltip";
 import { Link } from "react-router-dom";
 import { PostAndInteractions } from "../../contexts/Post/types/PostTypes";
-import { getUserInfo } from "../../contexts/User/actions/UserAction";
-import { UserPostAndInteractions, User } from "../../contexts/User/types/UserTypes";
+import { getUserInfo, useUser } from "../../contexts/User/actions/UserAction";
+import {
+  UserPostAndInteractions,
+  User,
+} from "../../contexts/User/types/UserTypes";
 import { calculateTime } from "../../utils/calculaTime";
 import ProfileCardPlaceholder from "../placeholders/ProfileCardPlaceholder";
 
@@ -16,7 +19,10 @@ interface PostCreatorInfoProps {
 const PostCreatorInfo: React.FC<PostCreatorInfoProps> = ({
   postAndInteractions,
 }) => {
-  const [user, setuser] = useState<User | null>(null);
+  const { userState } = useUser();
+  const meId = userState.user?.id;
+  const [currentUser, setCurrentUser] = useState<User | null>(null);
+  const postCreator = postAndInteractions.post.user;
 
   const [textDecoration, setTextDecoration] = useState(false);
   const {
@@ -32,16 +38,18 @@ const PostCreatorInfo: React.FC<PostCreatorInfoProps> = ({
     placement: "right",
   });
 
+  const hoverToFetchUserInfo = async () => {
+    setTextDecoration(true);
+    const user = await getUserInfo(postAndInteractions.post.userId);
+    setCurrentUser(user);
+  };
+
   return (
     <div className="fs-6 fw-lighter mt-2">
       Posted
-      {postAndInteractions.post.user && (
+      {postCreator && (
         <span
-          onMouseOver={async () => {
-            setTextDecoration(true);
-            const user = await getUserInfo(postAndInteractions.post.userId);
-            setuser(user);
-          }}
+          onMouseOver={async () => hoverToFetchUserInfo()}
           onMouseLeave={() => setTextDecoration(false)}
         >
           <span role="button" ref={setTriggerRef}>
@@ -59,7 +67,7 @@ const PostCreatorInfo: React.FC<PostCreatorInfoProps> = ({
                 style={{ color: "black", textDecoration: "none" }}
                 role="button"
               >
-                {postAndInteractions.post.user.username}
+                {postCreator.username}
               </Link>
             </span>
           </span>
@@ -70,8 +78,11 @@ const PostCreatorInfo: React.FC<PostCreatorInfoProps> = ({
             >
               <div {...getArrowProps({ className: "tooltip-arrow" })} />
               <div>
-                {user ? (
-                  <ProfileCard user={user} />
+                {currentUser ? (
+                  <ProfileCard
+                    user={currentUser}
+                    isMe={meId === postCreator.id}
+                  />
                 ) : (
                   <ProfileCardPlaceholder />
                 )}

@@ -3,10 +3,7 @@ import {
   fetchPaginatedPosts,
   usePost,
 } from "../contexts/Post/actions/PostAction";
-import {
-  PostSorting,
-  SortPostWithTop,
-} from "../contexts/Post/types/PostTypes";
+import { PostSorting, SortPostWithTop } from "../contexts/Post/types/PostTypes";
 
 interface SortByProps {
   topYear: SortPostWithTop;
@@ -88,7 +85,7 @@ const SortSection: React.FC<SortByProps> = ({ topYear, setTopYear }) => {
           <span>Top</span>
         </span>
 
-        {/* dropdown */}
+        {/* selecting time frame dropdowns */}
         {sortPost === "top" ? (
           <div className="btn-group">
             <button
@@ -105,11 +102,13 @@ const SortSection: React.FC<SortByProps> = ({ topYear, setTopYear }) => {
                   Half year
                 </a>
               </li>
+
               <li onClick={() => fetchSortedPost("top", "one-year")}>
                 <a className="dropdown-item" href="#">
                   One year
                 </a>
               </li>
+
               <li onClick={() => fetchSortedPost("top", "all-time")}>
                 <a className="dropdown-item" href="#">
                   All time

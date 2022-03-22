@@ -1,13 +1,18 @@
 import { useState } from "react";
 import { usePopperTooltip } from "react-popper-tooltip";
 import { useNavigate } from "react-router-dom";
-import { toast, ToastContainer } from "react-toastify";
-import { usePost, interactWithPost, deletePost } from "../../../contexts/Post/actions/PostAction";
+import { toast } from "react-toastify";
+import {
+  usePost,
+  interactWithPost,
+  deletePost,
+} from "../../../contexts/Post/actions/PostAction";
 import { PostAndInteractions } from "../../../contexts/Post/types/PostTypes";
-import { useUser, interactWithPostFromUserProfile } from "../../../contexts/User/actions/UserAction";
+import {
+  useUser,
+  interactWithPostFromUserProfile,
+} from "../../../contexts/User/actions/UserAction";
 import { UserPostAndInteractions } from "../../../contexts/User/types/UserTypes";
-
-
 
 interface EditSectionProps {
   postAndInteractions: PostAndInteractions | UserPostAndInteractions;
@@ -23,6 +28,7 @@ const EditSection: React.FC<EditSectionProps> = ({
   const { postDispatch } = usePost();
   const { userState, userDispatch } = useUser();
 
+  const postId = postAndInteractions.post.id;
   const { user } = userState;
   const navigate = useNavigate();
 
@@ -50,16 +56,30 @@ const EditSection: React.FC<EditSectionProps> = ({
     }
 
     if (isInProfile) {
-      interactWithPostFromUserProfile(
-        userDispatch,
-        postAndInteractions.post.id,
-        true,
-        field
-      );
+      interactWithPostFromUserProfile(userDispatch, postId, true, field);
       return;
     }
 
-    interactWithPost(postDispatch, postAndInteractions.post.id, true, field);
+    interactWithPost(postDispatch, postId, true, field);
+  };
+
+  const editPost = () => {
+    // Post can only be edited in post page
+    // not in main page
+    const url = isNotMain ? `/post/edit/${postId}` : `/post/${postId}`;
+    navigate(url);
+  };
+
+  const deleteP = () => {
+    // Post can only be deleted in post page
+    // not in main page
+    if (isNotMain) {
+      deletePost(postDispatch, postId);
+      navigate("/");
+      notify();
+    } else {
+      navigate(`/post/${postId}`);
+    }
   };
 
   return (
@@ -75,7 +95,7 @@ const EditSection: React.FC<EditSectionProps> = ({
       {visible && (
         <div
           ref={setTooltipRef}
-          {...getTooltipProps({ className: "card bg-info tooltip-container" })}
+          {...getTooltipProps({ className: "tooltip-container card bg-info" })}
         >
           <div className="card-body">
             <div {...getArrowProps({ className: "tooltip-arrow" })} />
@@ -132,13 +152,7 @@ const EditSection: React.FC<EditSectionProps> = ({
             <span
               role="button"
               className="text-decoration-none"
-              onClick={() => {
-                const url = isNotMain
-                  ? `/post/edit/${postAndInteractions.post.id}`
-                  : `/post/${postAndInteractions.post.id}`;
-
-                navigate(url);
-              }}
+              onClick={() => editPost()}
             >
               📝
             </span>
@@ -147,17 +161,7 @@ const EditSection: React.FC<EditSectionProps> = ({
             <span
               role="button"
               className="mt-2 text-decoration-none"
-              onClick={() => {
-                if (isNotMain) {
-                  deletePost(postDispatch, postAndInteractions.post.id);
-                  navigate("/");
-                  notify();
-                } else {
-                  navigate(`/post/${postAndInteractions.post.id}`);
-                }
-
-                return;
-              }}
+              onClick={() => deleteP()}
             >
               <i className="bi bi-trash3"></i>
             </span>

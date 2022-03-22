@@ -14,12 +14,14 @@ const ProfileCard: React.FC<ProfileCardProps> = ({ user, isMe }) => {
 
   return (
     <div className="card mt-2" style={{ width: 300 }}>
-      {/* <img src="..." className="card-img-top" alt="..." /> */}
       <div className="card-body">
+        {/* Username and email */}
         <div className="d-flex flex-column align-items-center">
           <div className="card-title fs-3">{user.username}</div>
           <div>{user.email && user.email}</div>
         </div>
+
+        {/* User posts and cake day info */}
         <div className="card-text my-2">
           <div className="row">
             <div className="col-5 ms-1">
@@ -33,6 +35,8 @@ const ProfileCard: React.FC<ProfileCardProps> = ({ user, isMe }) => {
             </div>
           </div>
         </div>
+
+        {/* Create post button */}
         {isMe && (
           <Link to="/create-post">
             <div role="button" className="btn btn-primary col-12 mt-1">

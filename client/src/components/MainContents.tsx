@@ -22,6 +22,7 @@ const MainContents: React.FC<MainContentsProps> = ({}) => {
 
   const [topYear, setTopYear] = useState<SortPostWithTop>("half-year");
 
+  //
   useEffect(() => {
     setSortPost("best");
   }, []);
@@ -42,6 +43,7 @@ const MainContents: React.FC<MainContentsProps> = ({}) => {
   }
 
   const fetchMorePosts = () => {
+    // If sort by === top, fetch offset based pagination
     if (sortPost === "top") {
       fetchPaginatedPosts(
         postDispatch,
@@ -52,6 +54,8 @@ const MainContents: React.FC<MainContentsProps> = ({}) => {
       setOffSetCount(offSetCount + 1);
       return;
     }
+
+    // else fetch cursor based pagination
     fetchPaginatedPosts(postDispatch, sortPost, cursor);
   };
 
@@ -65,8 +69,10 @@ const MainContents: React.FC<MainContentsProps> = ({}) => {
           <div className="card my-3 " key={postAndInteraction.post.id}>
             <div className="card-body">
               <div className="d-flex justify-content-between">
+                {/* left */}
                 <div className="d-flex justify-content-between">
                   <VoteSection postAndInteractions={postAndInteraction} />
+
                   <div>
                     <PostCreatorInfo postAndInteractions={postAndInteraction} />
                     <div
@@ -79,6 +85,8 @@ const MainContents: React.FC<MainContentsProps> = ({}) => {
                     </div>
                   </div>
                 </div>
+
+                {/* right */}
                 <EditSection
                   postAndInteractions={postAndInteraction}
                   isNotMain={false}
@@ -94,6 +102,7 @@ const MainContents: React.FC<MainContentsProps> = ({}) => {
         </div>
       )}
 
+      {/* Fetch more */}
       <div className="d-flex justify-content-center">
         {paginatedPosts.hasMore ? (
           <button

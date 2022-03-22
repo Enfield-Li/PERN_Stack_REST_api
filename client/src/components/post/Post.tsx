@@ -22,32 +22,37 @@ const PostPage: React.FC<PostPageProps> = ({}) => {
     if (id) fetchSinglePost(postDispatch, +id);
   }, []);
 
-  if (currentPost) {
-    return (
-      <div>
-        <div className="card my-2">
-          <div className="card-body">
-            <div className="d-flex justify-content-between">
-              <div className="d-flex">
-                <VoteSection postAndInteractions={currentPost} />
-                <div>
-                  <PostCreatorInfo postAndInteractions={currentPost} />
-                  <h3 className="my-2">{currentPost.post.title}</h3>
-                  <p className="card-text mb-3 me-2 fs-5">
-                    {currentPost.post.content}
-                  </p>
-                  <InteractionDisplay postAndInteractions={currentPost} />
+  return (
+    <>
+      {currentPost ? (
+        <div>
+          <div className="card my-2">
+            <div className="card-body">
+              <div className="d-flex justify-content-between">
+                <div className="d-flex">
+                  <VoteSection postAndInteractions={currentPost} />
+                  <div>
+                    <PostCreatorInfo postAndInteractions={currentPost} />
+                    <h3 className="my-2">{currentPost.post.title}</h3>
+                    <p className="card-text mb-3 me-2 fs-5">
+                      {currentPost.post.content}
+                    </p>
+                    <InteractionDisplay postAndInteractions={currentPost} />
+                  </div>
                 </div>
+                <EditSection
+                  postAndInteractions={currentPost}
+                  isNotMain={true}
+                />
               </div>
-              <EditSection postAndInteractions={currentPost} isNotMain={true} />
             </div>
           </div>
         </div>
-      </div>
-    );
-  }
-
-  return <ContentPlaceholder />;
+      ) : (
+        <ContentPlaceholder />
+      )}
+    </>
+  );
 };
 
 export default PostPage;
