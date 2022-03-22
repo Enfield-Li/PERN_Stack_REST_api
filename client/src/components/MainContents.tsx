@@ -10,7 +10,6 @@ import PostCardSection from "./nested-Components/postSection/PostCardSection";
 import PostCreatorInfo from "./nested-Components/user/PostCreatorInfo";
 import VoteSection from "./nested-Components/postSection/voteSection";
 import SortSection from "./layout/SortSection";
-import { PostSorting } from "../contexts/Post/types/PostTypes";
 
 interface MainContentsProps {}
 

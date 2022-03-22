@@ -43,6 +43,7 @@ const EditSection: React.FC<EditSectionProps> = ({
     closeOnOutsideClick: true,
     visible: controlledVisible,
     onVisibleChange: setControlledVisible,
+    interactive: true,
   });
 
   const notify = () => toast("Post deleted");
@@ -68,7 +69,6 @@ const EditSection: React.FC<EditSectionProps> = ({
 
   return (
     <div className="d-flex flex-column">
-
       {/* option button */}
       <div
         role="button"
@@ -80,7 +80,7 @@ const EditSection: React.FC<EditSectionProps> = ({
       {visible && (
         <div
           ref={setTooltipRef}
-          {...getTooltipProps({ className: "card bg-info" })}
+          {...getTooltipProps({ className: "card bg-info tooltip-container" })}
         >
           <div className="card-body">
             <div {...getArrowProps({ className: "tooltip-arrow" })} />
@@ -89,10 +89,10 @@ const EditSection: React.FC<EditSectionProps> = ({
               {/* like */}
               <div
                 role="button"
-                className={`me-2 ${
+                className={`me-2 fs-5${
                   postAndInteractions.interactions?.likeStatus
-                    ? "bg-secondary rounded"
-                    : null
+                    ? " bg-secondary rounded"
+                    : ""
                 }`}
                 onClick={() => interact("like")}
               >
@@ -102,10 +102,10 @@ const EditSection: React.FC<EditSectionProps> = ({
               {/* laugh */}
               <span
                 role="button"
-                className={`me-2 ${
+                className={`me-2 fs-5${
                   postAndInteractions.interactions?.laughStatus
-                    ? "bg-secondary rounded"
-                    : null
+                    ? " bg-secondary rounded"
+                    : ""
                 }`}
                 onClick={() => interact("laugh")}
               >
@@ -115,10 +115,10 @@ const EditSection: React.FC<EditSectionProps> = ({
               {/* confused */}
               <span
                 role="button"
-                className={`${
+                className={`fs-5${
                   postAndInteractions.interactions?.confusedStatus
-                    ? "bg-secondary rounded"
-                    : null
+                    ? " bg-secondary rounded"
+                    : ""
                 }`}
                 onClick={() => interact("confused")}
               >
