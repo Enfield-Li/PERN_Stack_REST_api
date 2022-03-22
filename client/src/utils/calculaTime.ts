@@ -1,4 +1,8 @@
-function timeDifference(current: number, previous: number) {
+function timeDifference(
+  current: number,
+  previous: number,
+  isSuccinct?: boolean
+) {
   const milliSecondsPerMinute = 60 * 1000;
   const milliSecondsPerHour = milliSecondsPerMinute * 60;
   const milliSecondsPerDay = milliSecondsPerHour * 24;
@@ -8,26 +12,41 @@ function timeDifference(current: number, previous: number) {
   const elapsed = current - previous;
 
   if (elapsed < milliSecondsPerMinute / 3) {
-    return "just now";
+    return isSuccinct ? "now" : "just now";
   }
 
   if (elapsed < milliSecondsPerMinute) {
-    return "less than 1 min ago";
+    return isSuccinct ? "now" : "less than 1 min ago";
   } else if (elapsed < milliSecondsPerHour) {
-    return Math.round(elapsed / milliSecondsPerMinute) + " min. ago";
+    return (
+      Math.round(elapsed / milliSecondsPerMinute) +
+      (isSuccinct ? "m" : " min. ago")
+    );
   } else if (elapsed < milliSecondsPerDay) {
-    return Math.round(elapsed / milliSecondsPerHour) + " hr. ago";
+    return (
+      Math.round(elapsed / milliSecondsPerHour) +
+      (isSuccinct ? "h" : " hr. ago")
+    );
   } else if (elapsed < milliSecondsPerMonth) {
-    return Math.round(elapsed / milliSecondsPerDay) + " days ago";
+    return (
+      Math.round(elapsed / milliSecondsPerDay) +
+      (isSuccinct ? "d" : " days ago")
+    );
   } else if (elapsed < milliSecondsPerYear) {
-    return Math.round(elapsed / milliSecondsPerMonth) + " months ago";
+    return (
+      Math.round(elapsed / milliSecondsPerMonth) +
+      (isSuccinct ? "m" : " months ago")
+    );
   } else {
-    return Math.round(elapsed / milliSecondsPerYear) + " years. ago";
+    return (
+      Math.round(elapsed / milliSecondsPerYear) +
+      (isSuccinct ? "yr" : " years. ago")
+    );
   }
 }
 
-export function calculateTime(date: Date) {
+export function calculateTime(date: Date, isSuccinct?: boolean) {
   const now = new Date().getTime();
   const updated = new Date(date).getTime();
-  return timeDifference(now, updated);
+  return timeDifference(now, updated, isSuccinct);
 }

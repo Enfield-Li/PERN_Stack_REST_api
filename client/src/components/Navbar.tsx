@@ -23,7 +23,7 @@ const Navbar: React.FC<navbarProps> = ({}) => {
   };
 
   return (
-    <div className="nav justify-content-between container align-items-center py-1">
+    <div className="nav justify-content-between container align-items-center">
       <div
         role="button"
         className="nav-link active text-dark h2"

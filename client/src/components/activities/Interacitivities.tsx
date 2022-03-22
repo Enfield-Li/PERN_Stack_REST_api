@@ -7,6 +7,7 @@ import {
   useSocket,
 } from "../../contexts/SocketIo/actions/socketActions";
 import { Interactive } from "../../contexts/SocketIo/types/socketTypes";
+import { calculateTime } from "../../utils/calculaTime";
 import { collectPostToBeCheckedOrRead } from "../../utils/collectPostToBeChecked";
 
 interface InteracitivitiesProps {}
@@ -39,33 +40,45 @@ const Interacitivities: React.FC<InteracitivitiesProps> = ({}) => {
 
   return (
     <div style={{ height: 300, width: 340, overflow: "scroll" }}>
-      {/* Set all read */}
-      <button
-        role="button"
-        className="btn btn-primary"
-        onClick={() => setAllCheckedOrRead()}
-      >
-        Set all read
-      </button>
+      <div className="d-flex justify-content-between align-items-center px-2 py-1">
+        <h4>Notifications</h4>
+
+        {/* Set all read */}
+        <i
+          className="bi bi-check-square fs-3"
+          role="button"
+          onClick={() => setAllCheckedOrRead()}
+        ></i>
+      </div>
 
       {/* tool tips */}
-      {interactives.map((interactive, index) => (
+      {interactives.map((interactive) => (
         <div
-          key={index}
+          key={`postId${interactive.postId}-userId${interactive.userId}`}
           role="button"
           onClick={() => setSingleRead(interactive)}
+          style={{ background: interactive.read ? "" : "#e9f5fd" }}
+          className="d-flex p-2"
         >
-          <div>{interactive.postId} Receive</div>
-          <span>checked: {interactive.checked ? "true" : "false"} </span>
-          <span>read: {interactive.read ? "true" : "false"} </span>
           <div>
-            {interactive.laughStatus && <span>laughter </span>}
-            {interactive.voteStatus && <span>upvote </span>}
-            {interactive.likeStatus && <span>likes </span>}
-            <span>from {interactive.user.username} </span>
-            on {interactive.post.title}
+            <i className="bi bi-person fs-2 me-2"></i>
           </div>
-          <br />
+
+          <div>
+            <div className="my-2">
+              {interactive.laughStatus && <span>😄 </span>}
+              {interactive.voteStatus && <span>⬆️ </span>}
+              {interactive.likeStatus && <span>❤ </span>}!
+              <span className="text-muted">
+                · {calculateTime(interactive.createdAt, true)}
+              </span>
+            </div>
+            <div className="text-muted">
+              Go see your post "{interactive.post.title.slice(0, 8)}..."
+            </div>
+            {/* <span>from {interactive.user.username} </span>
+              on {interactive.post.title} */}
+          </div>
         </div>
       ))}
     </div>

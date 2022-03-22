@@ -49,7 +49,6 @@ const InteractionDisplay: React.FC<InteractionDisplayProps> = ({
 
     if (isInProfile) {
       interactWithPostFromUserProfile(userDispatch, post.id, true, field);
-
       return;
     }
 

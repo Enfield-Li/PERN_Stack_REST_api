@@ -60,7 +60,7 @@ export function useInit() {
       const event = toastNotifications[0];
       let action = "";
       if (event.type === "laugh") action = "😄";
-      if (event.type === "vote") action = "⇧";
+      if (event.type === "vote") action = "⬆️";
       if (event.type === "like") action = "❤";
 
       const text = `Receive a ${action} from ${event.senderName}!`;
