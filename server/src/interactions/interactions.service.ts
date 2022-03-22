@@ -1,9 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { interactions } from '@prisma/client';
 import { PrismaService } from 'src/config/prisma.service';
-import {
-  InteractionIds
-} from './dto/create-interaction.dto';
+import { InteractionIds } from './dto/create-interaction.dto';
 
 @Injectable()
 export class InteractionsService {
@@ -62,6 +60,19 @@ export class InteractionsService {
       where: { userId_postId: { userId, postId } },
       data: { read: true },
     });
+
+    return true;
+  }
+
+  async setAllInteractionsRead(ids: InteractionIds[]) {
+    for (let i = 0; i < ids.length; i++) {
+      const { userId, postId } = ids[i];
+
+      await this.prismaService.interactions.update({
+        data: { read: true },
+        where: { userId_postId: { userId, postId } },
+      });
+    }
 
     return true;
   }

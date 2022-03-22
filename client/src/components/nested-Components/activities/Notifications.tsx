@@ -3,7 +3,7 @@ import { usePopperTooltip } from "react-popper-tooltip";
 import {
   clearNotifications,
   fetchInteractives,
-  setNotificationChecked as setServerNotificationChecked,
+  setServerNotificationCheckedOrRead,
   useSocket,
 } from "../../../contexts/SocketIo/actions/socketActions";
 import { collectPostToBeCheckedOrRead } from "../../../utils/collectPostToBeChecked";
@@ -35,6 +35,7 @@ const Notifications: React.FC<NotificationsProps> = ({}) => {
 
   return (
     <div>
+      {/* bell button */}
       <div
         role="button"
         ref={setTriggerRef}
@@ -45,10 +46,12 @@ const Notifications: React.FC<NotificationsProps> = ({}) => {
           setUncheckedAmount(0);
 
           const formatedPosts = collectPostToBeCheckedOrRead(
-            socketState.interactives
+            socketState.interactives,
+            true
           );
 
-          if (formatedPosts.length) setServerNotificationChecked(formatedPosts);
+          if (formatedPosts.length)
+            setServerNotificationCheckedOrRead(formatedPosts,true);
         }}
       >
         <span className="fs-6 position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
@@ -56,6 +59,7 @@ const Notifications: React.FC<NotificationsProps> = ({}) => {
         </span>
       </div>
 
+      {/* tool tips */}
       {visible && (
         <div
           ref={setTooltipRef}
@@ -65,10 +69,6 @@ const Notifications: React.FC<NotificationsProps> = ({}) => {
           <div {...getArrowProps({ className: "tooltip-arrow" })} />
         </div>
       )}
-
-      {/* <button onClick={() => setControlledVisible(!controlledVisible)}>
-        External control
-      </button> */}
     </div>
   );
 };

@@ -113,7 +113,7 @@ export type ClearNotifications = {
 
 export type SetNotificationRead = {
   type: typeof SET_NOTIFICATION_READ;
-  payload: number;
+  payload: PostsForChecked;
 };
 
 export type SetAllNotificationRead = {

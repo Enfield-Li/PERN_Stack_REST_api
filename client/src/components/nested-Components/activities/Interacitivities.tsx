@@ -3,6 +3,7 @@ import {
   setAllInteractivesRead,
   setClientInteractionRead,
   setServerInteractionRead,
+  setServerNotificationCheckedOrRead,
   useSocket,
 } from "../../../contexts/SocketIo/actions/socketActions";
 import { collectPostToBeCheckedOrRead } from "../../../utils/collectPostToBeChecked";
@@ -15,6 +16,7 @@ const Interacitivities: React.FC<InteracitivitiesProps> = ({}) => {
 
   return (
     <div style={{ height: 300, width: 340, overflow: "scroll" }}>
+      {/* Set all read */}
       <button
         role="button"
         className="btn btn-primary"
@@ -24,13 +26,18 @@ const Interacitivities: React.FC<InteracitivitiesProps> = ({}) => {
 
           // Update server data
           const formatedPosts = collectPostToBeCheckedOrRead(
-            socketState.interactives
+            socketState.interactives,
+            false
           );
-          
+
+          if (formatedPosts.length)
+            setServerNotificationCheckedOrRead(formatedPosts, false);
         }}
       >
         Set all read
       </button>
+
+      {/* tool tips */}
       {interactives.map((interactive, index) => (
         <div
           key={index}
@@ -38,13 +45,13 @@ const Interacitivities: React.FC<InteracitivitiesProps> = ({}) => {
           onClick={() => {
             // Update client cache
             const { userId, postId } = interactive;
-            setClientInteractionRead(postId, socketDispatch);
+            setClientInteractionRead(postId, userId, socketDispatch);
 
             // Update server data
             setServerInteractionRead({ postId, userId });
           }}
         >
-          <div>Receive</div>
+          <div>{interactive.postId} Receive</div>
           <span>checked: {interactive.checked ? "true" : "false"} </span>
           <span>read: {interactive.read ? "true" : "false"} </span>
           <div>

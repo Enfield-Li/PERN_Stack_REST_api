@@ -35,11 +35,23 @@ export class InteractionsController {
     return this.interactionsService.setNotificationChecked(ids);
   }
 
+  @ApiCreatedResponse({ type: Boolean })
   @Patch('/setInteractionRead')
   async setRead(@Body() ids: InteractionIds, @Req() req: Request) {
     if (!req.session.userId) return;
 
     return this.interactionsService.setInteractionRead(ids);
+  }
+
+  @ApiBody({
+    type: [InteractionIds],
+  })
+  @ApiCreatedResponse({ type: Boolean })
+  @Patch('/setAllInteractionRead')
+  async setAllRead(@Body() ids: InteractionIds[], @Req() req: Request) {
+    if (!req.session.userId) return;
+
+    return this.interactionsService.setAllInteractionsRead(ids);
   }
 
   @ApiQuery({

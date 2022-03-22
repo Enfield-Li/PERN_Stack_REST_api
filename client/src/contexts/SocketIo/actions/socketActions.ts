@@ -90,12 +90,17 @@ export async function fetchInteractives(
   });
 }
 
-export async function setNotificationChecked(interactionIds: InteractionIds[]) {
-  const res = await axios.patch<InteractionIds[]>(
-    "http://localhost:3119/interactions/setNotificationChecked",
-    interactionIds,
-    { withCredentials: true }
-  );
+export async function setServerNotificationCheckedOrRead(
+  interactionIdsArr: InteractionIds[],
+  isForCheck: boolean
+) {
+  const url = isForCheck
+    ? "http://localhost:3119/interactions/setNotificationChecked"
+    : "http://localhost:3119/interactions/setAllInteractionRead";
+
+  const res = await axios.patch<InteractionIds[]>(url, interactionIdsArr, {
+    withCredentials: true,
+  });
 }
 
 export async function setServerInteractionRead(interactionIds: InteractionIds) {
@@ -112,11 +117,12 @@ export function clearNotifications(dispatch: React.Dispatch<SocketActionType>) {
 
 export function setClientInteractionRead(
   postId: number,
+  userId: number,
   dispatch: React.Dispatch<SocketActionType>
 ) {
   dispatch({
     type: SET_NOTIFICATION_READ,
-    payload: postId,
+    payload: { postId, userId },
   });
 }
 

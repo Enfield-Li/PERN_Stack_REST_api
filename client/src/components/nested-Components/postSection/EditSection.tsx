@@ -68,11 +68,15 @@ const EditSection: React.FC<EditSectionProps> = ({
 
   return (
     <div className="d-flex flex-column">
+
+      {/* option button */}
       <div
         role="button"
         className="bi bi-three-dots text-success me-1"
         ref={setTriggerRef}
       ></div>
+
+      {/* tool tip */}
       {visible && (
         <div
           ref={setTooltipRef}

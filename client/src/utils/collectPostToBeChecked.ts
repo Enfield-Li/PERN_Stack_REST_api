@@ -3,9 +3,13 @@ import {
   PostsForChecked,
 } from "../contexts/SocketIo/types/socketTypes";
 
-export const collectPostToBeCheckedOrRead = (interactives: Interactives) => {
+export const collectPostToBeCheckedOrRead = (
+  interactives: Interactives,
+  isForCheck: boolean
+) => {
   const filtered = interactives.filter((interactive) => {
-    if (!interactive.checked) return interactive;
+    const filterCondition = isForCheck ? interactive.checked : interactive.read;
+    if (!filterCondition) return interactive;
   });
 
   const postsRes: PostsForChecked[] = [];

@@ -38,7 +38,10 @@ export default function SocketReducer(
       return produce(state, (draftState) => {
         draftState.interactives = draftState.interactives.filter(
           (interactive) => {
-            if (interactive.postId === action.payload) {
+            if (
+              interactive.postId === action.payload.postId &&
+              interactive.userId === action.payload.userId
+            ) {
               interactive.read = true;
             }
 
