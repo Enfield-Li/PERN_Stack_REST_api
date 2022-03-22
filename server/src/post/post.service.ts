@@ -71,9 +71,9 @@ export class PostService {
     let dateSpec: Date | undefined = undefined;
     if (cursor) {
       if (sortBy === 'best') {
-        dateSpec = this.calculateDate(30, cursor);
+        dateSpec = this.calculateDate(60, cursor);
       } else if (sortBy === 'hot') {
-        dateSpec = this.calculateDate(7, cursor);
+        dateSpec = this.calculateDate(30, cursor);
       }
     }
 

@@ -8,7 +8,7 @@ import {
   Delete,
   Req,
 } from '@nestjs/common';
-import { ApiTags } from '@nestjs/swagger';
+import { ApiParam, ApiTags } from '@nestjs/swagger';
 import { Request } from 'express';
 import { CommentsService } from './comments.service';
 import { CreateCommentDto } from './dto/create-comment.dto';
@@ -19,7 +19,7 @@ import { UpdateCommentDto } from './dto/update-comment.dto';
 export class CommentsController {
   constructor(private readonly commentsService: CommentsService) {}
 
-  @Post('/:id')
+  @Post('/createCommentForPost/:id')
   create(
     @Body() createCommentDto: CreateCommentDto,
     @Req() req: Request,
@@ -32,7 +32,7 @@ export class CommentsController {
     );
   }
 
-  @Get('/:id')
+  @Get('/allCommentsForPost/:id')
   findAll(@Param('id') id: string) {
     return this.commentsService.findAll(+id);
   }

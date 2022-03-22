@@ -102,6 +102,7 @@ export class PostController {
     @Req() req: Request,
     @Param('id') id: string,
   ): Promise<PostAndInteraction> {
+    console.log('postId: ', id);
     return this.postService.fetchOnePost(req.session.userId, +id);
   }
 
