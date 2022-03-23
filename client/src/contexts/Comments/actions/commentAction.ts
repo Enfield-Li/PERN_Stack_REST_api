@@ -1,8 +1,9 @@
 import axios from "axios";
 import { useContext } from "react";
-import { FETCH_COMMENTS } from "../../constant";
+import { CREATE_COMMENT, FETCH_COMMENTS } from "../../constant";
 import CommentContext from "../CommentContext";
 import {
+  Comment,
   CommentActionType,
   Comments,
   CreateCommentOrReplyType,
@@ -29,7 +30,7 @@ export const useComment = () => {
 // };
 
 export const fetchComments = async (
-  postId: string,
+  postId: number,
   dispatch: React.Dispatch<CommentActionType>
 ) => {
   const res = await axios.get<Comments>(
@@ -41,14 +42,18 @@ export const fetchComments = async (
 };
 
 export const createCommentOrReply = async (
-  postId: string,
-  commentOrReply: CreateCommentOrReplyType
+  postId: number,
+  commentOrReply: CreateCommentOrReplyType,
+  dispatch: React.Dispatch<CommentActionType>
 ) => {
-  const res = await axios.post<Comments>(
+  const res = await axios.post<Comment>(
     `http://localhost:3119/comments/createCommentOrReply/${postId}`,
     commentOrReply,
     { withCredentials: true }
   );
 
-  return res.data;
+  dispatch({
+    type: CREATE_COMMENT,
+    payload: res.data,
+  });
 };

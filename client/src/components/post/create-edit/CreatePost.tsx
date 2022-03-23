@@ -29,7 +29,7 @@ const CreatePost: React.FC<CreatePostProps> = ({}) => {
       }}
     >
       {(props) => (
-        <FormWrapper props={props} formUsage="Create Post">
+        <FormWrapper props={props} formUsage="Create Post" fullWidth={true}>
           <InputWrapper label="Title" name="title" />
           <InputWrapper
             label="Content"

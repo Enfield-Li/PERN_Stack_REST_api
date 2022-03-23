@@ -13,6 +13,7 @@ import {
   fetchComments,
   useComment,
 } from "../../contexts/Comments/actions/commentAction";
+import CreateComment from "../comments/create-edit/CreateComment";
 
 interface PostPageProps {}
 
@@ -26,7 +27,7 @@ const PostPage: React.FC<PostPageProps> = ({}) => {
     if (id) {
       fetchSinglePost(postDispatch, id);
 
-      fetchComments(id, commentDispatch);
+      fetchComments(+id, commentDispatch);
     }
   }, []);
 
@@ -39,6 +40,7 @@ const PostPage: React.FC<PostPageProps> = ({}) => {
               <div className="d-flex justify-content-between">
                 <div className="d-flex">
                   <VoteSection postAndInteractions={currentPost} />
+
                   <div>
                     <PostCreatorInfo postAndInteractions={currentPost} />
                     <h3 className="my-2">{currentPost.post.title}</h3>
@@ -46,21 +48,24 @@ const PostPage: React.FC<PostPageProps> = ({}) => {
                       {currentPost.post.content}
                     </p>
                     <InteractionDisplay postAndInteractions={currentPost} />
+
+                    <CreateComment postId={currentPost.post.id} />
+                    {commentState.comments &&
+                      commentState.comments.map((comment) => (
+                        <div key={comment.id}>
+                          <span>id: {comment.id} </span>
+                          <span>comment: {comment.comment_text}</span>
+                        </div>
+                      ))}
                   </div>
                 </div>
+
                 <EditSection
                   postAndInteractions={currentPost}
                   isNotMain={true}
                 />
               </div>
             </div>
-            {commentState.comments &&
-              commentState.comments.map((comment) => (
-                <div key={comment.id}>
-                  <span>id: {comment.id} </span>
-                  <span>comment: {comment.comment_text}</span>
-                </div>
-              ))}
           </div>
         </div>
       ) : (

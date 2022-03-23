@@ -6,18 +6,23 @@ type FormUsage =
   | "Register"
   | "Change password"
   | "Create Post"
-  | "Update Post";
+  | "Update Post"
+  | "Comment";
 
 interface FormWrapperProps<Values> {
   children: React.ReactNode;
   props: FormikProps<Values>;
   formUsage?: FormUsage;
+  fullWidth?: boolean;
+  isComment?: boolean;
 }
 
 const FormWrapper = <Values,>({
   children,
   props,
   formUsage,
+  fullWidth,
+  isComment,
 }: FormWrapperProps<Values>) => {
   // Form bottom assist msg
   let addtionalAssist = null;
@@ -35,8 +40,12 @@ const FormWrapper = <Values,>({
     addtionalAssist = <Link to={"/change-password"}>Or you can login!</Link>;
   }
 
+  let style = "container mt-2 py-3 w-50";
+  if (fullWidth) style = "mt-2";
+  if (isComment) style = "";
+
   return (
-    <Form className="container mt-2 py-3 w-50 fs-5">
+    <Form className={`fs-5 ${style}`}>
       <div className="d-grid">
         {children}
 

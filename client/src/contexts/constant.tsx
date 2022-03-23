@@ -24,3 +24,4 @@ export const SET_ALL_NOTIFICATION_READ = "set_All_Notification_Read";
 
 export const FETCH_COMMENTS = "fetch_Comments";
 export const DELETE_COMMENTS = "delete_Comments";
+export const CREATE_COMMENT = "create_Comment";

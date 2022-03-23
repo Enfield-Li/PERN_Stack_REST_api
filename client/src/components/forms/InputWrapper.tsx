@@ -1,5 +1,7 @@
 import { useField } from "formik";
 import React, { InputHTMLAttributes } from "react";
+import { Link } from "react-router-dom";
+import { number } from "yup/lib/locale";
 
 export type InputWrapperProps = InputHTMLAttributes<HTMLInputElement> & {
   label: string;
@@ -7,6 +9,8 @@ export type InputWrapperProps = InputHTMLAttributes<HTMLInputElement> & {
   required?: boolean;
   type?: "password" | "email";
   textarea?: boolean;
+  userId?: number;
+  userName?: string;
 };
 
 const InputWrapper: React.FC<InputWrapperProps> = ({
@@ -14,15 +18,27 @@ const InputWrapper: React.FC<InputWrapperProps> = ({
   textarea,
   type,
   required = true,
+  userId,
+  userName,
   ...props
 }) => {
   const [field, { error }] = useField(props);
   const InputType = textarea ? "textarea" : "input";
   return (
     <div className="mb-3">
-      <label htmlFor={field.name} className="form-label">
-        {label}:
-      </label>
+      {userId && userName ? (
+        <div>
+          <Link to={`/user-profile/${userId}`}>
+            <label htmlFor={field.name} className="form-label">
+              as {userName}:
+            </label>
+          </Link>
+        </div>
+      ) : (
+        <label htmlFor={field.name} className="form-label">
+          {label}:
+        </label>
+      )}
 
       <InputType
         required={required}

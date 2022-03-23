@@ -1,11 +1,15 @@
-import { DELETE_COMMENTS, FETCH_COMMENTS } from "../../constant";
+import {
+  CREATE_COMMENT,
+  DELETE_COMMENTS,
+  FETCH_COMMENTS,
+} from "../../constant";
 
 export const commentInitialState: CommentState = {
-  comments: null,
+  comments: [],
 };
 
 export type CommentState = {
-  comments: Comments | null;
+  comments: Comments;
 };
 
 export type Comments = Comment[];
@@ -28,7 +32,7 @@ export type CreateCommentOrReplyType = {
   replyToUserId?: number;
 };
 
-export type CommentActionType = FetchComments | DeleteComments;
+export type CommentActionType = FetchComments | DeleteComments | CreateComment;
 
 type FetchComments = {
   type: typeof FETCH_COMMENTS;
@@ -38,4 +42,9 @@ type FetchComments = {
 type DeleteComments = {
   type: typeof DELETE_COMMENTS;
   payload: number;
+};
+
+type CreateComment = {
+  type: typeof CREATE_COMMENT;
+  payload: Comment;
 };
