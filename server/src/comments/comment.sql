@@ -1,0 +1,1 @@
+ select comments.comment_text, comments.id, comments."parentId", "user".username from comments join "user" on "user"."id" = comments."parentId" where comments.id = 20;

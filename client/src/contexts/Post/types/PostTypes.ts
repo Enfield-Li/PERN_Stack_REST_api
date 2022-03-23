@@ -27,30 +27,49 @@ export type PostSorting = "new" | "hot" | "best" | "top";
 export type VotingTypes = "vote" | "like" | "laugh" | "confused";
 
 export type PostAndInteractions = {
-  post: {
-    id: number;
-    createdAt: Date;
-    updatedAt: Date;
-    title: string;
-    content: string | null;
-    userId: number;
-    viewCount: number;
-    votePoints: number;
-    likePoints: number;
-    confusedPoints: number;
-    laughPoints: number;
-    user: {
-      id: number;
-      username: string;
-    };
-  };
+  post: Post;
   interactions: Interactions;
+};
+
+export type Post = {
+  id: number;
+  createdAt: Date;
+  updatedAt: Date;
+  title: string;
+  content: string | null;
+  userId: number;
+  viewCount: number;
+  votePoints: number;
+  likePoints: number;
+  confusedPoints: number;
+  laughPoints: number;
+  user: {
+    id: number;
+    username: string;
+  };
+  comments: Comments;
+};
+
+export type Comments = Comment[];
+
+export type Comment = {
+  id: number;
+  createdAt: Date;
+  updatedAt: Date;
+  comment_text: string;
+  replyToUserId: number | null;
+  parentCommentId: number | null;
+  userId: number;
+  postId: number;
+  user: { username: string };
 };
 
 export type PaginatedPost = {
   postAndInteractions: PostAndInteractions[];
   hasMore: boolean;
 };
+
+export type FindReply = { parentCommentId: number };
 
 export type Interactions = {
   voteStatus: boolean | null;

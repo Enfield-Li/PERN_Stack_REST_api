@@ -155,7 +155,7 @@ export const clearCache = (dispatch: React.Dispatch<PostActionType>) => {
 
 export const fetchSinglePost = async (
   dispatch: React.Dispatch<PostActionType>,
-  id: number
+  id: string
 ) => {
   const res = await axios.get<PostAndInteractions>(
     `http://localhost:3119/post/single-post/${id}`,

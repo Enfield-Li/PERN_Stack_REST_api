@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import PostCreatorInfo from "../user-related/PostCreatorInfo";
 import VoteSection from "./sections/voteSection";
@@ -9,17 +9,30 @@ import {
 import ContentPlaceholder from "../placeholders/ContentPlaceholder";
 import EditSection from "./sections/EditSection";
 import InteractionDisplay from "./sections/InteractionDisplay";
+import { fetchComments } from "../../contexts/Post/actions/commentAction";
+import { Comments } from "../../contexts/Post/types/PostTypes";
 
 interface PostPageProps {}
 
 const PostPage: React.FC<PostPageProps> = ({}) => {
   const { postState, postDispatch } = usePost();
+  const { id } = useParams();
   const { currentPost } = postState;
 
-  const { id } = useParams();
+  const [comments, setComments] = useState<Comments | null>(null);
+  console.log(comments);
 
   useEffect(() => {
-    if (id) fetchSinglePost(postDispatch, +id);
+    if (id) {
+      fetchSinglePost(postDispatch, id);
+
+      const fetch = async () => {
+        const commentsData = await fetchComments(id);
+        setComments(commentsData);
+      };
+
+      fetch();
+    }
   }, []);
 
   return (
@@ -46,6 +59,8 @@ const PostPage: React.FC<PostPageProps> = ({}) => {
                 />
               </div>
             </div>
+            {comments &&
+              comments.map((comment) => <div>{comment.user.username}</div>)}
           </div>
         </div>
       ) : (

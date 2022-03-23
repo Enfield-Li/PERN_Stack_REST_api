@@ -7,11 +7,16 @@ import {
   Param,
   Delete,
   Req,
+  Put,
 } from '@nestjs/common';
-import { ApiParam, ApiTags } from '@nestjs/swagger';
+import { ApiCreatedResponse, ApiParam, ApiTags } from '@nestjs/swagger';
 import { Request } from 'express';
 import { CommentsService } from './comments.service';
-import { CreateCommentDto } from './dto/create-comment.dto';
+import {
+  CreateCommentOrReplyDto,
+  CommentOrReplyRO,
+  FindReplyDto,
+} from './dto/create-comment.dto';
 import { UpdateCommentDto } from './dto/update-comment.dto';
 
 @ApiTags('Comments')
@@ -19,22 +24,30 @@ import { UpdateCommentDto } from './dto/update-comment.dto';
 export class CommentsController {
   constructor(private readonly commentsService: CommentsService) {}
 
-  @Post('/createCommentForPost/:id')
-  create(
-    @Body() createCommentDto: CreateCommentDto,
+  @ApiCreatedResponse({ type: CommentOrReplyRO })
+  @Post('/createCommentOrReply/:id')
+  createCommentOrReply(
+    @Body() createCommentDto: CreateCommentOrReplyDto,
     @Req() req: Request,
     @Param('id') id: string,
   ) {
-    return this.commentsService.create(
+    return this.commentsService.createCommentOrReply(
       createCommentDto,
       req.session.userId,
       +id,
     );
   }
 
-  @Get('/allCommentsForPost/:id')
-  findAll(@Param('id') id: string) {
-    return this.commentsService.findAll(+id);
+  @ApiCreatedResponse({ type: CommentOrReplyRO })
+  @Get('/commentsForPost/:id')
+  findComments(@Param('id') id: string) {
+    return this.commentsService.findAllComments(+id);
+  }
+
+  @ApiCreatedResponse({ type: CommentOrReplyRO })
+  @Put('/repliesForPost/:id')
+  findAllReplies(@Param('id') id: string, @Body() findReplyDto: FindReplyDto) {
+    return this.commentsService.findAllReplies(+id, findReplyDto);
   }
 
   @Patch(':id')

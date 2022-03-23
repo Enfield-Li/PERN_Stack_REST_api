@@ -53,7 +53,6 @@ model interactions {
   postId         Int
   post           post     @relation(fields: [postId], references: [id], onDelete: Cascade, onUpdate: NoAction)
   user           user     @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: NoAction)
-
   @@unique([userId, postId])
 }
 
@@ -62,11 +61,12 @@ model comments {
   createdAt           DateTime              @unique() @default(now())
   updatedAt           DateTime              @unique() @updatedAt
   comment_text        String                @db.VarChar
-  parentId            Int?
+  replyToUserId       Int?
+  parentCommentId     Int?
   userId              Int
   postId              Int
-  user                user                  @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: NoAction)
-  post                post                  @relation(fields: [postId], references: [id], onDelete: Cascade, onUpdate: NoAction)
+  user                user                  @relation(fields: [userId], references: [id], onDelete: SetNull, onUpdate: NoAction)
+  post                post                  @relation(fields: [postId], references: [id], onDelete: SetNull, onUpdate: NoAction)
   commentInteractions commentInteractions[]
 }
 

@@ -1,33 +1,60 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from 'src/config/prisma.service';
-import { CreateCommentDto } from './dto/create-comment.dto';
+import {
+  CommentOrReplyRO,
+  CreateCommentOrReplyDto,
+  FindReplyDto,
+} from './dto/create-comment.dto';
 import { UpdateCommentDto } from './dto/update-comment.dto';
 
 @Injectable()
 export class CommentsService {
   constructor(private readonly prismaService: PrismaService) {}
 
-  async create(
-    createCommentDto: CreateCommentDto,
+  async createCommentOrReply(
+    createCommentDto: CreateCommentOrReplyDto,
     userId: number,
     postId: number,
-  ) {
-    const { comment_text, parentId } = createCommentDto;
+  ): Promise<CommentOrReplyRO> {
+    const { comment_text, replyToUserId, parentCommentId } = createCommentDto;
 
-    const res = await this.prismaService.comments.create({
-      data: { postId, userId, comment_text, parentId },
+    return this.prismaService.comments.create({
+      data: { postId, userId, comment_text, replyToUserId, parentCommentId },
     });
-
-    return res;
   }
 
-  async findAll(postId: number) {
-    const res = await this.prismaService.comments.findMany({
-      where: { postId },
-      include: { user: { select: { username: true } } },
+  async findAllComments(postId: number) {
+    return this.prismaService.comments.findMany({
+      where: {
+        postId,
+        OR: [
+          { parentCommentId: { equals: null } },
+          { replyToUserId: { equals: null } },
+        ],
+      },
+      include: {
+        user: {
+          select: {
+            username: true,
+          },
+        },
+      },
     });
+  }
 
-    return res;
+  async findAllReplies(postId: number, findReplyDto: FindReplyDto) {
+    const { parentCommentId } = findReplyDto;
+
+    return this.prismaService.comments.findMany({
+      where: { postId, parentCommentId },
+      include: {
+        user: {
+          select: {
+            username: true,
+          },
+        },
+      },
+    });
   }
 
   findOne(id: number) {
