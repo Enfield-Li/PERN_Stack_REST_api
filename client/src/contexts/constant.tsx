@@ -21,3 +21,5 @@ export const SET_INTERACTIVES = "set_Interactives";
 export const CLEAR_NOTIFICATIONS = "clear_Notifications";
 export const SET_NOTIFICATION_READ = "set_Notification_Read";
 export const SET_ALL_NOTIFICATION_READ = "set_All_Notification_Read";
+
+export const FETCH_COMMENTS = "fetch_Comments";

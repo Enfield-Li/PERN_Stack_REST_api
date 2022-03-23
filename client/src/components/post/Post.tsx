@@ -9,8 +9,7 @@ import {
 import ContentPlaceholder from "../placeholders/ContentPlaceholder";
 import EditSection from "./sections/EditSection";
 import InteractionDisplay from "./sections/InteractionDisplay";
-import { fetchComments } from "../../contexts/Post/actions/commentAction";
-import { Comments } from "../../contexts/Post/types/PostTypes";
+import { fetchComments } from "../../contexts/Comments/actions/commentAction";
 
 interface PostPageProps {}
 
@@ -19,19 +18,11 @@ const PostPage: React.FC<PostPageProps> = ({}) => {
   const { id } = useParams();
   const { currentPost } = postState;
 
-  const [comments, setComments] = useState<Comments | null>(null);
-  console.log(comments);
-
   useEffect(() => {
     if (id) {
       fetchSinglePost(postDispatch, id);
 
-      const fetch = async () => {
-        const commentsData = await fetchComments(id);
-        setComments(commentsData);
-      };
-
-      fetch();
+      fetchComments(id);
     }
   }, []);
 
@@ -59,8 +50,8 @@ const PostPage: React.FC<PostPageProps> = ({}) => {
                 />
               </div>
             </div>
-            {comments &&
-              comments.map((comment) => <div>{comment.user.username}</div>)}
+            {/* {comments &&
+              comments.map((comment) => <div>{comment.user.username}</div>)} */}
           </div>
         </div>
       ) : (

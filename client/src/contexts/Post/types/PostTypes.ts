@@ -47,21 +47,6 @@ export type Post = {
     id: number;
     username: string;
   };
-  comments: Comments;
-};
-
-export type Comments = Comment[];
-
-export type Comment = {
-  id: number;
-  createdAt: Date;
-  updatedAt: Date;
-  comment_text: string;
-  replyToUserId: number | null;
-  parentCommentId: number | null;
-  userId: number;
-  postId: number;
-  user: { username: string };
 };
 
 export type PaginatedPost = {
@@ -97,46 +82,46 @@ export type PostActionType =
   | ConfusePost
   | LaughPost;
 
-export type AddPost = {
+type AddPost = {
   type: typeof CREATE_POST;
   payload: PostAndInteractions;
 };
 
-export type FetchPaginatedPosts = {
+type FetchPaginatedPosts = {
   type: typeof FETCH_PAGINATED_POSTS;
   payload: PaginatedPost;
 };
 
-export type SetPost = {
+type SetPost = {
   type: typeof CURRENT_POST;
   payload: PostAndInteractions;
 };
 
-export type DeletePost = {
+type DeletePost = {
   type: typeof DELETE_POST;
   payload: number;
 };
 
-export type ClearCache = {
+type ClearCache = {
   type: typeof CLEAR_CACHE;
 };
 
-export type VotePost = {
+type VotePost = {
   type: typeof VOTE_POST;
   payload: { id: number; value: boolean };
 };
 
-export type LikePost = {
+type LikePost = {
   type: typeof LIKE_POST;
   payload: number;
 };
 
-export type LaughPost = {
+type LaughPost = {
   type: typeof LAUGHE_POST;
   payload: number;
 };
 
-export type ConfusePost = {
+type ConfusePost = {
   type: typeof CONFUSE_POST;
   payload: number;
 };
