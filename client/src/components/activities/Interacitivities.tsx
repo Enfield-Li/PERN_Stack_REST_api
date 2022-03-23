@@ -1,4 +1,5 @@
 import React from "react";
+import { useNavigate } from "react-router-dom";
 import {
   setAllInteractivesRead,
   setClientInteractionRead,
@@ -10,11 +11,16 @@ import { Interactive } from "../../contexts/SocketIo/types/socketTypes";
 import { calculateTime } from "../../utils/calculaTime";
 import { collectPostToBeCheckedOrRead } from "../../utils/collectPostToBeChecked";
 
-interface InteracitivitiesProps {}
+interface InteracitivitiesProps {
+  setControlledVisible: React.Dispatch<React.SetStateAction<boolean>>;
+}
 
-const Interacitivities: React.FC<InteracitivitiesProps> = ({}) => {
+const Interacitivities: React.FC<InteracitivitiesProps> = ({
+  setControlledVisible,
+}) => {
   const { socketState, socketDispatch } = useSocket();
   const { interactives } = socketState;
+  const navigate = useNavigate();
 
   const setAllCheckedOrRead = () => {
     // Update client cache
@@ -56,23 +62,31 @@ const Interacitivities: React.FC<InteracitivitiesProps> = ({}) => {
         <div
           key={`postId${interactive.postId}-userId${interactive.userId}`}
           role="button"
-          onClick={() => setSingleRead(interactive)}
+          onClick={() => {
+            setSingleRead(interactive);
+            navigate(`/post/${interactive.postId}`);
+            setControlledVisible(false);
+          }}
           style={{ background: interactive.read ? "" : "#e9f5fd" }}
           className="d-flex p-2"
         >
+          {/* Person icon */}
           <div>
             <i className="bi bi-person fs-2 me-2"></i>
           </div>
 
           <div>
+            {/* Notification status */}
             <div className="my-2">
               {interactive.laughStatus && <span>😄 </span>}
               {interactive.voteStatus && <span>⬆️ </span>}
-              {interactive.likeStatus && <span>❤ </span>}!
+              {interactive.likeStatus && <span>❤ </span>}received !
               <span className="text-muted">
                 · {calculateTime(interactive.createdAt, true)}
               </span>
             </div>
+
+            {/* Post title */}
             <div className="text-muted">
               Go see your post "{interactive.post.title.slice(0, 8)}..."
             </div>

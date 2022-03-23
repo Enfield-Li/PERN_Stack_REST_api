@@ -33,7 +33,7 @@ const Notifications: React.FC<NotificationsProps> = ({}) => {
     onVisibleChange: setControlledVisible,
   });
 
-  const clickBellButton = () => {
+  const updateReadAndCheck = () => {
     // Update client cache
     clearNotifications(socketDispatch);
     fetchInteractives(socketDispatch);
@@ -55,7 +55,7 @@ const Notifications: React.FC<NotificationsProps> = ({}) => {
         role="button"
         ref={setTriggerRef}
         className="bi bi-bell position-relative mx-4 fs-3"
-        onClick={() => clickBellButton()}
+        onClick={() => updateReadAndCheck()}
       >
         <span className="fs-6 position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
           {uncheckedAmount ? uncheckedAmount : null}
@@ -68,7 +68,7 @@ const Notifications: React.FC<NotificationsProps> = ({}) => {
           ref={setTooltipRef}
           {...getTooltipProps({ className: "tooltip-container" })}
         >
-          <Interacitivities />
+          <Interacitivities setControlledVisible={setControlledVisible} />
           <div {...getArrowProps({ className: "tooltip-arrow" })} />
         </div>
       )}

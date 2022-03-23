@@ -56,7 +56,7 @@ const InteractionDisplay: React.FC<InteractionDisplayProps> = ({
   };
 
   return (
-    <div className="d-flex mt-2">
+    <div className="d-flex my-3">
       {/* like */}
       {post.likePoints > 0 ? (
         <div
