@@ -1,4 +1,4 @@
-import { FETCH_COMMENTS } from "../../constant";
+import { DELETE_COMMENTS, FETCH_COMMENTS } from "../../constant";
 
 export const commentInitialState: CommentState = {
   comments: null,
@@ -28,8 +28,14 @@ export type CreateCommentOrReplyType = {
   replyToUserId?: number;
 };
 
-export type CommentActionType = FetchComments;
+export type CommentActionType = FetchComments | DeleteComments;
 
 type FetchComments = {
   type: typeof FETCH_COMMENTS;
+  payload: Comments;
+};
+
+type DeleteComments = {
+  type: typeof DELETE_COMMENTS;
+  payload: number;
 };

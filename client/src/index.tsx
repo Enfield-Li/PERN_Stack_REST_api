@@ -6,19 +6,23 @@ import { BrowserRouter } from "react-router-dom";
 import UserProvider from "./contexts/User/UserState";
 import PostProvider from "./contexts/Post/PostState";
 import SocketProvider from "./contexts/SocketIo/SocketState";
+import CommentProvider from "./contexts/Comments/CommentState";
 
 ReactDOM.render(
   <BrowserRouter>
-    <SocketProvider>
-      <PostProvider>
-        <UserProvider>
-          {/* <React.StrictMode> */}
-          <App />
-          {/* </React.StrictMode> */}
-        </UserProvider>
-      </PostProvider>
-    </SocketProvider>
+    <CommentProvider>
+      <SocketProvider>
+        <PostProvider>
+          <UserProvider>
+            {/* <React.StrictMode> */}
+            <App />
+            {/* </React.StrictMode> */}
+          </UserProvider>
+        </PostProvider>
+      </SocketProvider>
+    </CommentProvider>
   </BrowserRouter>,
+
   document.getElementById("root")
 );
 

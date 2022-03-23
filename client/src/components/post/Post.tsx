@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import { useParams } from "react-router-dom";
 import PostCreatorInfo from "../user-related/PostCreatorInfo";
 import VoteSection from "./sections/voteSection";
@@ -9,12 +9,16 @@ import {
 import ContentPlaceholder from "../placeholders/ContentPlaceholder";
 import EditSection from "./sections/EditSection";
 import InteractionDisplay from "./sections/InteractionDisplay";
-import { fetchComments } from "../../contexts/Comments/actions/commentAction";
+import {
+  fetchComments,
+  useComment,
+} from "../../contexts/Comments/actions/commentAction";
 
 interface PostPageProps {}
 
 const PostPage: React.FC<PostPageProps> = ({}) => {
   const { postState, postDispatch } = usePost();
+  const { commentState, commentDispatch } = useComment();
   const { id } = useParams();
   const { currentPost } = postState;
 
@@ -22,7 +26,7 @@ const PostPage: React.FC<PostPageProps> = ({}) => {
     if (id) {
       fetchSinglePost(postDispatch, id);
 
-      fetchComments(id);
+      fetchComments(id, commentDispatch);
     }
   }, []);
 
@@ -50,8 +54,13 @@ const PostPage: React.FC<PostPageProps> = ({}) => {
                 />
               </div>
             </div>
-            {/* {comments &&
-              comments.map((comment) => <div>{comment.user.username}</div>)} */}
+            {commentState.comments &&
+              commentState.comments.map((comment) => (
+                <div key={comment.id}>
+                  <span>id: {comment.id} </span>
+                  <span>comment: {comment.comment_text}</span>
+                </div>
+              ))}
           </div>
         </div>
       ) : (

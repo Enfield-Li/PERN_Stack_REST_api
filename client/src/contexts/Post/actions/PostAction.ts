@@ -28,6 +28,7 @@ import {
 
 export const usePost = () => {
   const { state, dispatch, sortPost, setSortPost } = useContext(PostContext);
+
   return { postState: state, postDispatch: dispatch, sortPost, setSortPost };
 };
 
@@ -71,11 +72,7 @@ export async function interactWithPost(
   }
 }
 
-export async function editCurrentPost(
-  dispatch: React.Dispatch<PostActionType>,
-  id: number,
-  post: CreatePostType
-) {
+export async function editCurrentPost(id: number, post: CreatePostType) {
   try {
     const res = await axios.patch<PostAndInteractions>(
       `http://localhost:3119/post/edit/${id}`,

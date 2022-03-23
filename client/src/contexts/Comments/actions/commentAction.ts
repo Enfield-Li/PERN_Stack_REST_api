@@ -1,13 +1,43 @@
 import axios from "axios";
-import { Comments, CreateCommentOrReplyType } from "../types/CommentTypes";
+import { useContext } from "react";
+import { FETCH_COMMENTS } from "../../constant";
+import CommentContext from "../CommentContext";
+import {
+  CommentActionType,
+  Comments,
+  CreateCommentOrReplyType,
+} from "../types/CommentTypes";
 
-export const fetchComments = async (postId: string) => {
+export const useComment = () => {
+  const { state, dispatch } = useContext(CommentContext);
+
+  return { commentState: state, commentDispatch: dispatch };
+};
+
+// export const fetchComments = async (
+//   postId: string,
+//   dispatch: React.Dispatch<CommentActionType>
+// ) => {
+//   const res = await axios.get<Comments>(
+//     `http://localhost:3119/comments/commentsForPost/${postId}`,
+//     { withCredentials: true }
+//   );
+
+//   dispatch({
+//     type: FETCH_COMMENTS,
+//   });
+// };
+
+export const fetchComments = async (
+  postId: string,
+  dispatch: React.Dispatch<CommentActionType>
+) => {
   const res = await axios.get<Comments>(
     `http://localhost:3119/comments/commentsForPost/${postId}`,
     { withCredentials: true }
   );
 
-  return res.data;
+  dispatch({ type: FETCH_COMMENTS, payload: res.data });
 };
 
 export const createCommentOrReply = async (

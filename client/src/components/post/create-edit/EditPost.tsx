@@ -2,10 +2,12 @@ import { Formik } from "formik";
 import React from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import * as Yup from "yup";
-import { usePost, editCurrentPost } from "../../../contexts/Post/actions/PostAction";
+import {
+  usePost,
+  editCurrentPost,
+} from "../../../contexts/Post/actions/PostAction";
 import FormWrapper from "../../forms/FormWrapper";
 import InputWrapper from "../../forms/InputWrapper";
-
 
 interface EditPostProps {}
 
@@ -33,7 +35,7 @@ const EditPost: React.FC<EditPostProps> = ({}) => {
           : "",
       }}
       onSubmit={async (values) => {
-        const res = await editCurrentPost(postDispatch, +id!, values);
+        const res = await editCurrentPost(+id!, values);
         if (res) navigate(`/post/${res.post.id}`, { replace: true });
       }}
     >

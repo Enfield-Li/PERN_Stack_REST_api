@@ -47,8 +47,6 @@ const EditSection: React.FC<EditSectionProps> = ({
     interactive: true,
   });
 
-  const notify = () => toast("Post deleted");
-
   const interact = (field: "like" | "laugh" | "confused") => {
     if (!user) {
       navigate("/login");
@@ -73,9 +71,12 @@ const EditSection: React.FC<EditSectionProps> = ({
   const deleteP = () => {
     // Post can only be deleted in post page
     // not in main page
+
     if (isNotMain) {
       deletePost(postDispatch, postId);
       navigate("/");
+
+      const notify = () => toast("Post deleted");
       notify();
     } else {
       navigate(`/post/${postId}`);
