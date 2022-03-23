@@ -31,12 +31,14 @@ export default function UserReducer(state: UserState, action: UserActionType) {
 
     case USER_PROFILE: {
       return produce(state, (draftState) => {
-        if (draftState.userProfile) {
-          draftState.userProfile.user = action.payload.user;
-          draftState.userProfile.userPaginatedPost.hasMore =
-            action.payload.userPaginatedPost.hasMore;
-          draftState.userProfile.userPaginatedPost.postAndInteractions.push(
-            ...action.payload.userPaginatedPost.postAndInteractions
+        const userProfile = draftState.userProfile;
+        const { user, userPaginatedPost } = action.payload;
+
+        if (userProfile) {
+          userProfile.user = user;
+          userProfile.userPaginatedPost.hasMore = userPaginatedPost.hasMore;
+          userProfile.userPaginatedPost.postAndInteractions.push(
+            ...userPaginatedPost.postAndInteractions
           );
         } else {
           draftState.userProfile = action.payload;
@@ -53,9 +55,11 @@ export default function UserReducer(state: UserState, action: UserActionType) {
 
     case VOTE_CURRENT_POST: {
       return produce(state, (draftState) => {
-        if (draftState.userProfile) {
-          draftState.userProfile.userPaginatedPost.postAndInteractions =
-            draftState.userProfile.userPaginatedPost.postAndInteractions.filter(
+        const userProfile = draftState.userProfile;
+
+        if (userProfile) {
+          userProfile.userPaginatedPost.postAndInteractions =
+            userProfile.userPaginatedPost.postAndInteractions.filter(
               (postAndInteraction) => {
                 if (postAndInteraction.post.id === action.payload.id) {
                   const voteValue = action.payload.value;
@@ -81,9 +85,11 @@ export default function UserReducer(state: UserState, action: UserActionType) {
 
     case LIKE_CURRENT_POST: {
       return produce(state, (draftState) => {
-        if (draftState.userProfile) {
-          draftState.userProfile.userPaginatedPost.postAndInteractions =
-            draftState.userProfile.userPaginatedPost.postAndInteractions.filter(
+        const userProfile = draftState.userProfile;
+
+        if (userProfile) {
+          userProfile.userPaginatedPost.postAndInteractions =
+            userProfile.userPaginatedPost.postAndInteractions.filter(
               (postAndInteraction) => {
                 if (postAndInteraction.post.id === action.payload) {
                   const likeStatus = postAndInteraction.interactions.likeStatus;
@@ -107,9 +113,11 @@ export default function UserReducer(state: UserState, action: UserActionType) {
 
     case LAUGH_CURRENT_POST: {
       return produce(state, (draftState) => {
-        if (draftState.userProfile) {
-          draftState.userProfile.userPaginatedPost.postAndInteractions =
-            draftState.userProfile.userPaginatedPost.postAndInteractions.filter(
+        const userProfile = draftState.userProfile;
+
+        if (userProfile) {
+          userProfile.userPaginatedPost.postAndInteractions =
+            userProfile.userPaginatedPost.postAndInteractions.filter(
               (postAndInteraction) => {
                 if (postAndInteraction.post.id === action.payload) {
                   const laughStatus =
@@ -134,9 +142,11 @@ export default function UserReducer(state: UserState, action: UserActionType) {
 
     case CONFUSE_CURRENT_POST: {
       return produce(state, (draftState) => {
-        if (draftState.userProfile) {
-          draftState.userProfile.userPaginatedPost.postAndInteractions =
-            draftState.userProfile.userPaginatedPost.postAndInteractions.filter(
+        const userProfile = draftState.userProfile;
+
+        if (userProfile) {
+          userProfile.userPaginatedPost.postAndInteractions =
+            userProfile.userPaginatedPost.postAndInteractions.filter(
               (postAndInteraction) => {
                 if (postAndInteraction.post.id === action.payload) {
                   const confusedStatus =
