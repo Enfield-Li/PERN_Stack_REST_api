@@ -40,6 +40,22 @@ const CommentInteractions: React.FC<ReplyCommentProps> = ({
   const viewReply =
     replyAmount > 1 ? ` view ${replyAmount} replies` : "View reply";
 
+  const fetchReplyBtn = () => {
+    // Fetch data only in close to open state
+    if (!repliseState && !replies?.length) {
+      fetchReplies(
+        postId,
+        {
+          parentCommentId,
+          replyToUserId,
+        },
+        commentDispatch
+      );
+    }
+
+    setRepliesState(!repliseState);
+  };
+
   return (
     <>
       <div>
@@ -47,7 +63,7 @@ const CommentInteractions: React.FC<ReplyCommentProps> = ({
         <i className="bi bi-hand-thumbs-up" role="button"></i>
         <i className="bi bi-hand-thumbs-down mx-3" role="button"></i>
 
-        {/* Reply */}
+        {/* Reply button */}
         <span
           className="text-muted"
           role="button"
@@ -87,26 +103,14 @@ const CommentInteractions: React.FC<ReplyCommentProps> = ({
         <div>
           <div
             role="button"
-            onClick={() => {
-              // Fetch data only in close to open state
-              if (!repliseState && !replies?.length) {
-                fetchReplies(
-                  postId,
-                  {
-                    parentCommentId,
-                    replyToUserId,
-                  },
-                  commentDispatch
-                );
-              }
-
-              setRepliesState(!repliseState);
-            }}
+            onClick={() => fetchReplyBtn()}
             className="text-primary"
           >
             {arrow}
             {viewReply}
           </div>
+
+          {/* Show reply only if it is comment */}
           {repliseState &&
             replies?.map((reply) => (
               // <div key={reply.id}>123</div>
@@ -115,7 +119,7 @@ const CommentInteractions: React.FC<ReplyCommentProps> = ({
                   comment={reply}
                   postId={postId}
                   isComment={false}
-                  parentCommentId={parentCommentId}
+                  parentCommentId={parentCommentId} 
                 />
               </div>
             ))}

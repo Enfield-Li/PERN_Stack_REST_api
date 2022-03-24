@@ -72,9 +72,9 @@ export class CommentsService {
       .$queryRaw<FetchRelyWithReplyToUserId>`select comments.*, comments."replyToUserId", "user".username 
       from comments join "user" on "user".id = comments."replyToUserId" 
       where comments."postId" = ${postId} 
-      and comments."parentCommentId" = ${parentCommentId} 
-      and comments."replyToUserId" = ${replyToUserId};
+      and comments."parentCommentId" = ${parentCommentId}; 
     `;
+    // and comments."replyToUserId" = ${replyToUserId};
 
     return this.buildCommentOrReplyROArr(data);
   }
