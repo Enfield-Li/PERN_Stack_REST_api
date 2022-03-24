@@ -1,4 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
+import { comments } from '@prisma/client';
 
 export class CreateCommentOrReplyDto {
   @ApiProperty()
@@ -18,6 +19,8 @@ export class CommentOrReplyRO {
   updatedAt: Date;
   @ApiProperty()
   comment_text: string;
+  @ApiProperty()
+  replyAmount: number;
   @ApiProperty({ nullable: true })
   replyToUserId: number | null;
   @ApiProperty({ nullable: true })
@@ -33,4 +36,8 @@ export class CommentOrReplyRO {
 export class FindReplyDto {
   @ApiProperty()
   parentCommentId: number;
+  @ApiProperty()
+  replyToUserId: number;
 }
+
+export type FetchRelyWithReplyToUserId = (comments & { username: string })[];

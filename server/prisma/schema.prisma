@@ -60,7 +60,7 @@ model interactions {
 model comments {
   id                  Int                   @id @default(autoincrement())
   createdAt           DateTime              @unique() @default(now())
-  updatedAt           DateTime              @unique() @updatedAt
+  updatedAt           DateTime              @updatedAt
   comment_text        String                @db.VarChar
   replyAmount         Int                   @default(0)
   replyToUserId       Int?

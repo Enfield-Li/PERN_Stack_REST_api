@@ -39,13 +39,13 @@ export class CommentsController {
   }
 
   @ApiCreatedResponse({ type: [CommentOrReplyRO] })
-  @Get('/commentsForPost/:id')
+  @Get('/fetchComments/:id')
   findComments(@Param('id') id: string) {
     return this.commentsService.findAllComments(+id);
   }
 
   @ApiCreatedResponse({ type: [CommentOrReplyRO] })
-  @Put('/repliesForPost/:id')
+  @Put('/fetchReplies/:id')
   findAllReplies(@Param('id') id: string, @Body() findReplyDto: FindReplyDto) {
     return this.commentsService.findAllReplies(+id, findReplyDto);
   }

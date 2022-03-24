@@ -1,9 +1,9 @@
 import { Injectable } from '@nestjs/common';
-import { comments } from '@prisma/client';
 import { PrismaService } from 'src/config/prisma.service';
 import {
   CommentOrReplyRO,
   CreateCommentOrReplyDto,
+  FetchRelyWithReplyToUserId,
   FindReplyDto,
 } from './dto/create-comment.dto';
 import { UpdateCommentDto } from './dto/update-comment.dto';
@@ -19,10 +19,27 @@ export class CommentsService {
   ): Promise<CommentOrReplyRO> {
     const { comment_text, replyToUserId, parentCommentId } = createCommentDto;
 
-    return this.prismaService.comments.create({
+    const createCommentOrReply = this.prismaService.comments.create({
       data: { postId, userId, comment_text, replyToUserId, parentCommentId },
       include: { user: { select: { username: true } } },
     });
+
+    // If it's a reply
+    if (replyToUserId && parentCommentId) {
+      const addOneToParentAmount = this.prismaService.comments.update({
+        where: { id: parentCommentId },
+        data: { replyAmount: { increment: 1 } },
+      });
+
+      const res = await this.prismaService.$transaction([
+        createCommentOrReply,
+        addOneToParentAmount,
+      ]);
+
+      return res[0];
+    }
+
+    return createCommentOrReply;
   }
 
   async findAllComments(postId: number): Promise<CommentOrReplyRO[]> {
@@ -45,19 +62,21 @@ export class CommentsService {
     });
   }
 
-  async findAllReplies(postId: number, findReplyDto: FindReplyDto) {
-    const { parentCommentId } = findReplyDto;
+  async findAllReplies(
+    postId: number,
+    findReplyDto: FindReplyDto,
+  ): Promise<CommentOrReplyRO[]> {
+    const { parentCommentId, replyToUserId } = findReplyDto;
 
-    return this.prismaService.comments.findMany({
-      where: { postId, parentCommentId },
-      include: {
-        user: {
-          select: {
-            username: true,
-          },
-        },
-      },
-    });
+    const data = await this.prismaService
+      .$queryRaw<FetchRelyWithReplyToUserId>`select comments.*, comments."replyToUserId", "user".username 
+      from comments join "user" on "user".id = comments."replyToUserId" 
+      where comments."postId" = ${postId} 
+      and comments."parentCommentId" = ${parentCommentId} 
+      and comments."replyToUserId" = ${replyToUserId};
+    `;
+
+    return this.buildCommentOrReplyROArr(data);
   }
 
   findOne(id: number) {
@@ -70,5 +89,24 @@ export class CommentsService {
 
   remove(id: number) {
     return `This action removes a #${id} comment`;
+  }
+
+  private buildCommentOrReplyROArr(
+    input: FetchRelyWithReplyToUserId,
+  ): CommentOrReplyRO[] {
+    const res: CommentOrReplyRO[] = [];
+
+    for (let i = 0; i < input.length; i++) {
+      const inputItem = input[i];
+      const commentOrReplyRO = {
+        user: { username: inputItem.username },
+        ...inputItem,
+      };
+
+      delete commentOrReplyRO.username;
+      res.push(commentOrReplyRO);
+    }
+
+    return res;
   }
 }

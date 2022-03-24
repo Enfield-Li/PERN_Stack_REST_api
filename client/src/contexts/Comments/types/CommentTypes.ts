@@ -2,6 +2,7 @@ import {
   CREATE_COMMENT,
   DELETE_COMMENTS,
   FETCH_COMMENTS,
+  FETCH_REPLIES,
 } from "../../constant";
 
 export const commentInitialState: CommentState = {
@@ -19,6 +20,27 @@ export type Comment = {
   createdAt: Date;
   updatedAt: Date;
   comment_text: string;
+  replyAmount: number;
+  replyToUserId: number | null;
+  parentCommentId: number | null;
+  userId: number;
+  postId: number;
+  user: { username: string };
+  replies: Reply[];
+};
+
+export type Replies = Reply[];
+export type RepliesForCommentId = {
+  replies: Replies;
+  parentCommentId: number;
+};
+
+export type Reply = {
+  id: number;
+  createdAt: Date;
+  updatedAt: Date;
+  comment_text: string;
+  replyAmount: number;
   replyToUserId: number | null;
   parentCommentId: number | null;
   userId: number;
@@ -26,13 +48,24 @@ export type Comment = {
   user: { username: string };
 };
 
+export type RepliesParentCommentId = { parentCommentId: number };
+
 export type CreateCommentOrReplyType = {
   comment_text: string;
   parentCommentId?: number;
   replyToUserId?: number;
 };
 
-export type CommentActionType = FetchComments | DeleteComments | CreateComment;
+export type FindRepliesCondition = {
+  parentCommentId: number;
+  replyToUserId: number;
+};
+
+export type CommentActionType =
+  | FetchComments
+  | DeleteComments
+  | CreateComment
+  | FetchReplies;
 
 type FetchComments = {
   type: typeof FETCH_COMMENTS;
@@ -47,4 +80,9 @@ type DeleteComments = {
 type CreateComment = {
   type: typeof CREATE_COMMENT;
   payload: Comment;
+};
+
+type FetchReplies = {
+  type: typeof FETCH_REPLIES;
+  payload: RepliesForCommentId;
 };
