@@ -38,13 +38,13 @@ export class CommentsController {
     );
   }
 
-  @ApiCreatedResponse({ type: CommentOrReplyRO })
+  @ApiCreatedResponse({ type: [CommentOrReplyRO] })
   @Get('/commentsForPost/:id')
   findComments(@Param('id') id: string) {
     return this.commentsService.findAllComments(+id);
   }
 
-  @ApiCreatedResponse({ type: CommentOrReplyRO })
+  @ApiCreatedResponse({ type: [CommentOrReplyRO] })
   @Put('/repliesForPost/:id')
   findAllReplies(@Param('id') id: string, @Body() findReplyDto: FindReplyDto) {
     return this.commentsService.findAllReplies(+id, findReplyDto);

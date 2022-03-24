@@ -14,6 +14,7 @@ import {
   useComment,
 } from "../../contexts/Comments/actions/commentAction";
 import CreateComment from "../comments/create-edit/CreateComment";
+import PostComments from "../comments/PostComments";
 
 interface PostPageProps {}
 
@@ -50,13 +51,7 @@ const PostPage: React.FC<PostPageProps> = ({}) => {
                     <InteractionDisplay postAndInteractions={currentPost} />
 
                     <CreateComment postId={currentPost.post.id} />
-                    {commentState.comments &&
-                      commentState.comments.map((comment) => (
-                        <div key={comment.id}>
-                          <span>id: {comment.id} </span>
-                          <span>comment: {comment.comment_text}</span>
-                        </div>
-                      ))}
+                    <PostComments postId={currentPost.post.id} />
                   </div>
                 </div>
 

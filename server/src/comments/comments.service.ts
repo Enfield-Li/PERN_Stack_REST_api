@@ -1,4 +1,5 @@
 import { Injectable } from '@nestjs/common';
+import { comments } from '@prisma/client';
 import { PrismaService } from 'src/config/prisma.service';
 import {
   CommentOrReplyRO,
@@ -20,10 +21,11 @@ export class CommentsService {
 
     return this.prismaService.comments.create({
       data: { postId, userId, comment_text, replyToUserId, parentCommentId },
+      include: { user: { select: { username: true } } },
     });
   }
 
-  async findAllComments(postId: number) {
+  async findAllComments(postId: number): Promise<CommentOrReplyRO[]> {
     return this.prismaService.comments.findMany({
       where: {
         postId,
@@ -39,6 +41,7 @@ export class CommentsService {
           },
         },
       },
+      orderBy: { createdAt: 'desc' },
     });
   }
 

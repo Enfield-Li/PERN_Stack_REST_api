@@ -26,6 +26,8 @@ export class CommentOrReplyRO {
   userId: number;
   @ApiProperty()
   postId: number;
+  @ApiProperty()
+  user: { username: string };
 }
 
 export class FindReplyDto {

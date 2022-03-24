@@ -51,9 +51,12 @@ export const createCommentOrReply = async (
     commentOrReply,
     { withCredentials: true }
   );
+  console.log("res: ", res.data);
 
-  dispatch({
-    type: CREATE_COMMENT,
-    payload: res.data,
-  });
+  if (!commentOrReply.parentCommentId && !commentOrReply.replyToUserId) {
+    dispatch({
+      type: CREATE_COMMENT,
+      payload: res.data,
+    });
+  }
 };
