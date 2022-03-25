@@ -1,10 +1,11 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from 'src/config/prisma.service';
 import {
-  CommentOrReplyRO,
+  CommentRO,
   CreateCommentOrReplyDto,
   FetchRelyWithReplyToUserId,
   FindReplyDto,
+  ReplyRO,
 } from './dto/create-comment.dto';
 import { UpdateCommentDto } from './dto/update-comment.dto';
 
@@ -16,7 +17,7 @@ export class CommentsService {
     createCommentDto: CreateCommentOrReplyDto,
     userId: number,
     postId: number,
-  ): Promise<CommentOrReplyRO> {
+  ): Promise<CommentRO> {
     const { comment_text, replyToUserId, parentCommentId } = createCommentDto;
 
     const createCommentOrReply = this.prismaService.comments.create({
@@ -42,7 +43,7 @@ export class CommentsService {
     return createCommentOrReply;
   }
 
-  async findAllComments(postId: number): Promise<CommentOrReplyRO[]> {
+  async findAllComments(postId: number): Promise<CommentRO[]> {
     return this.prismaService.comments.findMany({
       where: {
         postId,
@@ -65,16 +66,18 @@ export class CommentsService {
   async findAllReplies(
     postId: number,
     findReplyDto: FindReplyDto,
-  ): Promise<CommentOrReplyRO[]> {
+  ): Promise<ReplyRO[]> {
     const { parentCommentId, replyToUserId } = findReplyDto;
 
     const data = await this.prismaService
-      .$queryRaw<FetchRelyWithReplyToUserId>`select comments.*, comments."replyToUserId", "user".username 
-      from comments join "user" on "user".id = comments."replyToUserId" 
-      where comments."postId" = ${postId} 
-      and comments."parentCommentId" = ${parentCommentId}; 
+      .$queryRaw<FetchRelyWithReplyToUserId>`select 
+      comments.*, comments."replyToUserId", comments."userId", 
+          "replyToUsername".username as "replyToUsername", "user".username  
+      from comments 
+          join "user" as "replyToUsername" on "replyToUsername".id = comments."replyToUserId" 
+          join "user" as "user" on "user".id = comments."userId"
+      where comments."postId" = ${postId} and comments."parentCommentId" = ${parentCommentId};
     `;
-    // and comments."replyToUserId" = ${replyToUserId};
 
     return this.buildCommentOrReplyROArr(data);
   }
@@ -93,17 +96,20 @@ export class CommentsService {
 
   private buildCommentOrReplyROArr(
     input: FetchRelyWithReplyToUserId,
-  ): CommentOrReplyRO[] {
-    const res: CommentOrReplyRO[] = [];
+  ): ReplyRO[] {
+    const res: ReplyRO[] = [];
 
     for (let i = 0; i < input.length; i++) {
       const inputItem = input[i];
       const commentOrReplyRO = {
-        user: { username: inputItem.username },
         ...inputItem,
+        user: { username: inputItem.username },
+        replyToUser: { username: inputItem.replyToUsername },
       };
 
       delete commentOrReplyRO.username;
+      delete commentOrReplyRO.replyToUsername;
+
       res.push(commentOrReplyRO);
     }
 

@@ -1,26 +1,49 @@
-import React from "react";
+import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { Comment, Reply } from "../../contexts/Comments/types/CommentTypes";
-import { useUser } from "../../contexts/User/actions/UserAction";
+import {
+  fetchReplies,
+  useComment,
+} from "../../contexts/Comments/actions/commentAction";
+import { Comment } from "../../contexts/Comments/types/CommentTypes";
 import { calculateTime } from "../../utils/calculaTime";
-import CommentInteractions from "./create-edit/CommentInteractions";
+import CreateComment from "./create-edit/CreateComment";
+import ReplyCard from "./ReplyCard";
 
 interface CommentCardProps {
   postId: number;
-  comment: Comment | Reply;
-  parentCommentId: number;
-  isComment?: boolean;
+  comment: Comment;
 }
 
-const CommentCard: React.FC<CommentCardProps> = ({
-  comment,
-  postId,
-  isComment,
-  parentCommentId,
-}) => {
-  const { userState } = useUser();
-  const userId = userState.user?.id;
+const CommentCard: React.FC<CommentCardProps> = ({ comment, postId }) => {
   const navigate = useNavigate();
+  const [replyInputState, setReplyInputState] = useState(false);
+  const [repliseState, setRepliesState] = useState(false);
+  const { commentDispatch } = useComment();
+
+  // arrows
+  const arrows = repliseState ? (
+    <i className="bi bi-caret-down-fill"></i>
+  ) : (
+    <i className="bi bi-caret-up-fill"></i>
+  );
+  const viewOrHideReply = repliseState
+    ? ` Hide ${comment.replyAmount} replies`
+    : ` View ${comment.replyAmount} replies`;
+
+  const fetchReplyBtn = (replyToUserId: number) => {
+    // Fetch data only in close and doesn't fetch it before
+    if (!repliseState && !comment.replies) {
+      fetchReplies(
+        postId,
+        {
+          parentCommentId: comment.id,
+          replyToUserId,
+        },
+        commentDispatch
+      );
+    }
+    setRepliesState(!repliseState);
+  };
 
   return (
     <div className="d-flex mb-3 fs-5">
@@ -32,7 +55,7 @@ const CommentCard: React.FC<CommentCardProps> = ({
       {/* Comment info */}
       <div className="mt-1">
         <div>
-          {comment.user.username} {comment.userId}
+          {comment.user.username}
           <span className="text-muted fs-6">
             {" "}
             · {calculateTime(comment.createdAt)}
@@ -41,32 +64,60 @@ const CommentCard: React.FC<CommentCardProps> = ({
 
         {/* Comments */}
         <div>
-          {userId !== comment.replyToUserId &&
-            !isComment &&
-            userId === comment.userId &&
-            comment.replyToUserId !== null && (
-              <span
-                className="text-primary"
-                onClick={() =>
-                  navigate(`/user-profile/${comment.replyToUserId}`)
-                }
-                role="button"
-              >
-                @{comment.user.username}{" "}
-              </span>
-            )}
+          {comment.replyToUser?.username && (
+            <span
+              className="text-primary"
+              onClick={() => navigate(`/user-profile/${comment.replyToUserId}`)}
+              role="button"
+            >
+              @{comment.replyToUser?.username}{" "}
+            </span>
+          )}
           {comment.comment_text}
         </div>
 
-        <CommentInteractions
-          postId={postId}
-          replyAmount={comment.replyAmount}
-          findReplies={{
-            parentCommentId,
-            replyToUserId: comment.userId,
-          }}
-          isComment={isComment}
-        />
+        <div>
+          {/* Thumbs */}
+          <i className="bi bi-hand-thumbs-up" role="button"></i>
+          <i className="bi bi-hand-thumbs-down mx-3" role="button"></i>
+
+          {/* Reply button */}
+          <span
+            className="text-muted"
+            role="button"
+            onClick={() => setReplyInputState(!replyInputState)}
+          >
+            Reply
+          </span>
+          {replyInputState && <CreateComment postId={postId} />}
+        </div>
+
+        {/* Replies */}
+        {comment.replyAmount ? (
+          <div>
+            <div
+              role="button"
+              onClick={() => fetchReplyBtn(comment.userId)}
+              className="text-primary"
+            >
+              {arrows}
+              {viewOrHideReply}
+            </div>
+          </div>
+        ) : null}
+
+        {repliseState &&
+          comment.replies &&
+          comment.replies.map((reply) => (
+            <div key={reply.id}>
+              <ReplyCard
+                reply={reply}
+                postId={postId}
+                replyToUserId={reply.userId}
+                parentComment={comment}
+              />
+            </div>
+          ))}
       </div>
     </div>
   );

@@ -14,8 +14,9 @@ import { Request } from 'express';
 import { CommentsService } from './comments.service';
 import {
   CreateCommentOrReplyDto,
-  CommentOrReplyRO,
+  CommentRO,
   FindReplyDto,
+  ReplyRO,
 } from './dto/create-comment.dto';
 import { UpdateCommentDto } from './dto/update-comment.dto';
 
@@ -24,7 +25,7 @@ import { UpdateCommentDto } from './dto/update-comment.dto';
 export class CommentsController {
   constructor(private readonly commentsService: CommentsService) {}
 
-  @ApiCreatedResponse({ type: CommentOrReplyRO })
+  @ApiCreatedResponse({ type: CommentRO })
   @Post('/createCommentOrReply/:id')
   createCommentOrReply(
     @Body() createCommentDto: CreateCommentOrReplyDto,
@@ -38,13 +39,13 @@ export class CommentsController {
     );
   }
 
-  @ApiCreatedResponse({ type: [CommentOrReplyRO] })
+  @ApiCreatedResponse({ type: [CommentRO] })
   @Get('/fetchComments/:id')
   findComments(@Param('id') id: string) {
     return this.commentsService.findAllComments(+id);
   }
 
-  @ApiCreatedResponse({ type: [CommentOrReplyRO] })
+  @ApiCreatedResponse({ type: [ReplyRO] })
   @Put('/fetchReplies/:id')
   findAllReplies(@Param('id') id: string, @Body() findReplyDto: FindReplyDto) {
     return this.commentsService.findAllReplies(+id, findReplyDto);

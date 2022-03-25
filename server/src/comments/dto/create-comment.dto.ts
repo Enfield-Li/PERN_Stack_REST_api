@@ -10,7 +10,7 @@ export class CreateCommentOrReplyDto {
   replyToUserId?: number;
 }
 
-export class CommentOrReplyRO {
+export class CommentRO {
   @ApiProperty()
   id: number;
   @ApiProperty()
@@ -33,6 +33,31 @@ export class CommentOrReplyRO {
   user: { username: string };
 }
 
+export class ReplyRO {
+  @ApiProperty()
+  id: number;
+  @ApiProperty()
+  createdAt: Date;
+  @ApiProperty()
+  updatedAt: Date;
+  @ApiProperty()
+  comment_text: string;
+  @ApiProperty()
+  replyAmount: number;
+  @ApiProperty({ nullable: true })
+  replyToUserId: number | null;
+  @ApiProperty({ nullable: true })
+  parentCommentId: number | null;
+  @ApiProperty()
+  userId: number;
+  @ApiProperty()
+  postId: number;
+  @ApiProperty()
+  replyToUser: { username: string };
+  @ApiProperty()
+  user: { username: string };
+}
+
 export class FindReplyDto {
   @ApiProperty()
   parentCommentId: number;
@@ -40,4 +65,6 @@ export class FindReplyDto {
   replyToUserId: number;
 }
 
-export type FetchRelyWithReplyToUserId = (comments & { username: string })[];
+export type FetchRelyWithReplyToUserId = (comments & { username: string } & {
+  replyToUsername: string;
+})[];

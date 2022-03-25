@@ -110,7 +110,7 @@ const CommentInteractions: React.FC<ReplyCommentProps> = ({
             {viewReply}
           </div>
 
-          {/* Show reply only if it is comment */}
+          {/* Show reply only if it is comment
           {repliseState &&
             replies?.map((reply) => (
               // <div key={reply.id}>123</div>
@@ -119,10 +119,10 @@ const CommentInteractions: React.FC<ReplyCommentProps> = ({
                   comment={reply}
                   postId={postId}
                   isComment={false}
-                  parentCommentId={parentCommentId} 
+                  parentCommentId={parentCommentId}
                 />
               </div>
-            ))}
+            ))} */}
         </div>
       ) : null}
     </>

@@ -27,6 +27,7 @@ export type Comment = {
   postId: number;
   user: { username: string };
   replies: Reply[];
+  replyToUser?: { username: string };
 };
 
 export type Replies = Reply[];
@@ -46,6 +47,7 @@ export type Reply = {
   userId: number;
   postId: number;
   user: { username: string };
+  replyToUser: { username: string };
 };
 
 export type RepliesParentCommentId = { parentCommentId: number };

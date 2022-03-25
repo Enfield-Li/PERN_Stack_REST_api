@@ -15,12 +15,7 @@ const PostComments: React.FC<PostCommentsProps> = ({ postId }) => {
       {comments &&
         comments.map((comment) => (
           <div key={comment.id}>
-            <CommentCard
-              comment={comment}
-              postId={postId}
-              isComment={true}
-              parentCommentId={comment.id} 
-            />
+            <CommentCard comment={comment} postId={postId} />
           </div>
         ))}
     </>

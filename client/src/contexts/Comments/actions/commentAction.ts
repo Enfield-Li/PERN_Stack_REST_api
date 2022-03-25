@@ -81,6 +81,8 @@ export const createCommentOrReply = async (
       type: CREATE_COMMENT,
       payload: res.data,
     });
+
+    return;
   }
 
   // Create reply
@@ -89,7 +91,6 @@ export const createCommentOrReply = async (
     commentOrReply,
     { withCredentials: true }
   );
-  
 
-  console.log("create reply: ", res.data);
+  console.log("create reply: ", commentOrReply);
 };

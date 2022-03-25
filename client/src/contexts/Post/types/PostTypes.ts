@@ -20,11 +20,10 @@ export const postInitialState: PostState = {
   currentPost: null,
 };
 
-export type SortPostWithTop = "half-year" | "one-year" | "all-time";
-
-export type PostSorting = "new" | "hot" | "best" | "top";
-
-export type VotingTypes = "vote" | "like" | "laugh" | "confused";
+export type PaginatedPost = {
+  postAndInteractions: PostAndInteractions[];
+  hasMore: boolean;
+};
 
 export type PostAndInteractions = {
   post: Post;
@@ -49,13 +48,6 @@ export type Post = {
   };
 };
 
-export type PaginatedPost = {
-  postAndInteractions: PostAndInteractions[];
-  hasMore: boolean;
-};
-
-export type FindReply = { parentCommentId: number };
-
 export type Interactions = {
   voteStatus: boolean | null;
   likeStatus: boolean | null;
@@ -70,6 +62,14 @@ export type CreatePostType = {
   title: string;
   content: string;
 };
+
+export type SortPostWithTop = "half-year" | "one-year" | "all-time";
+
+export type PostSorting = "new" | "hot" | "best" | "top";
+
+export type VotingTypes = "vote" | "like" | "laugh" | "confused";
+
+export type FindReply = { parentCommentId: number };
 
 export type PostActionType =
   | AddPost
