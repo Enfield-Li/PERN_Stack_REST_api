@@ -14,9 +14,9 @@ ReactDOM.render(
       <SocketProvider>
         <PostProvider>
           <UserProvider>
-            {/* <React.StrictMode> */}
-            <App />
-            {/* </React.StrictMode> */}
+            <React.StrictMode>
+              <App />
+            </React.StrictMode>
           </UserProvider>
         </PostProvider>
       </SocketProvider>

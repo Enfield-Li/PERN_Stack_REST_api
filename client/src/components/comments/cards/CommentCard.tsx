@@ -19,6 +19,7 @@ const CommentCard: React.FC<CommentCardProps> = ({ comment, postId }) => {
   const [replyInputState, setReplyInputState] = useState(false);
   const [repliseState, setRepliesState] = useState(false);
   const { commentDispatch } = useComment();
+  const [isHover, setIsHover] = useState(false);
 
   // arrows
   const arrows = repliseState ? (
@@ -45,100 +46,115 @@ const CommentCard: React.FC<CommentCardProps> = ({ comment, postId }) => {
   };
 
   return (
-    <div className="d-flex mb-3 fs-5">
-      {/* Person icon */}
-      <div
-        onClick={() => navigate(`/user-profile/${comment.userId}`)}
-        role="button"
-      >
-        <i className="bi bi-person fs-1 me-3"></i>
-      </div>
-
-      {/* Comment info */}
-      <div className="mt-1 w-100">
+    <div
+      className="d-flex justify-content-between my-2"
+      onMouseOver={(e) => setIsHover(true)}
+      onMouseLeave={(e) => setIsHover(false)}
+    >
+      <div className="d-flex mb-3 fs-5 w-100">
+        {/* Person icon */}
         <div
           onClick={() => navigate(`/user-profile/${comment.userId}`)}
           role="button"
-          className="w-25"
         >
-          {comment.user.username}
-          <span className="text-muted fs-6">
-            {" "}
-            · {calculateTime(comment.createdAt, true)}
-          </span>
+          <i className="bi bi-person fs-1 me-3"></i>
         </div>
 
-        {/* Comments */}
-        <div>{comment.comment_text}</div>
-
-        {/* repeat */}
-        <div>
-          {/* Thumbs */}
-          <i className="bi bi-hand-thumbs-up" role="button"></i>
-          <i className="bi bi-hand-thumbs-down mx-3" role="button"></i>
-
-          {/* Reply button */}
-          <span
-            className="text-muted my-1"
-            role="button"
-            onClick={() => setReplyInputState(true)}
-          >
-            Reply
-          </span>
-
-          {replyInputState && (
-            <CreateComment
-              postId={postId}
-              parentCommentId={comment.id}
-              replyToUserId={comment.userId}
-              isReply={false}
-              setReplyInputState={setReplyInputState}
-            />
-          )}
-        </div>
-
-        {/* Show replies */}
-        {comment.replyAmount ? (
+        {/* Comment info */}
+        <div className="mt-1 w-100">
           <div>
             <div
+              onClick={() => navigate(`/user-profile/${comment.userId}`)}
               role="button"
-              onClick={() => fetchReplyBtn()}
-              className="text-primary my-1 w-25"
+              className="w-25"
             >
-              {arrows}
-              {viewOrHideReply}
+              {comment.user.username}
+              <span className="text-muted fs-6">
+                {" "}
+                · {calculateTime(comment.createdAt, true)}
+              </span>
             </div>
+
+            {/* Comments */}
+            <div>{comment.comment_text}</div>
+
+            {/* repeat */}
+            <div>
+              {/* Thumbs */}
+              <i className="bi bi-hand-thumbs-up" role="button"></i>
+              <i className="bi bi-hand-thumbs-down mx-3" role="button"></i>
+
+              {/* Reply button */}
+              <span
+                className="text-muted my-1"
+                role="button"
+                onClick={() => setReplyInputState(true)}
+              >
+                Reply
+              </span>
+
+              {replyInputState && (
+                <CreateComment
+                  postId={postId}
+                  parentCommentId={comment.id}
+                  replyToUserId={comment.userId}
+                  isReply={false}
+                  setReplyInputState={setReplyInputState}
+                />
+              )}
+            </div>
+
+            {/* Show replies */}
+            {comment.replyAmount ? (
+              <div
+                role="button"
+                onClick={() => fetchReplyBtn()}
+                className="text-primary my-1 w-25"
+              >
+                {arrows}
+                {viewOrHideReply}
+              </div>
+            ) : null}
           </div>
-        ) : null}
 
-        {/* Online reply */}
-        {repliseState &&
-          comment.replies &&
-          comment.replies.map((reply) => (
-            <div key={reply.id}>
-              <ReplyCard
-                reply={reply}
-                postId={postId}
-                replyToUserId={reply.userId}
-                parentComment={comment}
-              />
-            </div>
-          ))}
+          <div
+            onMouseOver={(e) => {
+              e.stopPropagation();
+              setIsHover(false);
+            }}
+          >
+            {/* Online reply */}
+            {repliseState &&
+              comment.replies &&
+              comment.replies.map((reply) => (
+                <div key={reply.id}>
+                  <ReplyCard
+                    reply={reply}
+                    postId={postId}
+                    replyToUserId={reply.userId}
+                    parentComment={comment}
+                  />
+                </div>
+              ))}
 
-        {/*  Local reply / user current generated reply */}
-        {!repliseState &&
-          comment.currentReplies &&
-          comment.currentReplies.map((reply, index) => (
-            <div key={index}>
-              <ReplyCard
-                reply={reply}
-                postId={postId}
-                replyToUserId={reply.userId}
-                parentComment={comment}
-              />
-            </div>
-          ))}
+            {/*  Local reply / user current generated reply */}
+            {!repliseState &&
+              comment.currentReplies &&
+              comment.currentReplies.map((reply, index) => (
+                <div key={index}>
+                  <ReplyCard
+                    reply={reply}
+                    postId={postId}
+                    replyToUserId={reply.userId}
+                    parentComment={comment}
+                  />
+                </div>
+              ))}
+          </div>
+        </div>
       </div>
+
+      {isHover && <div role="button" className="bi bi-three-dots fs-4"></div>}
     </div>
   );
 };

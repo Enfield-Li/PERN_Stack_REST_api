@@ -16,8 +16,12 @@ const PostCard: React.FC<PostCardProps> = ({ postAndInteraction }) => {
     <div
       className="card my-3 "
       key={postAndInteraction.post.id}
-      onMouseOver={() => setIsHover(true)}
-      onMouseLeave={() => setIsHover(false)}
+      onMouseOver={(e) => {
+        setIsHover(true);
+      }}
+      onMouseLeave={(e) => {
+        setIsHover(false);
+      }}
     >
       <div className="card-body">
         <div className="d-flex justify-content-between">
