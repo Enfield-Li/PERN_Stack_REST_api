@@ -67,8 +67,6 @@ export class ReplyRO {
 export class FindReplyDto {
   @ApiProperty()
   parentCommentId: number;
-  @ApiProperty()
-  replyToUserId: number;
 }
 
 export type FetchRelyWithReplyToUserId = (comments & { username: string } & {

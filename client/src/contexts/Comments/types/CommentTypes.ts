@@ -63,7 +63,6 @@ export type CreateCommentOrReplyType = {
 
 export type FindRepliesCondition = {
   parentCommentId: number;
-  replyToUserId: number;
 };
 
 export type CommentActionType =

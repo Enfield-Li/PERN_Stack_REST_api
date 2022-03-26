@@ -30,14 +30,13 @@ const CommentCard: React.FC<CommentCardProps> = ({ comment, postId }) => {
     ? ` Hide ${comment.replyAmount} replies`
     : ` View ${comment.replyAmount} replies`;
 
-  const fetchReplyBtn = (replyToUserId: number) => {
+  const fetchReplyBtn = () => {
     // Fetch data only in close and doesn't fetch it before
     if (!repliseState && !comment.replies) {
       fetchReplies(
         postId,
         {
           parentCommentId: comment.id,
-          replyToUserId,
         },
         commentDispatch
       );
@@ -102,7 +101,7 @@ const CommentCard: React.FC<CommentCardProps> = ({ comment, postId }) => {
           <div>
             <div
               role="button"
-              onClick={() => fetchReplyBtn(comment.userId)}
+              onClick={() => fetchReplyBtn()}
               className="text-primary my-1"
             >
               {arrows}

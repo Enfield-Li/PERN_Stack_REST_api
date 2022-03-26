@@ -75,7 +75,7 @@ export class CommentsService {
     postId: number,
     findReplyDto: FindReplyDto,
   ): Promise<ReplyRO[]> {
-    const { parentCommentId, replyToUserId } = findReplyDto;
+    const { parentCommentId } = findReplyDto;
 
     const data = await this.prismaService
       .$queryRaw<FetchRelyWithReplyToUserId>`select 

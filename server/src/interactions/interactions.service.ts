@@ -15,10 +15,8 @@ export class InteractionsService {
       // Fetch based on Post's creator ie. userId
       where: {
         post: { userId },
-
         // Exclude oneself's interactives with it's own post
         userId: { not: userId },
-
         // One or more conditions must return true.
         OR: [
           { voteStatus: { not: null } },
