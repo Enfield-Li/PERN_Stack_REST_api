@@ -10,8 +10,9 @@ interface CreateCommentProps {
   postId: number;
   isReply: boolean;
   isComment?: boolean;
-  parentCommentId?: number | undefined;
-  replyToUserId?: number | undefined;
+  parentCommentId?: number;
+  replyToUserId?: number;
+  replyToUsername?: string;
   setReplyInputState?: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
@@ -22,6 +23,7 @@ const CreateComment: React.FC<CreateCommentProps> = ({
   isComment = true,
   isReply,
   setReplyInputState,
+  replyToUsername,
 }) => {
   const { commentDispatch, commentState } = useComment();
 
@@ -33,7 +35,13 @@ const CreateComment: React.FC<CreateCommentProps> = ({
 
         createCommentOrReply(
           postId,
-          { comment_text, parentCommentId, replyToUserId, isReply },
+          {
+            comment_text,
+            parentCommentId,
+            replyToUserId,
+            isReply,
+            replyToUsername,
+          },
           commentDispatch
         );
 

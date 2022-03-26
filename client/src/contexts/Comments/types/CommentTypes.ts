@@ -1,5 +1,6 @@
 import {
   CREATE_COMMENT,
+  CREATE_REPLY,
   DELETE_COMMENTS,
   FETCH_COMMENTS,
   FETCH_REPLIES,
@@ -59,6 +60,7 @@ export type CreateCommentOrReplyType = {
   comment_text: string;
   parentCommentId?: number;
   replyToUserId?: number;
+  replyToUsername?: string;
 };
 
 export type FindRepliesCondition = {
@@ -69,6 +71,7 @@ export type CommentActionType =
   | FetchComments
   | DeleteComments
   | CreateComment
+  | CreateReply
   | FetchReplies;
 
 type FetchComments = {
@@ -89,4 +92,9 @@ type CreateComment = {
 type FetchReplies = {
   type: typeof FETCH_REPLIES;
   payload: RepliesForCommentId;
+};
+
+type CreateReply = {
+  type: typeof CREATE_REPLY;
+  payload: { reply: Reply; parentCommentId: number };
 };

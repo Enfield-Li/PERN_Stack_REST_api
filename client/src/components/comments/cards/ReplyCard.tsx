@@ -73,6 +73,7 @@ const ReplyCard: React.FC<ReplyCardProps> = ({
               parentCommentId={parentComment.id}
               isReply={true}
               setReplyInputState={setReplyInputState}
+              replyToUsername={reply.user.username}
             />
           )}
         </div>

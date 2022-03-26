@@ -1,6 +1,11 @@
 import axios from "axios";
 import { useContext } from "react";
-import { CREATE_COMMENT, FETCH_COMMENTS, FETCH_REPLIES } from "../../constant";
+import {
+  CREATE_COMMENT,
+  CREATE_REPLY,
+  FETCH_COMMENTS,
+  FETCH_REPLIES,
+} from "../../constant";
 import CommentContext from "../CommentContext";
 import {
   Comment,
@@ -69,8 +74,10 @@ export const createCommentOrReply = async (
   commentOrReply: CreateCommentOrReplyType,
   dispatch: React.Dispatch<CommentActionType>
 ) => {
+  const { parentCommentId, replyToUserId, replyToUsername } = commentOrReply;
+
   // Create comment
-  if (!commentOrReply.parentCommentId && !commentOrReply.replyToUserId) {
+  if (!parentCommentId && !replyToUserId) {
     const res = await axios.post<Comment>(
       `http://localhost:3119/comments/createCommentOrReply/${postId}`,
       commentOrReply,
@@ -81,14 +88,22 @@ export const createCommentOrReply = async (
       type: CREATE_COMMENT,
       payload: res.data,
     });
+  } else if (parentCommentId && replyToUserId && replyToUsername) {
+    // Create reply
+    const res = await axios.post<Reply>(
+      `http://localhost:3119/comments/createCommentOrReply/${postId}`,
+      commentOrReply,
+      { withCredentials: true }
+    );
 
-    return;
+    res.data.replyToUser = { username: replyToUsername };
+
+    dispatch({
+      type: CREATE_REPLY,
+      payload: {
+        reply: res.data,
+        parentCommentId,
+      },
+    });
   }
-
-  // Create reply
-  const res = await axios.post<Reply>(
-    `http://localhost:3119/comments/createCommentOrReply/${postId}`,
-    commentOrReply,
-    { withCredentials: true }
-  );
 };

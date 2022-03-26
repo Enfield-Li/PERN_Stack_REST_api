@@ -1,4 +1,9 @@
-import { CREATE_COMMENT, FETCH_COMMENTS, FETCH_REPLIES } from "../constant";
+import {
+  CREATE_COMMENT,
+  CREATE_REPLY,
+  FETCH_COMMENTS,
+  FETCH_REPLIES,
+} from "../constant";
 import { CommentActionType, CommentState } from "./types/CommentTypes";
 import produce from "immer";
 
@@ -23,6 +28,17 @@ export default function commentReducer(
           if (comment.id === parentCommentId) {
             comment.replies = replies;
           }
+        });
+      });
+    }
+
+    case CREATE_REPLY: {
+      const { parentCommentId, reply } = action.payload;
+
+      return produce(state, (draftState) => {
+        draftState.comments.filter((comment) => {
+          if (comment.id === parentCommentId)
+            comment.replies = [...comment.replies, reply];
         });
       });
     }

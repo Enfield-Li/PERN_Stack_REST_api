@@ -26,4 +26,4 @@ export const FETCH_COMMENTS = "fetch_Comments";
 export const DELETE_COMMENTS = "delete_Comments";
 export const CREATE_COMMENT = "create_Comment";
 export const FETCH_REPLIES = "fetch_Replies";
-
+export const CREATE_REPLY = "create_Reply";
