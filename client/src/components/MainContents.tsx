@@ -1,18 +1,15 @@
 import React, { useState } from "react";
+import InfiniteScroll from "react-infinite-scroll-component";
 import {
   fetchPaginatedPosts,
   usePost,
 } from "../contexts/Post/actions/PostAction";
-import ContentPlaceholder from "./placeholders/ContentPlaceholder";
-import PostCreatorInfo from "./user-related/PostCreatorInfo";
-import VoteSection from "./post/sections/voteSection";
-import SortSection from "./SortSection";
 import { SortPostWithTop } from "../contexts/Post/types/PostTypes";
-import CreatePostArea from "./CreatePostArea";
-import EditSection from "./post/sections/EditSection";
-import PostCardSection from "./post/sections/PostCardSection";
-import InfiniteScroll from "react-infinite-scroll-component";
 import { useGoTop } from "../utils/useGoTop";
+import CreatePostArea from "./CreatePostArea";
+import ContentPlaceholder from "./placeholders/ContentPlaceholder";
+import PostCard from "./post/PostCard";
+import SortSection from "./SortSection";
 
 interface MainContentsProps {}
 
@@ -75,36 +72,7 @@ const MainContents: React.FC<MainContentsProps> = ({}) => {
       >
         {postAndInteractions.length > 0 ? (
           postAndInteractions.map((postAndInteraction) => (
-            <div className="card my-3 " key={postAndInteraction.post.id}>
-              <div className="card-body">
-                <div className="d-flex justify-content-between">
-                  {/* left */}
-                  <div className="d-flex justify-content-between">
-                    <VoteSection postAndInteractions={postAndInteraction} />
-
-                    <div>
-                      <PostCreatorInfo
-                        postAndInteractions={postAndInteraction}
-                      />
-                      <div
-                        className="d-flex flex-column justify-content-between"
-                        style={{ color: "gray" }}
-                      >
-                        <PostCardSection
-                          postAndInteractions={postAndInteraction}
-                        />
-                      </div>
-                    </div>
-                  </div>
-
-                  {/* right */}
-                  <EditSection
-                    postAndInteractions={postAndInteraction}
-                    isNotMain={false}
-                  />
-                </div>
-              </div>
-            </div>
+            <PostCard postAndInteraction={postAndInteraction} />
           ))
         ) : (
           <div>
