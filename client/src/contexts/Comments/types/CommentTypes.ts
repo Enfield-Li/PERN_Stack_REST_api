@@ -30,6 +30,7 @@ export type Comment = {
   replies: Reply[];
   replyToUser?: { username: string };
   isReply: boolean;
+  currentReplies: Reply[];
 };
 
 export type Replies = Reply[];

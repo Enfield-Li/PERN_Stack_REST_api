@@ -24,7 +24,7 @@ export default function commentReducer(
       return produce(state, (draftState) => {
         const { parentCommentId, replies } = action.payload;
 
-        draftState.comments.filter((comment) => {
+        draftState.comments.forEach((comment) => {
           if (comment.id === parentCommentId) {
             comment.replies = replies;
           }
@@ -36,9 +36,15 @@ export default function commentReducer(
       const { parentCommentId, reply } = action.payload;
 
       return produce(state, (draftState) => {
-        draftState.comments.filter((comment) => {
-          if (comment.id === parentCommentId)
-            comment.replies = [...comment.replies, reply];
+        draftState.comments.forEach((comment) => {
+          if (comment.id === parentCommentId) {
+            // When data exist, push the new reply
+            if (comment.replies.length)
+              comment.replies = [...comment.replies, reply];
+
+            // User current gen reply
+            comment.currentReplies.push(reply);
+          }
         });
       });
     }

@@ -23,20 +23,6 @@ export const useComment = () => {
   return { commentState: state, commentDispatch: dispatch };
 };
 
-// export const fetchComments = async (
-//   postId: string,
-//   dispatch: React.Dispatch<CommentActionType>
-// ) => {
-//   const res = await axios.get<Comments>(
-//     `http://localhost:3119/comments/commentsForPost/${postId}`,
-//     { withCredentials: true }
-//   );
-
-//   dispatch({
-//     type: FETCH_COMMENTS,
-//   });
-// };
-
 export const fetchComments = async (
   postId: number,
   dispatch: React.Dispatch<CommentActionType>
@@ -46,10 +32,12 @@ export const fetchComments = async (
     { withCredentials: true }
   );
 
+  // Initiate replies
   const data = res.data;
   for (let i = 0; i < data.length; i++) {
     let comment = data[i];
     if (!comment.replies) comment.replies = [];
+    comment.currentReplies = [];
   }
 
   dispatch({ type: FETCH_COMMENTS, payload: data });
@@ -94,8 +82,10 @@ export const createCommentOrReply = async (
       type: CREATE_COMMENT,
       payload: res.data,
     });
-  } else if (parentCommentId && replyToUserId) {
-    // Create reply
+  }
+
+  // Create reply
+  else if (parentCommentId && replyToUserId) {
     const res = await axios.post<Reply>(
       `http://localhost:3119/comments/createCommentOrReply/${postId}`,
       commentOrReply,

@@ -110,10 +110,25 @@ const CommentCard: React.FC<CommentCardProps> = ({ comment, postId }) => {
           </div>
         ) : null}
 
+        {/* Online reply */}
         {repliseState &&
           comment.replies &&
           comment.replies.map((reply) => (
             <div key={reply.id}>
+              <ReplyCard
+                reply={reply}
+                postId={postId}
+                replyToUserId={reply.userId}
+                parentComment={comment}
+              />
+            </div>
+          ))}
+
+        {/*  Local reply / user current generated reply */}
+        {!repliseState &&
+          comment.currentReplies &&
+          comment.currentReplies.map((reply, index) => (
+            <div key={index}>
               <ReplyCard
                 reply={reply}
                 postId={postId}
