@@ -32,7 +32,10 @@ export class PostController {
 
   @Post('create-post')
   @ApiCreatedResponse({ type: PostAndInteraction })
-  async create(@Body() createPostDto: CreatePostDto, @Req() req: Request) {
+  async create(
+    @Body() createPostDto: CreatePostDto,
+    @Req() req: Request,
+  ): Promise<PostAndInteraction> {
     if (!req.session.userId) throw new HttpException('Not authenticated', 401);
 
     const post = await this.postService.createPost(
@@ -83,11 +86,12 @@ export class PostController {
     type: Number,
   })
   @Get('paginated-posts/top')
+  @ApiCreatedResponse({ type: PaginatedPost })
   findByTop(
     @Req() req: Request,
     @Query('time') time: 'half-year' | 'one-year' | 'all-time' = 'half-year',
     @Query('skipTimes') skipTimes?: string,
-  ) {
+  ): Promise<PaginatedPost> {
     return this.postService.fetchPaginatedPostsSortByTop(
       10,
       time,
@@ -102,7 +106,6 @@ export class PostController {
     @Req() req: Request,
     @Param('id') id: string,
   ): Promise<PostAndInteraction> {
-    console.log('postId: ', id);
     return this.postService.fetchOnePost(req.session.userId, +id);
   }
 

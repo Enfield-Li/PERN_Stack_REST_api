@@ -99,7 +99,6 @@ export class SocketGateway
         },
       },
     });
-    console.log('interactions: ', interactions);
 
     if (!interactions) {
     } else if (interactions) {

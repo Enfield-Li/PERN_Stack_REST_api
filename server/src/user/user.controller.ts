@@ -16,6 +16,7 @@ import { UserService } from './user.service';
 import {
   CreateUserDto,
   LoginUserDto,
+  ResUser,
   UserProfileRO,
   UserRO,
 } from './dto/create-user.dto';
@@ -61,7 +62,7 @@ export class UserController {
     @Req() req: Request,
     @Query('take') take: string = '5',
     @Query('cursor') cursor?: Date,
-  ) {
+  ): Promise<UserProfileRO> {
     return this.userService.fetchProfile(
       +id,
       req.session.userId,
@@ -70,8 +71,12 @@ export class UserController {
     );
   }
 
+  @ApiCreatedResponse({ type: ResUser })
   @Get('/userInfo/:id')
-  async fetchUserInfo(@Param('id') id: string, @Req() req: Request) {
+  async fetchUserInfo(
+    @Param('id') id: string,
+    @Req() req: Request,
+  ): Promise<ResUser | string> {
     const user = await this.userService.fetchUserInfo(+id, req.session.userId);
     if (!user) {
       return 'User Not Found';
@@ -91,7 +96,7 @@ export class UserController {
 
   @Get('/me')
   @ApiCreatedResponse({ type: UserRO })
-  findOne(@Req() req: Request) {
+  findOne(@Req() req: Request): Promise<UserRO> {
     if (!req.session.userId) return;
 
     return this.userService.me(req.session.userId);
@@ -99,7 +104,10 @@ export class UserController {
 
   @Patch('/update-user/:id')
   @ApiCreatedResponse({ type: UserRO })
-  update(@Req() req: Request, @Body() updateUserDto: UpdateUserDto) {
+  update(
+    @Req() req: Request,
+    @Body() updateUserDto: UpdateUserDto,
+  ): Promise<UserRO> {
     if (!req.session.userId) throw new HttpException('Invalid credential', 401);
 
     return this.userService.updateUser(req.session.userId, updateUserDto);
@@ -123,7 +131,7 @@ export class UserController {
 
   @Delete('/delete-user/:id')
   @ApiResponse({ type: Boolean })
-  remove(@Req() req: Request) {
+  remove(@Req() req: Request): Promise<boolean> {
     if (!req.session.userId) throw new HttpException('Invalid credential', 401);
 
     return this.userService.deleteUser(req.session.userId);

@@ -87,24 +87,33 @@ export class CommentsService {
       where comments."postId" = ${postId} and comments."parentCommentId" = ${parentCommentId};
     `;
 
-    return this.buildCommentOrReplyROArr(data);
+    return this.buildReplyROArr(data);
   }
 
   findOne(id: number) {
     return `This action returns a #${id} comment`;
   }
 
-  update(id: number, updateCommentDto: UpdateCommentDto) {
-    return `This action updates a #${id} comment`;
+  async editComment(
+    id: number,
+    updateCommentDto: UpdateCommentDto,
+  ): Promise<CommentRO> {
+    const { comment_text } = updateCommentDto;
+
+    return this.prismaService.comments.update({
+      where: { id },
+      data: { comment_text },
+      include: { user: { select: { username: true } } },
+    });
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} comment`;
+  async remove(id: number): Promise<boolean> {
+    await this.prismaService.commentInteractions.delete({ where: { id } });
+
+    return true;
   }
 
-  private buildCommentOrReplyROArr(
-    input: FetchRelyWithReplyToUserId,
-  ): ReplyRO[] {
+  private buildReplyROArr(input: FetchRelyWithReplyToUserId): ReplyRO[] {
     const res: ReplyRO[] = [];
 
     for (let i = 0; i < input.length; i++) {

@@ -31,7 +31,7 @@ export class CommentsController {
     @Body() createCommentDto: CreateCommentOrReplyDto,
     @Req() req: Request,
     @Param('id') id: string,
-  ) {
+  ): Promise<CommentRO> {
     return this.commentsService.createCommentOrReply(
       createCommentDto,
       req.session.userId,
@@ -41,23 +41,31 @@ export class CommentsController {
 
   @ApiCreatedResponse({ type: [CommentRO] })
   @Get('/fetchComments/:id')
-  findComments(@Param('id') id: string) {
+  findComments(@Param('id') id: string): Promise<CommentRO[]> {
     return this.commentsService.findAllComments(+id);
   }
 
   @ApiCreatedResponse({ type: [ReplyRO] })
   @Put('/fetchReplies/:id')
-  findAllReplies(@Param('id') id: string, @Body() findReplyDto: FindReplyDto) {
+  findAllReplies(
+    @Param('id') id: string,
+    @Body() findReplyDto: FindReplyDto,
+  ): Promise<ReplyRO[]> {
     return this.commentsService.findAllReplies(+id, findReplyDto);
   }
 
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updateCommentDto: UpdateCommentDto) {
-    return this.commentsService.update(+id, updateCommentDto);
+  @Patch('/updateComment/:id')
+  @ApiCreatedResponse({ type: CommentRO })
+  update(
+    @Param('id') id: string,
+    @Body() updateCommentDto: UpdateCommentDto,
+  ): Promise<CommentRO> {
+    return this.commentsService.editComment(+id, updateCommentDto);
   }
 
-  @Delete(':id')
-  remove(@Param('id') id: string) {
+  @Delete('/deleteComment/:id')
+  @ApiCreatedResponse({ type: Boolean })
+  remove(@Param('id') id: string): Promise<boolean> {
     return this.commentsService.remove(+id);
   }
 }
