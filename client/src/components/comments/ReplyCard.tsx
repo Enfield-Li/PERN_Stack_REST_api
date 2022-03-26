@@ -35,13 +35,13 @@ const ReplyCard: React.FC<ReplyCardProps> = ({
           {reply.user.username}
           <span className="text-muted fs-6">
             {" "}
-            · {calculateTime(reply.createdAt)}
+            · {calculateTime(reply.createdAt, true)}
           </span>
         </div>
 
         {/* Comments */}
         <div>
-          {reply.replyToUserId !== parentComment.userId && (
+          {reply.isReply && (
             <span
               className="text-primary"
               onClick={() => navigate(`/user-profile/${reply.replyToUserId}`)}
@@ -71,6 +71,7 @@ const ReplyCard: React.FC<ReplyCardProps> = ({
               postId={postId}
               replyToUserId={replyToUserId}
               parentCommentId={parentComment.id}
+              isReply={true}
             />
           )}
         </div>

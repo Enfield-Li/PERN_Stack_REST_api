@@ -50,7 +50,10 @@ const PostPage: React.FC<PostPageProps> = ({}) => {
                     </p>
                     <InteractionDisplay postAndInteractions={currentPost} />
 
-                    <CreateComment postId={currentPost.post.id} />
+                    <CreateComment
+                      postId={currentPost.post.id}
+                      isReply={false}
+                    />
                     <PostComments postId={currentPost.post.id} />
                   </div>
                 </div>

@@ -28,6 +28,7 @@ export type Comment = {
   user: { username: string };
   replies: Reply[];
   replyToUser?: { username: string };
+  isReply: boolean;
 };
 
 export type Replies = Reply[];
@@ -48,11 +49,13 @@ export type Reply = {
   postId: number;
   user: { username: string };
   replyToUser: { username: string };
+  isReply: boolean;
 };
 
 export type RepliesParentCommentId = { parentCommentId: number };
 
 export type CreateCommentOrReplyType = {
+  isReply: boolean;
   comment_text: string;
   parentCommentId?: number;
   replyToUserId?: number;

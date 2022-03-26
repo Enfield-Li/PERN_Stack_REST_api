@@ -91,6 +91,4 @@ export const createCommentOrReply = async (
     commentOrReply,
     { withCredentials: true }
   );
-
-  console.log("create reply: ", commentOrReply);
 };

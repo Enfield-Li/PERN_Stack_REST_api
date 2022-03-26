@@ -18,15 +18,23 @@ export class CommentsService {
     userId: number,
     postId: number,
   ): Promise<CommentRO> {
-    const { comment_text, replyToUserId, parentCommentId } = createCommentDto;
+    const { comment_text, replyToUserId, parentCommentId, isReply } =
+      createCommentDto;
 
     const createCommentOrReply = this.prismaService.comments.create({
-      data: { postId, userId, comment_text, replyToUserId, parentCommentId },
+      data: {
+        postId,
+        userId,
+        comment_text,
+        replyToUserId,
+        parentCommentId,
+        isReply,
+      },
       include: { user: { select: { username: true } } },
     });
 
     // If it's a reply
-    if (replyToUserId && parentCommentId) {
+    if (parentCommentId && replyToUserId) {
       const addOneToParentAmount = this.prismaService.comments.update({
         where: { id: parentCommentId },
         data: { replyAmount: { increment: 1 } },
@@ -75,7 +83,7 @@ export class CommentsService {
           "replyToUsername".username as "replyToUsername", "user".username  
       from comments 
           join "user" as "replyToUsername" on "replyToUsername".id = comments."replyToUserId" 
-          join "user" as "user" on "user".id = comments."userId"
+          join "user" on "user".id = comments."userId"
       where comments."postId" = ${postId} and comments."parentCommentId" = ${parentCommentId};
     `;
 

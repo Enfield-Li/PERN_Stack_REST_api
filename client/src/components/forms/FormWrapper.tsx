@@ -14,7 +14,7 @@ interface FormWrapperProps<Values> {
   props: FormikProps<Values>;
   formUsage?: FormUsage;
   fullWidth?: boolean;
-  isComment?: boolean;
+  isReply?: boolean;
 }
 
 const FormWrapper = <Values,>({
@@ -22,7 +22,7 @@ const FormWrapper = <Values,>({
   props,
   formUsage,
   fullWidth,
-  isComment,
+  isReply,
 }: FormWrapperProps<Values>) => {
   // Form bottom assist msg
   let addtionalAssist = null;
@@ -42,7 +42,7 @@ const FormWrapper = <Values,>({
 
   let style = "container mt-2 py-3 w-50";
   if (fullWidth) style = "mt-2";
-  if (isComment) style = "";
+  if (isReply) style = "";
 
   return (
     <Form className={`fs-5 ${style}`}>

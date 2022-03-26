@@ -65,6 +65,7 @@ model comments {
   replyAmount         Int                   @default(0)
   replyToUserId       Int?
   parentCommentId     Int?
+  isReply             Boolean
   userId              Int
   postId              Int
   user                user                  @relation(fields: [userId], references: [id], onDelete: SetNull, onUpdate: NoAction)

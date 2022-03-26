@@ -58,7 +58,7 @@ const CommentCard: React.FC<CommentCardProps> = ({ comment, postId }) => {
           {comment.user.username}
           <span className="text-muted fs-6">
             {" "}
-            · {calculateTime(comment.createdAt)}
+            · {calculateTime(comment.createdAt, true)}
           </span>
         </div>
 
@@ -89,7 +89,14 @@ const CommentCard: React.FC<CommentCardProps> = ({ comment, postId }) => {
           >
             Reply
           </span>
-          {replyInputState && <CreateComment postId={postId} />}
+          {replyInputState && (
+            <CreateComment
+              postId={postId}
+              isReply={false}
+              parentCommentId={comment.id}
+              replyToUserId={comment.userId}
+            />
+          )}
         </div>
 
         {/* Replies */}

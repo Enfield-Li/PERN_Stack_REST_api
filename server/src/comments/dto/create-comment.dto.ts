@@ -4,6 +4,8 @@ import { comments } from '@prisma/client';
 export class CreateCommentOrReplyDto {
   @ApiProperty()
   comment_text: string;
+  @ApiProperty()
+  isReply: boolean;
   @ApiProperty({ nullable: true })
   parentCommentId?: number;
   @ApiProperty({ nullable: true })
@@ -26,6 +28,8 @@ export class CommentRO {
   @ApiProperty({ nullable: true })
   parentCommentId: number | null;
   @ApiProperty()
+  isReply: boolean;
+  @ApiProperty()
   userId: number;
   @ApiProperty()
   postId: number;
@@ -44,6 +48,8 @@ export class ReplyRO {
   comment_text: string;
   @ApiProperty()
   replyAmount: number;
+  @ApiProperty()
+  isReply: boolean;
   @ApiProperty({ nullable: true })
   replyToUserId: number | null;
   @ApiProperty({ nullable: true })
