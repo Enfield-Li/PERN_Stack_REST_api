@@ -4,9 +4,9 @@ import { Link } from "react-router-dom";
 import { number } from "yup/lib/locale";
 
 export type InputWrapperProps = InputHTMLAttributes<HTMLInputElement> & {
-  label: string;
   name: string;
   required?: boolean;
+  label?: string;
   type?: "password" | "email";
   textarea?: boolean;
   userId?: number;
@@ -35,9 +35,11 @@ const InputWrapper: React.FC<InputWrapperProps> = ({
           </Link>
         </div>
       ) : (
-        <label htmlFor={field.name} className="form-label">
-          {label}:
-        </label>
+        label && (
+          <label htmlFor={field.name} className="form-label">
+            {label && label + ":"}
+          </label>
+        )
       )}
 
       <InputType

@@ -53,6 +53,7 @@ const PostPage: React.FC<PostPageProps> = ({}) => {
                     <CreateComment
                       postId={currentPost.post.id}
                       isReply={false}
+                      isComment={false}
                     />
                     <PostComments postId={currentPost.post.id} />
                   </div>

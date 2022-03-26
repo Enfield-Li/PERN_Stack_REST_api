@@ -9,6 +9,7 @@ import InputWrapper from "../../forms/InputWrapper";
 interface CreateCommentProps {
   postId: number;
   isReply: boolean;
+  isComment?: boolean;
   parentCommentId?: number | undefined;
   replyToUserId?: number | undefined;
   setReplyInputState?: React.Dispatch<React.SetStateAction<boolean>>;
@@ -18,6 +19,7 @@ const CreateComment: React.FC<CreateCommentProps> = ({
   postId,
   parentCommentId,
   replyToUserId,
+  isComment = true,
   isReply,
   setReplyInputState,
 }) => {
@@ -40,23 +42,25 @@ const CreateComment: React.FC<CreateCommentProps> = ({
     >
       {(props) => (
         <Form>
-          <InputWrapper label="Comment" name="comment" textarea={true} />
+          <InputWrapper name="comment" textarea={true} />
 
           <div className="row">
-            <div className="col-8"></div>
+            <div className={isComment ? "col-8" : "col-10"}></div>
 
             {/* Cancel button */}
-            <div className="col-2">
-              <button
-                disabled={props.isSubmitting}
-                className="btn btn-secondary w-100"
-                onClick={() => {
-                  if (setReplyInputState) setReplyInputState(false);
-                }}
-              >
-                Cancel
-              </button>
-            </div>
+            {isComment && (
+              <div className="col-2">
+                <button
+                  disabled={props.isSubmitting}
+                  className="btn btn-secondary w-100"
+                  onClick={() => {
+                    if (setReplyInputState) setReplyInputState(false);
+                  }}
+                >
+                  Cancel
+                </button>
+              </div>
+            )}
 
             {/* Submit button */}
             <div className="col-2">
