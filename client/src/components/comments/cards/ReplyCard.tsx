@@ -23,13 +23,20 @@ const ReplyCard: React.FC<ReplyCardProps> = ({
   return (
     <div className="d-flex mb-3 fs-5">
       {/* Person icon */}
-      <div>
+      <div
+        onClick={() => navigate(`/user-profile/${reply.userId}`)}
+        role="button"
+      >
         <i className="bi bi-person fs-1 me-2"></i>
       </div>
 
       {/* Comment info */}
       <div className="mt-1 w-100">
-        <div>
+        <div
+          onClick={() => navigate(`/user-profile/${reply.userId}`)}
+          role="button"
+          className="w-25"
+        >
           {reply.user.username}
           <span className="text-muted fs-6">
             {" "}

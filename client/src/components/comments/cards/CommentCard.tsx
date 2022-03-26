@@ -59,6 +59,7 @@ const CommentCard: React.FC<CommentCardProps> = ({ comment, postId }) => {
         <div
           onClick={() => navigate(`/user-profile/${comment.userId}`)}
           role="button"
+          className="w-25"
         >
           {comment.user.username}
           <span className="text-muted fs-6">
@@ -102,7 +103,7 @@ const CommentCard: React.FC<CommentCardProps> = ({ comment, postId }) => {
             <div
               role="button"
               onClick={() => fetchReplyBtn()}
-              className="text-primary my-1"
+              className="text-primary my-1 w-25"
             >
               {arrows}
               {viewOrHideReply}
