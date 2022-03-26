@@ -1,9 +1,8 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { useComment } from "../../contexts/Comments/actions/commentAction";
-import { Comment, Reply } from "../../contexts/Comments/types/CommentTypes";
-import { calculateTime } from "../../utils/calculaTime";
-import CreateComment from "./create-edit/CreateComment";
+import { Comment, Reply } from "../../../contexts/Comments/types/CommentTypes";
+import { calculateTime } from "../../../utils/calculaTime";
+import CreateComment from "../create-edit/CreateComment";
 
 interface ReplyCardProps {
   reply: Reply;
@@ -18,7 +17,6 @@ const ReplyCard: React.FC<ReplyCardProps> = ({
   replyToUserId,
   parentComment,
 }) => {
-  const { commentDispatch, commentState } = useComment();
   const navigate = useNavigate();
   const [replyInputState, setReplyInputState] = useState(false);
 
@@ -30,7 +28,7 @@ const ReplyCard: React.FC<ReplyCardProps> = ({
       </div>
 
       {/* Comment info */}
-      <div className="mt-1">
+      <div className="mt-1 w-100">
         <div>
           {reply.user.username}
           <span className="text-muted fs-6">
@@ -53,6 +51,7 @@ const ReplyCard: React.FC<ReplyCardProps> = ({
           {reply.comment_text}
         </div>
 
+        {/* repeat */}
         <div>
           {/* Thumbs */}
           <i className="bi bi-hand-thumbs-up" role="button"></i>
@@ -62,16 +61,18 @@ const ReplyCard: React.FC<ReplyCardProps> = ({
           <span
             className="text-muted"
             role="button"
-            onClick={() => setReplyInputState(!replyInputState)}
+            onClick={() => setReplyInputState(true)}
           >
             Reply
           </span>
+
           {replyInputState && (
             <CreateComment
               postId={postId}
               replyToUserId={replyToUserId}
               parentCommentId={parentComment.id}
               isReply={true}
+              setReplyInputState={setReplyInputState}
             />
           )}
         </div>

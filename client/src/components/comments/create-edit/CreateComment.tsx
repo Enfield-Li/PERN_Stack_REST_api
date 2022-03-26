@@ -1,10 +1,9 @@
-import { Formik } from "formik";
+import { Form, Formik } from "formik";
 import React from "react";
 import {
   createCommentOrReply,
   useComment,
 } from "../../../contexts/Comments/actions/commentAction";
-import FormWrapper from "../../forms/FormWrapper";
 import InputWrapper from "../../forms/InputWrapper";
 
 interface CreateCommentProps {
@@ -12,6 +11,7 @@ interface CreateCommentProps {
   isReply: boolean;
   parentCommentId?: number | undefined;
   replyToUserId?: number | undefined;
+  setReplyInputState?: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 const CreateComment: React.FC<CreateCommentProps> = ({
@@ -19,6 +19,7 @@ const CreateComment: React.FC<CreateCommentProps> = ({
   parentCommentId,
   replyToUserId,
   isReply,
+  setReplyInputState,
 }) => {
   const { commentDispatch, commentState } = useComment();
 
@@ -38,9 +39,37 @@ const CreateComment: React.FC<CreateCommentProps> = ({
       }}
     >
       {(props) => (
-        <FormWrapper props={props} formUsage="Comment" isReply={true}>
+        <Form>
           <InputWrapper label="Comment" name="comment" textarea={true} />
-        </FormWrapper>
+
+          <div className="row">
+            <div className="col-8"></div>
+
+            {/* Cancel button */}
+            <div className="col-2">
+              <button
+                disabled={props.isSubmitting}
+                className="btn btn-secondary w-100"
+                onClick={() => {
+                  if (setReplyInputState) setReplyInputState(false);
+                }}
+              >
+                Cancel
+              </button>
+            </div>
+
+            {/* Submit button */}
+            <div className="col-2">
+              <button
+                type="submit"
+                disabled={props.isSubmitting}
+                className="btn btn-primary w-100"
+              >
+                Comment
+              </button>
+            </div>
+          </div>
+        </Form>
       )}
     </Formik>
   );

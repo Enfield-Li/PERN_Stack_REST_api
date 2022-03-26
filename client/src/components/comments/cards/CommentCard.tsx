@@ -3,10 +3,10 @@ import { useNavigate } from "react-router-dom";
 import {
   fetchReplies,
   useComment,
-} from "../../contexts/Comments/actions/commentAction";
-import { Comment } from "../../contexts/Comments/types/CommentTypes";
-import { calculateTime } from "../../utils/calculaTime";
-import CreateComment from "./create-edit/CreateComment";
+} from "../../../contexts/Comments/actions/commentAction";
+import { Comment } from "../../../contexts/Comments/types/CommentTypes";
+import { calculateTime } from "../../../utils/calculaTime";
+import CreateComment from "../create-edit/CreateComment";
 import ReplyCard from "./ReplyCard";
 
 interface CommentCardProps {
@@ -48,13 +48,19 @@ const CommentCard: React.FC<CommentCardProps> = ({ comment, postId }) => {
   return (
     <div className="d-flex mb-3 fs-5">
       {/* Person icon */}
-      <div>
-        <i className="bi bi-person fs-1 me-2"></i>
+      <div
+        onClick={() => navigate(`/user-profile/${comment.userId}`)}
+        role="button"
+      >
+        <i className="bi bi-person fs-1 me-3"></i>
       </div>
 
       {/* Comment info */}
-      <div className="mt-1">
-        <div>
+      <div className="mt-1 w-100">
+        <div
+          onClick={() => navigate(`/user-profile/${comment.userId}`)}
+          role="button"
+        >
           {comment.user.username}
           <span className="text-muted fs-6">
             {" "}
@@ -63,19 +69,9 @@ const CommentCard: React.FC<CommentCardProps> = ({ comment, postId }) => {
         </div>
 
         {/* Comments */}
-        <div>
-          {comment.replyToUser?.username && (
-            <span
-              className="text-primary"
-              onClick={() => navigate(`/user-profile/${comment.replyToUserId}`)}
-              role="button"
-            >
-              @{comment.replyToUser?.username}{" "}
-            </span>
-          )}
-          {comment.comment_text}
-        </div>
+        <div>{comment.comment_text}</div>
 
+        {/* repeat */}
         <div>
           {/* Thumbs */}
           <i className="bi bi-hand-thumbs-up" role="button"></i>
@@ -83,29 +79,31 @@ const CommentCard: React.FC<CommentCardProps> = ({ comment, postId }) => {
 
           {/* Reply button */}
           <span
-            className="text-muted"
+            className="text-muted my-1"
             role="button"
-            onClick={() => setReplyInputState(!replyInputState)}
+            onClick={() => setReplyInputState(true)}
           >
             Reply
           </span>
+
           {replyInputState && (
             <CreateComment
               postId={postId}
-              isReply={false}
               parentCommentId={comment.id}
               replyToUserId={comment.userId}
+              isReply={false}
+              setReplyInputState={setReplyInputState}
             />
           )}
         </div>
 
-        {/* Replies */}
+        {/* Show replies */}
         {comment.replyAmount ? (
           <div>
             <div
               role="button"
               onClick={() => fetchReplyBtn(comment.userId)}
-              className="text-primary"
+              className="text-primary my-1"
             >
               {arrows}
               {viewOrHideReply}

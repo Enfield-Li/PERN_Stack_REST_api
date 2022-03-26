@@ -1,6 +1,6 @@
 import React from "react";
 import { useComment } from "../../contexts/Comments/actions/commentAction";
-import CommentCard from "./CommentCard";
+import CommentCard from "./cards/CommentCard";
 
 interface PostCommentsProps {
   postId: number;
