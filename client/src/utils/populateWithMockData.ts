@@ -6,7 +6,6 @@ import { UserPostAndInteractions } from "../contexts/User/types/UserTypes";
 
 export const populateWithMockData = (
   interactions: Interactions,
-
   postId: number
 ) => {
   interactions = {

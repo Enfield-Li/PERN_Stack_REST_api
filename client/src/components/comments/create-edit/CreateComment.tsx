@@ -46,6 +46,7 @@ const CreateComment: React.FC<CreateCommentProps> = ({
         );
 
         setFieldValue("comment", "");
+        if (setReplyInputState) setReplyInputState(false);
       }}
     >
       {(props) => (

@@ -46,7 +46,13 @@ export const fetchComments = async (
     { withCredentials: true }
   );
 
-  dispatch({ type: FETCH_COMMENTS, payload: res.data });
+  const data = res.data;
+  for (let i = 0; i < data.length; i++) {
+    let comment = data[i];
+    if (!comment.replies) comment.replies = [];
+  }
+
+  dispatch({ type: FETCH_COMMENTS, payload: data });
 };
 
 export const fetchReplies = async (
@@ -88,7 +94,7 @@ export const createCommentOrReply = async (
       type: CREATE_COMMENT,
       payload: res.data,
     });
-  } else if (parentCommentId && replyToUserId && replyToUsername) {
+  } else if (parentCommentId && replyToUserId) {
     // Create reply
     const res = await axios.post<Reply>(
       `http://localhost:3119/comments/createCommentOrReply/${postId}`,
@@ -96,7 +102,7 @@ export const createCommentOrReply = async (
       { withCredentials: true }
     );
 
-    res.data.replyToUser = { username: replyToUsername };
+    if (replyToUsername) res.data.replyToUser = { username: replyToUsername };
 
     dispatch({
       type: CREATE_REPLY,
