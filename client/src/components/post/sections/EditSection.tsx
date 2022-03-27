@@ -164,7 +164,7 @@ const EditSection: React.FC<EditSectionProps> = ({
               className="mt-2 text-decoration-none"
               onClick={() => deleteP()}
             >
-              <i className="bi bi-trash3"></i>
+              🗑️
             </span>
           </div>
         ) : null)}

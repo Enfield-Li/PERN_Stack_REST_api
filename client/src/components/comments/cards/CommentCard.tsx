@@ -1,5 +1,7 @@
 import React, { useState } from "react";
+import { usePopperTooltip } from "react-popper-tooltip";
 import {
+  deleteCommentOrReply,
   fetchReplies,
   useComment,
 } from "../../../contexts/Comments/actions/commentAction";
@@ -22,6 +24,21 @@ const CommentCard: React.FC<CommentCardProps> = ({ comment, postId }) => {
   const [isHover, setIsHover] = useState(false);
 
   const [editComment, setEditComment] = useState<string | null>(null);
+
+  const [controlledVisible, setControlledVisible] = useState(false);
+  const {
+    getArrowProps,
+    getTooltipProps,
+    setTooltipRef,
+    setTriggerRef,
+    visible,
+  } = usePopperTooltip({
+    trigger: "click",
+    closeOnOutsideClick: true,
+    visible: controlledVisible,
+    onVisibleChange: setControlledVisible,
+    interactive: true,
+  });
 
   const fetchReplyBtn = () => {
     // Fetch data only in close and doesn't fetch it before
@@ -66,33 +83,28 @@ const CommentCard: React.FC<CommentCardProps> = ({ comment, postId }) => {
               username={comment.user.username}
             />
 
-            {/* Comment body */}
-            <div>{comment.comment_text}</div>
-            <button
-              className="btn btn-primary"
-              onClick={() => {
-                setEditComment(comment.comment_text);
-              }}
-            >
-              edit
-            </button>
-
-            {/* Comment and interacitons */}
-            <CommentAndInteractions
-              postId={postId}
-              replyToUserId={comment.userId}
-              parentCommentId={comment.id}
-              isReply={false}
-              setReplyInputState={setReplyInputState}
-              replyInputState={replyInputState}
-            />
-
-            {editComment && (
+            {editComment ? (
+              // Edit current comment
               <EditCommentOrReply
-                setReplyInputState={setReplyInputState}
+                setEditComment={setEditComment}
                 currentCommentOrReplyId={comment.id}
                 comment={editComment}
               />
+            ) : (
+              <>
+                {/* Comment body */}
+                <div>{comment.comment_text}</div>
+
+                {/* Comment and interacitons */}
+                <CommentAndInteractions
+                  postId={postId}
+                  replyToUserId={comment.userId}
+                  parentCommentId={comment.id}
+                  isReply={false}
+                  setReplyInputState={setReplyInputState}
+                  replyInputState={replyInputState}
+                />
+              </>
             )}
 
             {/* Show replies */}
@@ -118,8 +130,52 @@ const CommentCard: React.FC<CommentCardProps> = ({ comment, postId }) => {
         </div>
       </div>
 
-      {/* Options */}
-      {isHover && <div role="button" className="bi bi-three-dots fs-5"></div>}
+      <div>
+        {/* Controlls */}
+        {isHover && (
+          <div
+            role="button"
+            className="bi bi-three-dots fs-5"
+            ref={setTriggerRef}
+          ></div>
+        )}
+
+        {/* Popups */}
+        {visible && (
+          <div
+            ref={setTooltipRef}
+            {...getTooltipProps({
+              className: "tooltip-container card bg-info",
+            })}
+          >
+            <div className="card-body">
+              <div {...getArrowProps({ className: "tooltip-arrow" })} />
+
+              <span className="d-flex align-items-center">
+                {/* edit */}
+                <span
+                  role="button"
+                  className="text-decoration-none mx-2"
+                  onClick={() => setEditComment(comment.comment_text)}
+                >
+                  📝
+                </span>
+
+                {/* delete */}
+                <span
+                  role="button"
+                  className="text-decoration-none mx-2"
+                  onClick={() =>
+                    deleteCommentOrReply(comment.id, commentDispatch)
+                  }
+                >
+                  🗑️
+                </span>
+              </span>
+            </div>
+          </div>
+        )}
+      </div>
     </div>
   );
 };

@@ -1,6 +1,7 @@
 import {
   CREATE_COMMENT,
   CREATE_REPLY,
+  DELETE_COMMENTS_OR_REPLY,
   EDIT_CURRENT_COMMENT_OR_REPLY,
   FETCH_COMMENTS,
   FETCH_REPLIES,
@@ -45,6 +46,7 @@ export default function commentReducer(
 
             // User current gen reply
             comment.currentReplies.push(reply);
+            comment.replyAmount++;
           }
         });
       });
@@ -54,24 +56,54 @@ export default function commentReducer(
       const { comment_text, currentCommentOrReplyId, parentCommentId } =
         action.payload;
 
+      // It's a reply
       if (parentCommentId) {
         return produce(state, (draftState) => {
           draftState.comments.forEach((comment) => {
-            comment.replies.forEach((reply) => {
-              if (reply.id === currentCommentOrReplyId) {
-                reply.comment_text = comment_text;
-              }
-            });
+            if (comment.id === parentCommentId) {
+              comment.replies.forEach((reply) => {
+                if (reply.id === currentCommentOrReplyId) {
+                  reply.comment_text = comment_text;
+                }
+              });
+            }
           });
         });
       }
 
+      // It's a comment
       return produce(state, (draftState) => {
         draftState.comments.forEach((comment) => {
           if (comment.id === currentCommentOrReplyId) {
             comment.comment_text = comment_text;
           }
         });
+      });
+    }
+
+    case DELETE_COMMENTS_OR_REPLY: {
+      const { currentCommentOrReplyId, parentCommentId } = action.payload;
+
+      // It's a reply
+      if (parentCommentId) {
+        return produce(state, (draftState) => {
+          draftState.comments.forEach((comment) => {
+            if (comment.id === parentCommentId) {
+              comment.replies = comment.replies.filter(
+                (reply) => reply.id !== currentCommentOrReplyId
+              );
+
+              comment.replyAmount--;
+            }
+          });
+        });
+      }
+
+      // It's a comment
+      return produce(state, (draftState) => {
+        draftState.comments = draftState.comments.filter(
+          (comment) => comment.id !== currentCommentOrReplyId
+        );
       });
     }
 

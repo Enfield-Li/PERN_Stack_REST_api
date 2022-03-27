@@ -1,5 +1,10 @@
 import React, { useState } from "react";
+import { usePopperTooltip } from "react-popper-tooltip";
 import { useNavigate } from "react-router-dom";
+import {
+  deleteCommentOrReply,
+  useComment,
+} from "../../../contexts/Comments/actions/commentAction";
 import { Comment, Reply } from "../../../contexts/Comments/types/CommentTypes";
 import CommentAndInteractions from "./details/CommentAndInteractions";
 import EditCommentOrReply from "./details/EditCommentOrReply";
@@ -19,11 +24,27 @@ const ReplyCard: React.FC<ReplyCardProps> = ({
   replyToUserId,
   parentComment,
 }) => {
+  const { commentDispatch } = useComment();
   const navigate = useNavigate();
   const [replyInputState, setReplyInputState] = useState(false);
   const [isHover, setIsHover] = useState(false);
 
   const [editComment, setEditComment] = useState<string | null>(null);
+
+  const [controlledVisible, setControlledVisible] = useState(false);
+  const {
+    getArrowProps,
+    getTooltipProps,
+    setTooltipRef,
+    setTriggerRef,
+    visible,
+  } = usePopperTooltip({
+    trigger: "click",
+    closeOnOutsideClick: true,
+    visible: controlledVisible,
+    onVisibleChange: setControlledVisible,
+    interactive: true,
+  });
 
   return (
     <div
@@ -45,53 +66,98 @@ const ReplyCard: React.FC<ReplyCardProps> = ({
             username={reply.user.username}
           />
 
-          {/* Comment body */}
-          <div>
-            {reply.isReply && (
-              <span
-                className="text-primary"
-                onClick={() => navigate(`/user-profile/${reply.replyToUserId}`)}
-                role="button"
-              >
-                @{reply.replyToUser?.username}{" "}
-              </span>
-            )}
-            {reply.comment_text}
-          </div>
-
-          <button
-            className="btn btn-primary"
-            onClick={() => {
-              setEditComment(reply.comment_text);
-            }}
-          >
-            edit
-          </button>
-
-          {/* Comment and interacitons */}
-          <CommentAndInteractions
-            postId={postId}
-            replyToUserId={replyToUserId}
-            parentCommentId={parentComment.id}
-            isReply={true}
-            setReplyInputState={setReplyInputState}
-            replyToUsername={reply.user.username}
-            replyInputState={replyInputState}
-          />
-
-          {editComment && (
+          {editComment ? (
+            // Edit current reply
             <EditCommentOrReply
-              setReplyInputState={setReplyInputState}
+              setEditComment={setEditComment}
               parentCommentId={parentComment.id}
               currentCommentOrReplyId={reply.id}
               comment={editComment}
             />
+          ) : (
+            // Comment and interacitons
+            <>
+              {/* Comment body */}
+              <div>
+                {reply.isReply && (
+                  <span
+                    className="text-primary"
+                    onClick={() =>
+                      navigate(`/user-profile/${reply.replyToUserId}`)
+                    }
+                    role="button"
+                  >
+                    @{reply.replyToUser?.username}{" "}
+                  </span>
+                )}
+                {reply.comment_text}
+              </div>
+
+              {/* Comment and interacitons */}
+              <CommentAndInteractions
+                postId={postId}
+                replyToUserId={replyToUserId}
+                parentCommentId={parentComment.id}
+                isReply={true}
+                setReplyInputState={setReplyInputState}
+                replyToUsername={reply.user.username}
+                replyInputState={replyInputState}
+              />
+            </>
           )}
         </div>
       </div>
 
-      {/* Options */}
-      {isHover && <div role="button" className="bi bi-three-dots fs-5"></div>}
+      <div>
+        {/* Controlls */}
+        {isHover && (
+          <div
+            role="button"
+            className="bi bi-three-dots fs-5"
+            ref={setTriggerRef}
+          ></div>
+        )}
+
+        {/* Popups */}
+        {visible && (
+          <div
+            ref={setTooltipRef}
+            {...getTooltipProps({
+              className: "tooltip-container card bg-info",
+            })}
+          >
+            <div className="card-body">
+              <div {...getArrowProps({ className: "tooltip-arrow" })} />
+
+              <span className="d-flex align-items-center">
+                {/* edit */}
+                <span
+                  role="button"
+                  className="text-decoration-none mx-2"
+                  onClick={() => setEditComment(reply.comment_text)}
+                >
+                  📝
+                </span>
+
+                {/* delete */}
+                <span
+                  role="button"
+                  className="text-decoration-none mx-2"
+                  onClick={() =>
+                    deleteCommentOrReply(
+                      reply.id,
+                      commentDispatch,
+                      parentComment.id
+                    )
+                  }
+                >
+                  🗑️
+                </span>
+              </span>
+            </div>
+          </div>
+        )}
+      </div>
     </div>
   );
 };

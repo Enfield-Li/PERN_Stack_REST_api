@@ -1,7 +1,7 @@
 import {
   CREATE_COMMENT,
   CREATE_REPLY,
-  DELETE_COMMENTS,
+  DELETE_COMMENTS_OR_REPLY,
   EDIT_CURRENT_COMMENT_OR_REPLY,
   FETCH_COMMENTS,
   FETCH_REPLIES,
@@ -75,6 +75,11 @@ type CurrentComment = {
   parentCommentId?: number;
 };
 
+type DeleteCommentOrReply = {
+  currentCommentOrReplyId: number;
+  parentCommentId?: number;
+};
+
 export type CommentActionType =
   | FetchComments
   | DeleteComments
@@ -89,8 +94,8 @@ type FetchComments = {
 };
 
 type DeleteComments = {
-  type: typeof DELETE_COMMENTS;
-  payload: number;
+  type: typeof DELETE_COMMENTS_OR_REPLY;
+  payload: DeleteCommentOrReply;
 };
 
 type CreateComment = {

@@ -9,12 +9,12 @@ import InputWrapper from "../../../forms/InputWrapper";
 interface EditCommentOrReplyProps {
   currentCommentOrReplyId: number;
   comment: string;
-  setReplyInputState?: React.Dispatch<React.SetStateAction<boolean>>;
+  setEditComment: React.Dispatch<React.SetStateAction<string | null>>;
   parentCommentId?: number;
 }
 
 const EditCommentOrReply: React.FC<EditCommentOrReplyProps> = ({
-  setReplyInputState,
+  setEditComment,
   currentCommentOrReplyId,
   parentCommentId,
   comment,
@@ -32,6 +32,7 @@ const EditCommentOrReply: React.FC<EditCommentOrReplyProps> = ({
           parentCommentId
         );
 
+        setEditComment(null);
         setFieldValue("comment", "");
       }}
     >
@@ -48,7 +49,7 @@ const EditCommentOrReply: React.FC<EditCommentOrReplyProps> = ({
                 disabled={props.isSubmitting}
                 className="btn btn-secondary w-100"
                 onClick={() => {
-                  if (setReplyInputState) setReplyInputState(false);
+                  setEditComment(null);
                 }}
               >
                 Cancel

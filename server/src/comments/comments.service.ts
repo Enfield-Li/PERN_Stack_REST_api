@@ -108,7 +108,7 @@ export class CommentsService {
   }
 
   async remove(id: number): Promise<boolean> {
-    await this.prismaService.commentInteractions.delete({ where: { id } });
+    await this.prismaService.comments.delete({ where: { id } });
 
     return true;
   }

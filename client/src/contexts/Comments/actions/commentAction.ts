@@ -3,6 +3,7 @@ import { useContext } from "react";
 import {
   CREATE_COMMENT,
   CREATE_REPLY,
+  DELETE_COMMENTS_OR_REPLY,
   EDIT_CURRENT_COMMENT_OR_REPLY,
   FETCH_COMMENTS,
   FETCH_REPLIES,
@@ -120,5 +121,21 @@ export const editCommentOrReply = async (
   dispatch({
     type: EDIT_CURRENT_COMMENT_OR_REPLY,
     payload: { comment_text, currentCommentOrReplyId, parentCommentId },
+  });
+};
+
+export const deleteCommentOrReply = async (
+  currentCommentOrReplyId: number,
+  dispatch: React.Dispatch<CommentActionType>,
+  parentCommentId?: number
+) => {
+  // await axios.delete(
+  //   `http://localhost:3119/comments/deleteComment/${currentCommentOrReplyId}`,
+  //   { withCredentials: true }
+  // );
+
+  dispatch({
+    type: DELETE_COMMENTS_OR_REPLY,
+    payload: { currentCommentOrReplyId, parentCommentId },
   });
 };
