@@ -6,7 +6,7 @@ import {
 } from "../../../contexts/Comments/actions/commentAction";
 import InputWrapper from "../../forms/InputWrapper";
 
-interface CreateCommentProps {
+export interface CreateCommentProps {
   postId: number;
   isReply: boolean;
   isComment?: boolean;

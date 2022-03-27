@@ -50,7 +50,7 @@ const Notifications: React.FC<NotificationsProps> = ({}) => {
 
   return (
     <div>
-      {/* bell button */}
+      {/* Controlls */}
       <div
         role="button"
         ref={setTriggerRef}
@@ -62,7 +62,7 @@ const Notifications: React.FC<NotificationsProps> = ({}) => {
         </span>
       </div>
 
-      {/* tool tips */}
+      {/* Popups */}
       {visible && (
         <div
           ref={setTooltipRef}

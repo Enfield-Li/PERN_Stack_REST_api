@@ -52,6 +52,7 @@ const PostCreatorInfo: React.FC<PostCreatorInfoProps> = ({
           onMouseOver={async () => hoverToFetchUserInfo()}
           onMouseLeave={() => setTextDecoration(false)}
         >
+          {/* Controlls */}
           <span role="button" ref={setTriggerRef}>
             <span> by </span>
             <span
@@ -71,6 +72,8 @@ const PostCreatorInfo: React.FC<PostCreatorInfoProps> = ({
               </Link>
             </span>
           </span>
+
+          {/* Popups */}
           {visible && (
             <div
               ref={setTooltipRef}
@@ -91,6 +94,7 @@ const PostCreatorInfo: React.FC<PostCreatorInfoProps> = ({
           )}
         </span>
       )}
+      {/* Create time */}
       <span className="ms-2 fw-lighter">
         {calculateTime(postAndInteractions.post.createdAt)}
       </span>
