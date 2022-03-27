@@ -27,7 +27,7 @@ const ReplyCard: React.FC<ReplyCardProps> = ({
   const { commentDispatch } = useComment();
   const navigate = useNavigate();
   const [replyInputState, setReplyInputState] = useState(false);
-  const [isHover, setIsHover] = useState(false);
+  const [isMouseHover, setIsMouseHover] = useState(false);
 
   const [editComment, setEditComment] = useState<string | null>(null);
 
@@ -50,9 +50,9 @@ const ReplyCard: React.FC<ReplyCardProps> = ({
     <div
       className="d-flex justify-content-between my-2"
       onMouseOver={(e) => {
-        setIsHover(true);
+        setIsMouseHover(true);
       }}
-      onMouseLeave={() => setIsHover(false)}
+      onMouseLeave={() => setIsMouseHover(false)}
     >
       <div className="d-flex mb-3 fs-5 w-100">
         {/* Person icon */}
@@ -101,7 +101,7 @@ const ReplyCard: React.FC<ReplyCardProps> = ({
                 isReply={true}
                 setReplyInputState={setReplyInputState}
                 replyToUsername={reply.user.username}
-                replyInputState={replyInputState}
+                replyInputState={replyInputState} 
               />
             </>
           )}
@@ -110,7 +110,7 @@ const ReplyCard: React.FC<ReplyCardProps> = ({
 
       <div>
         {/* Controlls */}
-        {isHover && (
+        {isMouseHover && (
           <div
             role="button"
             className="bi bi-three-dots fs-5"

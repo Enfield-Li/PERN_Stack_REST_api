@@ -39,10 +39,10 @@ const PostPage: React.FC<PostPageProps> = ({}) => {
           <div className="card my-2">
             <div className="card-body">
               <div className="d-flex justify-content-between">
-                <div className="d-flex">
+                <div className="d-flex w-100">
                   <VoteSection postAndInteractions={currentPost} />
 
-                  <div>
+                  <div className="w-100">
                     <PostCreatorInfo postAndInteractions={currentPost} />
                     <h3 className="my-2">{currentPost.post.title}</h3>
                     <p className="card-text mb-3 me-2 fs-5">

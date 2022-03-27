@@ -21,7 +21,7 @@ const CommentCard: React.FC<CommentCardProps> = ({ comment, postId }) => {
   const [replyInputState, setReplyInputState] = useState(false);
   const [repliseState, setRepliesState] = useState(false);
   const { commentDispatch } = useComment();
-  const [isHover, setIsHover] = useState(false);
+  const [isMouseHover, setIsMouseHover] = useState(false);
 
   const [editComment, setEditComment] = useState<string | null>(null);
 
@@ -67,8 +67,8 @@ const CommentCard: React.FC<CommentCardProps> = ({ comment, postId }) => {
   return (
     <div
       className="d-flex justify-content-between my-2"
-      onMouseOver={(e) => setIsHover(true)}
-      onMouseLeave={(e) => setIsHover(false)}
+      onMouseOver={(e) => setIsMouseHover(true)}
+      onMouseLeave={(e) => setIsMouseHover(false)}
     >
       <div className="d-flex mb-3 fs-5 w-100">
         {/* Person icon */}
@@ -122,7 +122,7 @@ const CommentCard: React.FC<CommentCardProps> = ({ comment, postId }) => {
 
           {/* Relies section */}
           <RepliesSection
-            setIsHover={setIsHover}
+            setIsHover={setIsMouseHover}
             comment={comment}
             repliseState={repliseState}
             postId={postId}
@@ -132,7 +132,7 @@ const CommentCard: React.FC<CommentCardProps> = ({ comment, postId }) => {
 
       <div>
         {/* Controlls */}
-        {isHover && (
+        {isMouseHover && (
           <div
             role="button"
             className="bi bi-three-dots fs-5"
