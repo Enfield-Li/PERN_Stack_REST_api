@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Comment, Reply } from "../../../contexts/Comments/types/CommentTypes";
 import CommentAndInteractions from "./details/CommentAndInteractions";
+import EditCommentOrReply from "./details/EditCommentOrReply";
 import PersonIcon from "./details/PersonIcon";
 import UserCommentInfo from "./details/UserCommentInfo";
 
@@ -21,6 +22,8 @@ const ReplyCard: React.FC<ReplyCardProps> = ({
   const navigate = useNavigate();
   const [replyInputState, setReplyInputState] = useState(false);
   const [isHover, setIsHover] = useState(false);
+
+  const [editComment, setEditComment] = useState<string | null>(null);
 
   return (
     <div
@@ -56,6 +59,15 @@ const ReplyCard: React.FC<ReplyCardProps> = ({
             {reply.comment_text}
           </div>
 
+          <button
+            className="btn btn-primary"
+            onClick={() => {
+              setEditComment(reply.comment_text);
+            }}
+          >
+            edit
+          </button>
+
           {/* Comment and interacitons */}
           <CommentAndInteractions
             postId={postId}
@@ -66,6 +78,15 @@ const ReplyCard: React.FC<ReplyCardProps> = ({
             replyToUsername={reply.user.username}
             replyInputState={replyInputState}
           />
+
+          {editComment && (
+            <EditCommentOrReply
+              setReplyInputState={setReplyInputState}
+              parentCommentId={parentComment.id}
+              currentCommentOrReplyId={reply.id}
+              comment={editComment}
+            />
+          )}
         </div>
       </div>
 

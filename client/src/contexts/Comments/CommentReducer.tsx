@@ -1,6 +1,7 @@
 import {
   CREATE_COMMENT,
   CREATE_REPLY,
+  EDIT_CURRENT_COMMENT_OR_REPLY,
   FETCH_COMMENTS,
   FETCH_REPLIES,
 } from "../constant";
@@ -44,6 +45,31 @@ export default function commentReducer(
 
             // User current gen reply
             comment.currentReplies.push(reply);
+          }
+        });
+      });
+    }
+
+    case EDIT_CURRENT_COMMENT_OR_REPLY: {
+      const { comment_text, currentCommentOrReplyId, parentCommentId } =
+        action.payload;
+
+      if (parentCommentId) {
+        return produce(state, (draftState) => {
+          draftState.comments.forEach((comment) => {
+            comment.replies.forEach((reply) => {
+              if (reply.id === currentCommentOrReplyId) {
+                reply.comment_text = comment_text;
+              }
+            });
+          });
+        });
+      }
+
+      return produce(state, (draftState) => {
+        draftState.comments.forEach((comment) => {
+          if (comment.id === currentCommentOrReplyId) {
+            comment.comment_text = comment_text;
           }
         });
       });

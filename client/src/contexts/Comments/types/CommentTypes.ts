@@ -2,6 +2,7 @@ import {
   CREATE_COMMENT,
   CREATE_REPLY,
   DELETE_COMMENTS,
+  EDIT_CURRENT_COMMENT_OR_REPLY,
   FETCH_COMMENTS,
   FETCH_REPLIES,
 } from "../../constant";
@@ -68,12 +69,19 @@ export type FindRepliesCondition = {
   parentCommentId: number;
 };
 
+type CurrentComment = {
+  comment_text: string;
+  currentCommentOrReplyId: number;
+  parentCommentId?: number;
+};
+
 export type CommentActionType =
   | FetchComments
   | DeleteComments
   | CreateComment
   | CreateReply
-  | FetchReplies;
+  | FetchReplies
+  | EditCurrentComment;
 
 type FetchComments = {
   type: typeof FETCH_COMMENTS;
@@ -98,4 +106,9 @@ type FetchReplies = {
 type CreateReply = {
   type: typeof CREATE_REPLY;
   payload: { reply: Reply; parentCommentId: number };
+};
+
+type EditCurrentComment = {
+  type: typeof EDIT_CURRENT_COMMENT_OR_REPLY;
+  payload: CurrentComment;
 };

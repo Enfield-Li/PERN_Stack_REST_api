@@ -3,6 +3,7 @@ import { useContext } from "react";
 import {
   CREATE_COMMENT,
   CREATE_REPLY,
+  EDIT_CURRENT_COMMENT_OR_REPLY,
   FETCH_COMMENTS,
   FETCH_REPLIES,
 } from "../../constant";
@@ -102,4 +103,22 @@ export const createCommentOrReply = async (
       },
     });
   }
+};
+
+export const editCommentOrReply = async (
+  currentCommentOrReplyId: number,
+  comment_text: string,
+  dispatch: React.Dispatch<CommentActionType>,
+  parentCommentId?: number
+) => {
+  await axios.patch(
+    `http://localhost:3119/comments/updateComment/${currentCommentOrReplyId}`,
+    { comment_text },
+    { withCredentials: true }
+  );
+
+  dispatch({
+    type: EDIT_CURRENT_COMMENT_OR_REPLY,
+    payload: { comment_text, currentCommentOrReplyId, parentCommentId },
+  });
 };

@@ -5,6 +5,7 @@ import {
 } from "../../../contexts/Comments/actions/commentAction";
 import { Comment } from "../../../contexts/Comments/types/CommentTypes";
 import CommentAndInteractions from "./details/CommentAndInteractions";
+import EditCommentOrReply from "./details/EditCommentOrReply";
 import PersonIcon from "./details/PersonIcon";
 import RepliesSection from "./details/RepliesSection";
 import UserCommentInfo from "./details/UserCommentInfo";
@@ -20,15 +21,7 @@ const CommentCard: React.FC<CommentCardProps> = ({ comment, postId }) => {
   const { commentDispatch } = useComment();
   const [isHover, setIsHover] = useState(false);
 
-  // arrows
-  const arrows = repliseState ? (
-    <i className="bi bi-caret-down-fill"></i>
-  ) : (
-    <i className="bi bi-caret-up-fill"></i>
-  );
-  const viewOrHideReply = repliseState
-    ? ` Hide ${comment.replyAmount} replies`
-    : ` View ${comment.replyAmount} replies`;
+  const [editComment, setEditComment] = useState<string | null>(null);
 
   const fetchReplyBtn = () => {
     // Fetch data only in close and doesn't fetch it before
@@ -43,6 +36,16 @@ const CommentCard: React.FC<CommentCardProps> = ({ comment, postId }) => {
     }
     setRepliesState(!repliseState);
   };
+
+  // JSX
+  const arrows = repliseState ? (
+    <i className="bi bi-caret-down-fill"></i>
+  ) : (
+    <i className="bi bi-caret-up-fill"></i>
+  );
+  const viewOrHideReply = repliseState
+    ? ` Hide ${comment.replyAmount} replies`
+    : ` View ${comment.replyAmount} replies`;
 
   return (
     <div
@@ -65,6 +68,14 @@ const CommentCard: React.FC<CommentCardProps> = ({ comment, postId }) => {
 
             {/* Comment body */}
             <div>{comment.comment_text}</div>
+            <button
+              className="btn btn-primary"
+              onClick={() => {
+                setEditComment(comment.comment_text);
+              }}
+            >
+              edit
+            </button>
 
             {/* Comment and interacitons */}
             <CommentAndInteractions
@@ -75,6 +86,14 @@ const CommentCard: React.FC<CommentCardProps> = ({ comment, postId }) => {
               setReplyInputState={setReplyInputState}
               replyInputState={replyInputState}
             />
+
+            {editComment && (
+              <EditCommentOrReply
+                setReplyInputState={setReplyInputState}
+                currentCommentOrReplyId={comment.id}
+                comment={editComment}
+              />
+            )}
 
             {/* Show replies */}
             {comment.replyAmount ? (
