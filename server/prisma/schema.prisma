@@ -19,24 +19,25 @@ model user {
   interactions        interactions[]
   comments            comments[]
   commentInteractions commentInteractions[]
+  parentComment       commentReplyToUser[]
 }
 
 model post {
-  id                  Int                   @id() @default(autoincrement())
-  createdAt           DateTime              @unique() @default(now())
-  updatedAt           DateTime              @unique() @updatedAt
-  title               String                @db.VarChar
-  content             String?               @db.VarChar
-  userId              Int
-  viewCount           Int                   @default(0)
-  votePoints          Int                   @default(0)
-  likePoints          Int                   @default(0)
-  confusedPoints      Int                   @default(0)
-  commentAmounts      Int                   @default(0)
-  laughPoints         Int                   @default(0)
-  user                user                  @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: NoAction)
-  interactions        interactions[]
-  comments            comments[]
+  id             Int            @id() @default(autoincrement())
+  createdAt      DateTime       @unique() @default(now())
+  updatedAt      DateTime       @unique() @updatedAt
+  title          String         @db.VarChar
+  content        String?        @db.VarChar
+  userId         Int
+  viewCount      Int            @default(0)
+  votePoints     Int            @default(0)
+  likePoints     Int            @default(0)
+  confusedPoints Int            @default(0)
+  commentAmounts Int            @default(0)
+  laughPoints    Int            @default(0)
+  user           user           @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: NoAction)
+  interactions   interactions[]
+  comments       comments[]
 }
 
 model interactions {
@@ -70,6 +71,16 @@ model comments {
   user                user                  @relation(fields: [userId], references: [id], onDelete: SetNull, onUpdate: NoAction)
   post                post                  @relation(fields: [postId], references: [id], onDelete: SetNull, onUpdate: NoAction)
   commentInteractions commentInteractions[]
+  parentComment       commentReplyToUser[]
+}
+
+model commentReplyToUser {
+  replyToUserId Int
+  commentId     Int
+  comments      comments @relation(fields: [commentId], references: [id])
+  user          user     @relation(fields: [replyToUserId], references: [id])
+
+  @@unique([replyToUserId, commentId]) 
 }
 
 model commentInteractions {
@@ -84,5 +95,5 @@ model commentInteractions {
   user           user      @relation(fields: [userId], references: [id])
   comments       comments? @relation(fields: [commentId], references: [id])
 
-  @@unique([userId,commentId])
+  @@unique([userId, commentId])
 }

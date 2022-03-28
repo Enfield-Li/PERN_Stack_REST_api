@@ -81,9 +81,10 @@ export class CommentsService {
   ): Promise<ReplyRO[]> {
     const { parentCommentId } = findReplyDto;
 
+    // https://stackoverflow.com/questions/8779918/postgres-multiple-joins
     const data = await this.prismaService.$queryRaw<rawReply>`select 
       comments.*, comments."replyToUserId", comments."userId", 
-          "replyToUsername".username as "replyToUsername", "user".username  
+          "replyToUsername".username as "replyToUsername", "user".username,   
       from comments 
           join "user" as "replyToUsername" on "replyToUsername".id = comments."replyToUserId" 
           join "user" on "user".id = comments."userId"
