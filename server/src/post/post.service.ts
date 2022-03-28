@@ -105,6 +105,7 @@ export class PostService {
             username: true,
           },
         },
+        interactions: userId ? { where: { userId } } : false,
       },
       where: sortCondition,
     });
@@ -118,7 +119,6 @@ export class PostService {
     const postAndInteractions = await this.processPostWithInteractions(
       hasMore,
       posts,
-      userId,
     );
 
     return { hasMore, postAndInteractions };
@@ -146,7 +146,10 @@ export class PostService {
       skip: skipTimes ? takeLimitPlusOne * skipTimes : undefined,
       where: time === 'all-time' ? undefined : { createdAt: { gte: dateSpec } },
       orderBy: { votePoints: 'desc' },
-      include: { user: { select: { username: true } } },
+      include: {
+        user: { select: { username: true } },
+        interactions: userId ? { where: { userId } } : false,
+      },
     });
 
     const hasMore = posts.length === takeLimitPlusOne;
@@ -154,7 +157,6 @@ export class PostService {
     const postAndInteractions = await this.processPostWithInteractions(
       hasMore,
       posts,
-      userId,
     );
 
     return { hasMore, postAndInteractions };
@@ -253,11 +255,11 @@ export class PostService {
   private async processPostWithInteractions(
     hasMore: boolean,
     posts: (post & {
+      interactions: interactions[];
       user: {
         username: string;
       };
     })[],
-    userId: number,
   ): Promise<PostAndInteraction[]> {
     // make sure return full list if hasMore === false
     const fullLength = hasMore ? posts.length - 1 : posts.length;
@@ -267,18 +269,12 @@ export class PostService {
       // send snippets numbering 49
       posts[i].content = posts[i].content.slice(0, 50);
 
-      let interactions: interactions | null = null;
-
-      if (userId) {
-        interactions = await this.prismaService.interactions.findUnique({
-          where: { userId_postId: { userId, postId: posts[i].id } },
-        });
-      }
-
       postAndInteractions[i] = {
         post: posts[i],
-        interactions,
+        interactions: posts[i].interactions[0],
       };
+
+      delete posts[i].interactions;
     }
 
     return postAndInteractions;
