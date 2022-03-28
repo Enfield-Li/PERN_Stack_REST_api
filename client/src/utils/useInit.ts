@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { io } from "socket.io-client";
 import {
   usePost,
@@ -17,7 +17,9 @@ import { toastNotify } from "./toastNotify";
 export function useInit() {
   const { userState, userDispatch } = useUser();
   const { postDispatch } = usePost();
-  const { socket, setSocket, socketDispatch, setUncheckedAmount } = useSocket();
+  const { socket, setSocket, socketDispatch, setUncheckedAmount, socketState } =
+    useSocket();
+  const navigate = useNavigate();
   const location = useLocation();
 
   // Initialize login, fetch posts, socket connection, interactives
@@ -68,7 +70,7 @@ export function useInit() {
 
       const text = `Receive a ${action} from ${event.senderName}!`;
 
-      toastNotify(text);
+      toastNotify(text, navigate, event.postId);
     }
   }, [toastNotifications]);
 }
