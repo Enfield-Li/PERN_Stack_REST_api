@@ -20,7 +20,7 @@ export default function PostReducer(state: PostState, action: PostActionType) {
       return produce(state, (draftState) => {
         draftState.paginatedPosts = { hasMore: false, postAndInteractions: [] };
 
-        // if (draftState.currentPost) draftState.currentPost.interactions = null;
+        if (draftState.currentPost) draftState.currentPost.interactions = null;
       });
     }
 

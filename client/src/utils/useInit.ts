@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { useLocation } from "react-router-dom";
 import { toast } from "react-toastify";
 import { io } from "socket.io-client";
 import {
@@ -17,11 +18,12 @@ export function useInit() {
   const { userState, userDispatch } = useUser();
   const { postDispatch } = usePost();
   const { socket, setSocket, socketDispatch, setUncheckedAmount } = useSocket();
+  const location = useLocation();
 
   // Initialize login, fetch posts, socket connection, interactives
   useEffect(() => {
     me(userDispatch);
-    fetchPaginatedPosts(postDispatch);
+    if (location.pathname === "/") fetchPaginatedPosts(postDispatch);
 
     const connectSocket = io("http://localhost:3119");
     setSocket(connectSocket);

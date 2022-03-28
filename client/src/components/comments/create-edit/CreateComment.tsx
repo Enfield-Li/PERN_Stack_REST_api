@@ -1,9 +1,11 @@
 import { Form, Formik } from "formik";
 import React from "react";
+import { useNavigate } from "react-router-dom";
 import {
   createCommentOrReply,
   useComment,
 } from "../../../contexts/Comments/actions/commentAction";
+import { useUser } from "../../../contexts/User/actions/UserAction";
 import InputWrapper from "../../forms/InputWrapper";
 
 export interface CreateCommentProps {
@@ -26,11 +28,19 @@ const CreateComment: React.FC<CreateCommentProps> = ({
   replyToUsername,
 }) => {
   const { commentDispatch, commentState } = useComment();
+  const navigate = useNavigate();
+  const { userState } = useUser();
+  const { user } = userState;
 
   return (
     <Formik
       initialValues={{ comment: "" }}
       onSubmit={async (value, { setFieldValue }) => {
+        if (!user) {
+          navigate("/login");
+          return;
+        }
+
         const { comment: comment_text } = value;
 
         createCommentOrReply(
