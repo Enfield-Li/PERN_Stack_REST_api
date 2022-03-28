@@ -124,6 +124,15 @@ export const editCommentOrReply = async (
   });
 };
 
+export const voteComment = async (commentId: number, voteValue: boolean) => {
+  const res = await axios.get(
+    `http://localhost:3119/interactions/interact/comment/${commentId}?voteValue=${voteValue}`,
+    { withCredentials: true }
+  );
+
+  console.log(res);
+};
+
 export const deleteCommentOrReply = async (
   currentCommentOrReplyId: number,
   dispatch: React.Dispatch<CommentActionType>,

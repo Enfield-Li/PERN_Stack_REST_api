@@ -3,9 +3,10 @@ import { PrismaService } from 'src/config/prisma.service';
 import {
   CommentRO,
   CreateCommentOrReplyDto,
-  FetchRelyWithReplyToUserId,
+  rawReply,
   FindReplyDto,
   ReplyRO,
+  rawComment,
 } from './dto/create-comment.dto';
 import { UpdateCommentDto } from './dto/update-comment.dto';
 
@@ -51,8 +52,8 @@ export class CommentsService {
     return createCommentOrReply;
   }
 
-  async findAllComments(postId: number): Promise<CommentRO[]> {
-    return this.prismaService.comments.findMany({
+  async findAllComments(postId: number, userId: number): Promise<CommentRO[]> {
+    const res = await this.prismaService.comments.findMany({
       where: {
         postId,
         OR: [
@@ -66,9 +67,12 @@ export class CommentsService {
             username: true,
           },
         },
+        commentInteractions: userId ? { where: { userId } } : false,
       },
       orderBy: { createdAt: 'desc' },
     });
+
+    return this.buildCommentRO(res);
   }
 
   async findAllReplies(
@@ -77,8 +81,7 @@ export class CommentsService {
   ): Promise<ReplyRO[]> {
     const { parentCommentId } = findReplyDto;
 
-    const data = await this.prismaService
-      .$queryRaw<FetchRelyWithReplyToUserId>`select 
+    const data = await this.prismaService.$queryRaw<rawReply>`select 
       comments.*, comments."replyToUserId", comments."userId", 
           "replyToUsername".username as "replyToUsername", "user".username  
       from comments 
@@ -87,7 +90,7 @@ export class CommentsService {
       where comments."postId" = ${postId} and comments."parentCommentId" = ${parentCommentId};
     `;
 
-    return this.buildReplyROArr(data);
+    return this.buildReplyRO(data);
   }
 
   async editComment(
@@ -120,7 +123,7 @@ export class CommentsService {
     return true;
   }
 
-  private buildReplyROArr(input: FetchRelyWithReplyToUserId): ReplyRO[] {
+  private buildReplyRO(input: rawReply): ReplyRO[] {
     const res: ReplyRO[] = [];
 
     for (let i = 0; i < input.length; i++) {
@@ -135,6 +138,23 @@ export class CommentsService {
       delete commentOrReplyRO.replyToUsername;
 
       res.push(commentOrReplyRO);
+    }
+
+    return res;
+  }
+
+  private buildCommentRO(input: rawComment): CommentRO[] {
+    const res: CommentRO[] = [];
+
+    for (let i = 0; i < input.length; i++) {
+      const inputItem = input[i];
+
+      const commentRO = {
+        ...inputItem,
+        commentInteractions: inputItem.commentInteractions[0],
+      };
+
+      res.push(commentRO);
     }
 
     return res;

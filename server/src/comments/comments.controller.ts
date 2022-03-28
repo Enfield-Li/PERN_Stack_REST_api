@@ -45,8 +45,13 @@ export class CommentsController {
 
   @ApiCreatedResponse({ type: [CommentRO] })
   @Get('/fetchComments/:id')
-  findComments(@Param('id') id: string): Promise<CommentRO[]> {
-    return this.commentsService.findAllComments(+id);
+  findComments(
+    @Param('id') id: string,
+    @Req() req: Request,
+  ): Promise<CommentRO[]> {
+    const userId = req.session.userId;
+
+    return this.commentsService.findAllComments(+id, userId);
   }
 
   @ApiCreatedResponse({ type: [ReplyRO] })

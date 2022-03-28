@@ -1,15 +1,14 @@
 import React from "react";
-import CreateComment, {
-  CreateCommentProps,
-} from "../../create-edit/CreateComment";
+import { voteComment } from "../../../../contexts/Comments/actions/commentAction";
+import CreateComment from "../../create-edit/CreateComment";
 
 interface CommentAndInteractionsProps {
   postId: number;
   isReply: boolean;
   replyToUserId: number;
   setReplyInputState: React.Dispatch<React.SetStateAction<boolean>>;
-  parentCommentId?: number;
   replyInputState: boolean;
+  parentCommentId: number;
   replyToUsername?: string;
 }
 
@@ -25,8 +24,20 @@ const CommentAndInteractions: React.FC<CommentAndInteractionsProps> = ({
   return (
     <div>
       {/* Thumbs */}
-      <i className="bi bi-hand-thumbs-up" role="button"></i>
-      <i className="bi bi-hand-thumbs-down mx-3" role="button"></i>
+      <i
+        className="bi bi-hand-thumbs-up"
+        role="button"
+        onClick={() => {
+          voteComment(parentCommentId, true);
+        }}
+      ></i>{}
+      <i
+        className="bi bi-hand-thumbs-down mx-3"
+        role="button"
+        onClick={() => {
+          voteComment(parentCommentId, false);
+        }}
+      ></i>
 
       {/* Reply button */}
       <span

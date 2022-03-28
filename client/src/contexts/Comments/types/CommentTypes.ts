@@ -32,6 +32,18 @@ export type Comment = {
   replyToUser?: { username: string };
   isReply: boolean;
   currentReplies: Reply[];
+  commentInteractions?: commentInteractions;
+};
+
+type commentInteractions = {
+  id: number;
+  createdAt: Date;
+  updatedAt: Date;
+  voteStatus: boolean | null;
+  upvoteAmount: number;
+  downvoteAmount: number;
+  commentId: number;
+  userId: number;
 };
 
 export type Replies = Reply[];
@@ -53,6 +65,7 @@ export type Reply = {
   user: { username: string };
   replyToUser: { username: string };
   isReply: boolean;
+  commentInteractions?: commentInteractions[];
 };
 
 export type RepliesParentCommentId = { parentCommentId: number };
