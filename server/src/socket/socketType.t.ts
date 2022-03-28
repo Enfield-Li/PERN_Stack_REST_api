@@ -24,7 +24,12 @@ export type HelloWorld = {
   msg: string;
 };
 
-export type VoteFields = 'vote' | 'like' | 'laugh' | 'confused';
+export type NotificationType =
+  | 'vote'
+  | 'like'
+  | 'laugh'
+  | 'confused'
+  | 'comment';
 
 export type SendNotification = {
   postId: number;
@@ -32,7 +37,7 @@ export type SendNotification = {
   value: boolean;
   senderId: number;
   senderName: string;
-  type: VoteFields;
+  type: NotificationType;
 };
 
 export type ReceiveNotification = {
@@ -40,7 +45,7 @@ export type ReceiveNotification = {
   title: string;
   senderId: number;
   senderName: string;
-  type: VoteFields;
+  type: NotificationType;
 };
 
 export type SendChat = {

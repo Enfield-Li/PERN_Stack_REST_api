@@ -6,7 +6,6 @@ import {
   SET_NOTIFICATIONS,
   SET_NOTIFICATION_READ,
 } from "../../constant";
-import { VotingTypes } from "../../Post/types/PostTypes";
 
 export interface ServerToClientEvents {
   MsgToClient: (data: HelloWorld) => void;
@@ -62,13 +61,20 @@ export type PostsForChecked = {
   postId: number;
 };
 
+export type NotificationType =
+  | "vote"
+  | "like"
+  | "laugh"
+  | "confused"
+  | "comment";
+
 export type SendNotification = {
   postId: number;
   reciverId: number;
   value: boolean;
   senderId: number;
   senderName: string;
-  type: VotingTypes;
+  type: NotificationType;
 };
 
 export type ReceiveNotification = {
@@ -76,7 +82,7 @@ export type ReceiveNotification = {
   title: string;
   senderId: number;
   senderName: string;
-  type: VotingTypes;
+  type: NotificationType;
 };
 
 export type SendChat = {

@@ -1,6 +1,5 @@
 import { useState, useEffect } from "react";
 import { useLocation } from "react-router-dom";
-import { toast } from "react-toastify";
 import { io } from "socket.io-client";
 import {
   usePost,
@@ -13,6 +12,7 @@ import {
 } from "../contexts/SocketIo/actions/socketActions";
 import { ReceiveNotification } from "../contexts/SocketIo/types/socketTypes";
 import { useUser, me } from "../contexts/User/actions/UserAction";
+import { toastNotify } from "./toastNotify";
 
 export function useInit() {
   const { userState, userDispatch } = useUser();
@@ -56,10 +56,11 @@ export function useInit() {
     );
   }, [socket]);
 
-  // Notify with toast when receive interactions
+  // Notify with toast after receiving interactions
   useEffect(() => {
     if (toastNotifications[0]) {
       const event = toastNotifications[0];
+
       let action = "";
       if (event.type === "laugh") action = "😄";
       if (event.type === "vote") action = "⬆️";
@@ -67,9 +68,7 @@ export function useInit() {
 
       const text = `Receive a ${action} from ${event.senderName}!`;
 
-      const notify = () => toast(text);
-
-      notify();
+      toastNotify(text);
     }
   }, [toastNotifications]);
 }

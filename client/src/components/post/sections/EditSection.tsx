@@ -13,6 +13,7 @@ import {
   interactWithPostFromUserProfile,
 } from "../../../contexts/User/actions/UserAction";
 import { UserPostAndInteractions } from "../../../contexts/User/types/UserTypes";
+import { toastNotify } from "../../../utils/toastNotify";
 
 interface EditSectionProps {
   postAndInteractions: PostAndInteractions | UserPostAndInteractions;
@@ -76,8 +77,7 @@ const EditSection: React.FC<EditSectionProps> = ({
       deletePost(postDispatch, postId);
       navigate("/");
 
-      const notify = () => toast("Post deleted");
-      notify();
+      toastNotify("Post deleted");
     } else {
       navigate(`/post/${postId}`);
     }
