@@ -32,7 +32,7 @@ const VoteSection: React.FC<VoteSectionProps> = ({
       return;
     }
 
-    // Emit interactions
+    // Emit notification
     sendNotification(socket, {
       postId,
       reciverId: post.userId,

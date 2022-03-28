@@ -6,9 +6,9 @@ import CreateComment, {
 interface CommentAndInteractionsProps {
   postId: number;
   isReply: boolean;
-  parentCommentId?: number;
-  replyToUserId?: number;
+  replyToUserId: number;
   setReplyInputState: React.Dispatch<React.SetStateAction<boolean>>;
+  parentCommentId?: number;
   replyInputState: boolean;
   replyToUsername?: string;
 }
@@ -46,6 +46,7 @@ const CommentAndInteractions: React.FC<CommentAndInteractionsProps> = ({
           isReply={isReply}
           setReplyInputState={setReplyInputState}
           replyToUsername={replyToUsername}
+          reciverId={replyToUserId}
         />
       )}
     </div>

@@ -54,6 +54,7 @@ const PostPage: React.FC<PostPageProps> = ({}) => {
                       postId={currentPost.post.id}
                       isReply={false}
                       isComment={false}
+                      reciverId={currentPost.post.userId}
                     />
                     <PostComments postId={currentPost.post.id} />
                   </div>

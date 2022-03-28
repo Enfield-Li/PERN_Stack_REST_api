@@ -67,6 +67,7 @@ export function useInit() {
       if (event.type === "laugh") action = "😄";
       if (event.type === "vote") action = "⬆️";
       if (event.type === "like") action = "❤";
+      if (event.type === "comment") action = "📝";
 
       const text = `Receive a ${action} from ${event.senderName}!`;
 

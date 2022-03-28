@@ -5,12 +5,17 @@ import {
   createCommentOrReply,
   useComment,
 } from "../../../contexts/Comments/actions/commentAction";
+import {
+  sendNotification,
+  useSocket,
+} from "../../../contexts/SocketIo/actions/socketActions";
 import { useUser } from "../../../contexts/User/actions/UserAction";
 import InputWrapper from "../../forms/InputWrapper";
 
 export interface CreateCommentProps {
   postId: number;
   isReply: boolean;
+  reciverId: number;
   isComment?: boolean;
   parentCommentId?: number;
   replyToUserId?: number;
@@ -26,11 +31,13 @@ const CreateComment: React.FC<CreateCommentProps> = ({
   isReply,
   setReplyInputState,
   replyToUsername,
+  reciverId,
 }) => {
   const { commentDispatch, commentState } = useComment();
   const navigate = useNavigate();
   const { userState } = useUser();
   const { user } = userState;
+  const { socket } = useSocket();
 
   return (
     <Formik
@@ -40,6 +47,16 @@ const CreateComment: React.FC<CreateCommentProps> = ({
           navigate("/login");
           return;
         }
+
+        // Emit notification
+        sendNotification(socket, {
+          postId,
+          reciverId,
+          senderId: user.id,
+          value: true,
+          senderName: user.username,
+          type: "comment",
+        });
 
         const { comment: comment_text } = value;
 

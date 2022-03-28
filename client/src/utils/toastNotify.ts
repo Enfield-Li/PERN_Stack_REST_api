@@ -9,7 +9,10 @@ export const toastNotify = (
   const notify = () =>
     toast(text, {
       onClick: () => {
-        if (navigate) navigate(`/post/${postId}`);
+        if (navigate) {
+          navigate(`/post/${postId}`);
+          navigate(0);
+        }
       },
     });
 
