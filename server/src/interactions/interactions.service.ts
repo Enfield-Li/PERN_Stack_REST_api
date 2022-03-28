@@ -75,6 +75,68 @@ export class InteractionsService {
     return true;
   }
 
+  async voteComment(
+    commentId: number,
+    userId: number,
+    voteValue: boolean,
+  ): Promise<boolean> {
+    const votesOnComment =
+      await this.prismaService.commentInteractions.findUnique({
+        where: { userId_commentId: { userId, commentId } },
+      });
+
+    // Create new vote for comment
+    if (!votesOnComment) {
+      await this.prismaService.commentInteractions.create({
+        data: {
+          voteStatus: voteValue,
+          commentId: commentId,
+          userId,
+          upvoteAmount: voteValue ? 1 : undefined,
+          downvoteAmount: voteValue ? 1 : undefined,
+        },
+      });
+    }
+
+    // Vote cacelled before
+    else if (votesOnComment.voteStatus === null) {
+      await this.prismaService.commentInteractions.update({
+        where: { userId_commentId: { userId, commentId } },
+        data: {
+          upvoteAmount: voteValue ? { increment: 1 } : undefined,
+          downvoteAmount: !voteValue ? { increment: 1 } : undefined,
+          voteStatus: voteValue ? true : false,
+        },
+      });
+    }
+
+    // Cancel vote
+    else if (votesOnComment.voteStatus === voteValue) {
+      await this.prismaService.commentInteractions.update({
+        where: { userId_commentId: { userId, commentId } },
+        data: {
+          voteStatus: null,
+          downvoteAmount: !voteValue ? { decrement: 1 } : undefined,
+          upvoteAmount: voteValue ? { decrement: 1 } : undefined,
+        },
+      });
+    }
+
+    // Change vote
+    else if (votesOnComment.voteStatus !== voteValue) {
+      await this.prismaService.commentInteractions.update({
+        where: { userId_commentId: { userId, commentId } },
+        data: {
+          voteStatus: voteValue,
+          downvoteAmount: !voteValue ? { increment: 1 } : { decrement: 1 },
+          upvoteAmount: voteValue ? { increment: 1 } : { decrement: 1 },
+        },
+      });
+    }
+
+    return true;
+  }
+
   async voteAndInteractWithPost(
     postId: number,
     userId: number,

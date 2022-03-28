@@ -90,10 +90,6 @@ export class CommentsService {
     return this.buildReplyROArr(data);
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} comment`;
-  }
-
   async editComment(
     id: number,
     updateCommentDto: UpdateCommentDto,

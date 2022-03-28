@@ -1,7 +1,6 @@
 import { useState } from "react";
 import { usePopperTooltip } from "react-popper-tooltip";
 import { useNavigate } from "react-router-dom";
-import { toast } from "react-toastify";
 import {
   usePost,
   interactWithPost,
@@ -88,7 +87,7 @@ const EditSection: React.FC<EditSectionProps> = ({
       {/* Controlls */}
       <div
         role="button"
-        className="bi bi-three-dots text-success me-1"
+        className="bi bi-three-dots text-success me-1 fs-5"
         ref={setTriggerRef}
       ></div>
 

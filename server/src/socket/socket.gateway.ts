@@ -33,6 +33,9 @@ export class SocketGateway
 {
   constructor(private readonly prismaService: PrismaService) {}
 
+  @WebSocketServer()
+  socketServer: Server<ClientToServerEvents, ServerToClientEvents>;
+
   onlineUsers: { userId: number; socketId: string }[] = [];
 
   private logger: Logger = new Logger('SocketGateway');
@@ -49,9 +52,6 @@ export class SocketGateway
     this.logger.log(`Socket Disconnected: ${socket.id}`);
     this.removeUser(socket.id);
   }
-
-  @WebSocketServer()
-  socketServer: Server<ClientToServerEvents, ServerToClientEvents>;
 
   @SubscribeMessage('MsgToServer')
   handleMessage(

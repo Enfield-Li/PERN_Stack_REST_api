@@ -67,7 +67,7 @@ const Interacitivities: React.FC<InteracitivitiesProps> = ({
             navigate(`/post/${interactive.postId}`);
             setControlledVisible(false);
           }}
-          style={{ background: interactive.read ? "" : "#e9f5fd" }}
+          style={{ background: interactive.read ? "" : "#c9d3dd" }}
           className="d-flex p-2"
         >
           {/* Person icon */}

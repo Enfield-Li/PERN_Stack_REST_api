@@ -2,6 +2,7 @@ import {
   Body,
   Controller,
   Get,
+  HttpException,
   Param,
   Patch,
   Query,
@@ -30,7 +31,8 @@ export class InteractionsController {
   @ApiCreatedResponse({ type: Boolean })
   @Patch('/setNotificationChecked')
   async setChecked(@Body() ids: InteractionIds[], @Req() req: Request) {
-    if (!req.session.userId) return;
+    const userId = req.session.userId;
+    if (!userId) throw new HttpException('Not authenticated', 401);
 
     return this.interactionsService.setNotificationChecked(ids);
   }
@@ -38,7 +40,8 @@ export class InteractionsController {
   @ApiCreatedResponse({ type: Boolean })
   @Patch('/setInteractionRead')
   async setRead(@Body() ids: InteractionIds, @Req() req: Request) {
-    if (!req.session.userId) return;
+    const userId = req.session.userId;
+    if (!userId) throw new HttpException('Not authenticated', 401);
 
     return this.interactionsService.setInteractionRead(ids);
   }
@@ -49,7 +52,8 @@ export class InteractionsController {
   @ApiCreatedResponse({ type: Boolean })
   @Patch('/setAllInteractionRead')
   async setAllRead(@Body() ids: InteractionIds[], @Req() req: Request) {
-    if (!req.session.userId) return;
+    const userId = req.session.userId;
+    if (!userId) throw new HttpException('Not authenticated', 401);
 
     return this.interactionsService.setAllInteractionsRead(ids);
   }
@@ -65,14 +69,12 @@ export class InteractionsController {
     @Req() req: Request,
     @Query('getAll') getAll: string = 'false',
   ) {
-    if (!req.session.userId) return;
+    const userId = req.session.userId;
+    if (!userId) throw new HttpException('Not authenticated', 401);
 
     const getAllIsTrue = getAll === 'true';
 
-    return this.interactionsService.fetchInteractives(
-      req.session.userId,
-      getAllIsTrue,
-    );
+    return this.interactionsService.fetchInteractives(userId, getAllIsTrue);
   }
 
   @ApiQuery({
@@ -83,7 +85,7 @@ export class InteractionsController {
     name: 'field',
     enum: ['vote', 'like', 'laugh', 'confused'],
   })
-  @Get('interact/:id')
+  @Get('interact/post/:id')
   @ApiOkResponse({ type: Boolean })
   votings(
     @Param('id') id: string,
@@ -91,11 +93,34 @@ export class InteractionsController {
     @Query('field') field: VoteFields,
     @Req() req: Request,
   ): Promise<Boolean> {
+    const userId = req.session.userId;
+    if (!userId) throw new HttpException('Not authenticated', 401);
+
     return this.interactionsService.voteAndInteractWithPost(
       +id,
-      req.session.userId,
+      userId,
       value === 'true' ? true : value === 'false' ? false : null,
       field,
+    );
+  }
+
+  @ApiQuery({
+    name: 'voteValue',
+    type: Boolean,
+  })
+  @Get('interact/comment/:id')
+  async voteComment(
+    @Req() req: Request,
+    @Param('id') id: string,
+    @Query('voteValue') voteValue: string,
+  ) {
+    const userId = req.session.userId;
+    if (!userId) throw new HttpException('Not authenticated', 401);
+
+    return this.interactionsService.voteComment(
+      +id,
+      userId,
+      voteValue === 'true' ? true : voteValue === 'false' ? false : null,
     );
   }
 }
