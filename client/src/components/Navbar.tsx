@@ -1,7 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import {
-  clearCache,
+  clearPostsCache,
   fetchPaginatedPosts,
   usePost,
 } from "../contexts/Post/actions/PostAction";
@@ -17,7 +17,7 @@ const Navbar: React.FC<navbarProps> = ({}) => {
   const { user } = userState;
 
   const refreshHome = () => {
-    clearCache(postDispatch);
+    clearPostsCache(postDispatch);
     fetchPaginatedPosts(postDispatch);
     setSortPost("best");
   };

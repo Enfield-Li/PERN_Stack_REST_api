@@ -63,12 +63,9 @@ export class UserController {
     @Query('take') take: string = '5',
     @Query('cursor') cursor?: Date,
   ): Promise<UserProfileRO> {
-    return this.userService.fetchProfile(
-      +id,
-      req.session.userId,
-      +take,
-      cursor,
-    );
+    const userId = req.session.userId;
+
+    return this.userService.fetchProfile(+id, userId, +take, cursor);
   }
 
   @ApiCreatedResponse({ type: ResUser })
@@ -77,7 +74,9 @@ export class UserController {
     @Param('id') id: string,
     @Req() req: Request,
   ): Promise<ResUser | string> {
-    const user = await this.userService.fetchUserInfo(+id, req.session.userId);
+    const userId = req.session.userId;
+
+    const user = await this.userService.fetchUserInfo(+id, userId);
     if (!user) {
       return 'User Not Found';
     }
@@ -97,9 +96,11 @@ export class UserController {
   @Get('/me')
   @ApiCreatedResponse({ type: UserRO })
   findOne(@Req() req: Request): Promise<UserRO> {
-    if (!req.session.userId) return;
+    const userId = req.session.userId;
 
-    return this.userService.me(req.session.userId);
+    if (!userId) throw new HttpException('Invalid credential', 401);
+
+    return this.userService.me(userId);
   }
 
   @Patch('/update-user/:id')
@@ -108,9 +109,11 @@ export class UserController {
     @Req() req: Request,
     @Body() updateUserDto: UpdateUserDto,
   ): Promise<UserRO> {
-    if (!req.session.userId) throw new HttpException('Invalid credential', 401);
+    const userId = req.session.userId;
 
-    return this.userService.updateUser(req.session.userId, updateUserDto);
+    if (!userId) throw new HttpException('Invalid credential', 401);
+
+    return this.userService.updateUser(userId, updateUserDto);
   }
 
   @Get('/logout')
@@ -132,8 +135,10 @@ export class UserController {
   @Delete('/delete-user/:id')
   @ApiResponse({ type: Boolean })
   remove(@Req() req: Request): Promise<boolean> {
-    if (!req.session.userId) throw new HttpException('Invalid credential', 401);
+    const userId = req.session.userId;
 
-    return this.userService.deleteUser(req.session.userId);
+    if (!userId) throw new HttpException('Invalid credential', 401);
+
+    return this.userService.deleteUser(userId);
   }
 }

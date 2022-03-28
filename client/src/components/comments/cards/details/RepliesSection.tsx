@@ -40,14 +40,13 @@ const RepliesSection: React.FC<RepliesSectionProps> = ({
       {!repliseState &&
         comment.currentReplies &&
         comment.currentReplies.map((reply, index) => (
-          <div key={index}>
-            <ReplyCard
-              reply={reply}
-              postId={postId}
-              replyToUserId={reply.userId}
-              parentComment={comment}
-            />
-          </div>
+          <ReplyCard
+            key={index}
+            reply={reply}
+            postId={postId}
+            replyToUserId={reply.userId}
+            parentComment={comment}
+          />
         ))}
     </div>
   );

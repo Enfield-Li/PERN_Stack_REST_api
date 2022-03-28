@@ -7,7 +7,7 @@ import FormWrapper from "../forms/FormWrapper";
 import InputWrapper from "../forms/InputWrapper";
 import * as Yup from "yup";
 import {
-  clearCache,
+  clearPostsCache,
   fetchPaginatedPosts,
   usePost,
 } from "../../contexts/Post/actions/PostAction";
@@ -40,7 +40,7 @@ const Login: React.FC<LoginProps> = ({}) => {
           setErrors(mapToError(errorRes));
           return;
         } else {
-          clearCache(postDispatch);
+          clearPostsCache(postDispatch);
           fetchPaginatedPosts(postDispatch);
           navigate("/");
           return;

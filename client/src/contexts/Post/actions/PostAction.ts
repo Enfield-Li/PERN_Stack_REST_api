@@ -144,7 +144,7 @@ export const fetchPaginatedPosts = async (
   });
 };
 
-export const clearCache = (dispatch: React.Dispatch<PostActionType>) => {
+export const clearPostsCache = (dispatch: React.Dispatch<PostActionType>) => {
   dispatch({
     type: CLEAR_CACHE,
   });

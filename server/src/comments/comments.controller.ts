@@ -8,6 +8,7 @@ import {
   Delete,
   Req,
   Put,
+  HttpException,
 } from '@nestjs/common';
 import { ApiCreatedResponse, ApiParam, ApiTags } from '@nestjs/swagger';
 import { Request } from 'express';
@@ -32,9 +33,12 @@ export class CommentsController {
     @Req() req: Request,
     @Param('id') id: string,
   ): Promise<CommentRO> {
+    const userId = req.session.userId;
+    if (!userId) throw new HttpException('Not authenticated', 401);
+
     return this.commentsService.createCommentOrReply(
       createCommentDto,
-      req.session.userId,
+      userId,
       +id,
     );
   }
@@ -56,16 +60,37 @@ export class CommentsController {
 
   @Patch('/updateComment/:id')
   @ApiCreatedResponse({ type: CommentRO })
-  update(
+  async update(
     @Param('id') id: string,
     @Body() updateCommentDto: UpdateCommentDto,
+    @Req() req: Request,
   ): Promise<CommentRO> {
-    return this.commentsService.editComment(+id, updateCommentDto);
+    const userId = req.session.userId;
+
+    if (!userId) throw new HttpException('Not authenticated', 401);
+
+    const res = await this.commentsService.editComment(
+      +id,
+      updateCommentDto,
+      userId,
+    );
+
+    if (!res) throw new HttpException('Not authorized', 403);
+
+    return res;
   }
 
   @Delete('/deleteComment/:id')
   @ApiCreatedResponse({ type: Boolean })
-  remove(@Param('id') id: string): Promise<boolean> {
-    return this.commentsService.remove(+id);
+  async remove(@Param('id') id: string, @Req() req: Request): Promise<boolean> {
+    const userId = req.session.userId;
+
+    if (!userId) throw new HttpException('Not authenticated', 401);
+
+    const res = await this.commentsService.deleteComment(+id, userId);
+
+    if (!res) throw new HttpException('Not authorized', 403);
+
+    return res;
   }
 }

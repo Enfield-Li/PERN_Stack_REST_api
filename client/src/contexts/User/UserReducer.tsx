@@ -15,6 +15,13 @@ import { interactionManipulation } from "../../utils/interactionManipulation";
 
 export default function UserReducer(state: UserState, action: UserActionType) {
   switch (action.type) {
+    case CLEAR_CACHE: {
+      return {
+        ...state,
+        userProfile: null,
+      };
+    }
+
     case LOGIN_USER: {
       return {
         ...state,
@@ -44,13 +51,6 @@ export default function UserReducer(state: UserState, action: UserActionType) {
           draftState.userProfile = action.payload;
         }
       });
-    }
-
-    case CLEAR_CACHE: {
-      return {
-        ...state,
-        userProfile: null,
-      };
     }
 
     case VOTE_CURRENT_POST: {

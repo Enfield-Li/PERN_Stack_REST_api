@@ -18,8 +18,9 @@ export default function PostReducer(state: PostState, action: PostActionType) {
   switch (action.type) {
     case CLEAR_CACHE: {
       return produce(state, (draftState) => {
-        draftState.paginatedPosts.postAndInteractions = [];
-        // draftState.currentPost = null;
+        draftState.paginatedPosts = { hasMore: false, postAndInteractions: [] };
+
+        // if (draftState.currentPost) draftState.currentPost.interactions = null;
       });
     }
 
@@ -63,7 +64,7 @@ export default function PostReducer(state: PostState, action: PostActionType) {
         const currentPost = draftState.currentPost;
         const paginatedPosts = draftState.paginatedPosts;
 
-        if (currentPost) {
+        if (currentPost && currentPost.interactions) {
           const voteValue = action.payload.value;
           const voteStatus = currentPost.interactions.voteStatus;
           const votePoints = currentPost.post.votePoints;
@@ -81,7 +82,10 @@ export default function PostReducer(state: PostState, action: PostActionType) {
 
         paginatedPosts.postAndInteractions =
           paginatedPosts.postAndInteractions.filter((postAndInteraction) => {
-            if (postAndInteraction.post.id === action.payload.id) {
+            if (
+              postAndInteraction.post.id === action.payload.id &&
+              postAndInteraction.interactions
+            ) {
               const voteValue = action.payload.value;
               const voteStatus = postAndInteraction.interactions.voteStatus;
               const votePoints = postAndInteraction.post.votePoints;
@@ -106,7 +110,7 @@ export default function PostReducer(state: PostState, action: PostActionType) {
         const currentPost = draftState.currentPost;
         const paginatedPosts = draftState.paginatedPosts;
 
-        if (currentPost) {
+        if (currentPost && currentPost.interactions) {
           const likeStatus = currentPost.interactions.likeStatus;
           const likePoints = currentPost.post.likePoints;
 
@@ -122,7 +126,10 @@ export default function PostReducer(state: PostState, action: PostActionType) {
 
         paginatedPosts.postAndInteractions =
           paginatedPosts.postAndInteractions.filter((postAndInteraction) => {
-            if (postAndInteraction.post.id === action.payload) {
+            if (
+              postAndInteraction.post.id === action.payload &&
+              postAndInteraction.interactions
+            ) {
               const likeStatus = postAndInteraction.interactions.likeStatus;
               const likePoints = postAndInteraction.post.likePoints;
 
@@ -145,7 +152,7 @@ export default function PostReducer(state: PostState, action: PostActionType) {
         const currentPost = draftState.currentPost;
         const paginatedPosts = draftState.paginatedPosts;
 
-        if (currentPost) {
+        if (currentPost && currentPost.interactions) {
           const laughStatus = currentPost.interactions.laughStatus;
           const laughPoints = currentPost.post.laughPoints;
 
@@ -161,7 +168,10 @@ export default function PostReducer(state: PostState, action: PostActionType) {
 
         paginatedPosts.postAndInteractions =
           paginatedPosts.postAndInteractions.filter((postAndInteraction) => {
-            if (postAndInteraction.post.id === action.payload) {
+            if (
+              postAndInteraction.post.id === action.payload &&
+              postAndInteraction.interactions
+            ) {
               const laughStatus = postAndInteraction.interactions.laughStatus;
               const laughPoints = postAndInteraction.post.laughPoints;
 
@@ -184,7 +194,7 @@ export default function PostReducer(state: PostState, action: PostActionType) {
         const currentPost = draftState.currentPost;
         const paginatedPosts = draftState.paginatedPosts;
 
-        if (currentPost) {
+        if (currentPost && currentPost.interactions) {
           const confusedStatus = currentPost.interactions.confusedStatus;
           const confusedPoints = currentPost.post.confusedPoints;
 
@@ -200,7 +210,10 @@ export default function PostReducer(state: PostState, action: PostActionType) {
 
         paginatedPosts.postAndInteractions =
           paginatedPosts.postAndInteractions.filter((postAndInteraction) => {
-            if (postAndInteraction.post.id === action.payload) {
+            if (
+              postAndInteraction.post.id === action.payload &&
+              postAndInteraction.interactions
+            ) {
               const confusedStatus =
                 postAndInteraction.interactions.confusedStatus;
               const confusedPoints = postAndInteraction.post.confusedPoints;

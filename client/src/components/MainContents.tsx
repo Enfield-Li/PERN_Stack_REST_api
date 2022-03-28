@@ -72,7 +72,10 @@ const MainContents: React.FC<MainContentsProps> = ({}) => {
       >
         {postAndInteractions.length > 0 ? (
           postAndInteractions.map((postAndInteraction) => (
-            <PostCard postAndInteraction={postAndInteraction} />
+            <PostCard
+              postAndInteraction={postAndInteraction}
+              key={postAndInteraction.post.id}
+            />
           ))
         ) : (
           <div>

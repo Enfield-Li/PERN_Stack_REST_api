@@ -36,12 +36,11 @@ export class PostController {
     @Body() createPostDto: CreatePostDto,
     @Req() req: Request,
   ): Promise<PostAndInteraction> {
-    if (!req.session.userId) throw new HttpException('Not authenticated', 401);
+    const userId = req.session.userId;
 
-    const post = await this.postService.createPost(
-      createPostDto,
-      req.session.userId,
-    );
+    if (!userId) throw new HttpException('Not authenticated', 401);
+
+    const post = await this.postService.createPost(createPostDto, userId);
     return post;
   }
 
@@ -67,9 +66,11 @@ export class PostController {
     @Query('sortBy') sortBy: 'new' | 'hot' | 'best' = 'best',
     @Query('cursor') cursor?: string,
   ): Promise<PaginatedPost> {
+    const userId = req.session.userId;
+
     return this.postService.fetchPaginatedPost(
       sortBy,
-      req.session.userId,
+      userId,
       +take,
       cursor && new Date(cursor),
     );
@@ -92,10 +93,12 @@ export class PostController {
     @Query('time') time: 'half-year' | 'one-year' | 'all-time' = 'half-year',
     @Query('skipTimes') skipTimes?: string,
   ): Promise<PaginatedPost> {
+    const userId = req.session.userId;
+
     return this.postService.fetchPaginatedPostsSortByTop(
       10,
       time,
-      req.session.userId,
+      userId,
       +skipTimes,
     );
   }
@@ -106,7 +109,9 @@ export class PostController {
     @Req() req: Request,
     @Param('id') id: string,
   ): Promise<PostAndInteraction> {
-    return this.postService.fetchOnePost(req.session.userId, +id);
+    const userId = req.session.userId;
+
+    return this.postService.fetchOnePost(userId, +id);
   }
 
   @ApiCreatedResponse({ type: PostAndInteraction })
@@ -116,12 +121,14 @@ export class PostController {
     @Body() updatePostDto: UpdatePostDto,
     @Req() req: Request,
   ): Promise<PostAndInteraction> {
-    if (!req.session.userId) throw new HttpException('Not authenticated', 401);
+    const userId = req.session.userId;
+
+    if (!userId) throw new HttpException('Not authenticated', 401);
 
     const updatedPost = await this.postService.editPost(
       +id,
       updatePostDto,
-      req.session.userId,
+      userId,
     );
 
     if (!updatedPost) throw new HttpException('Not authorized', 403);
@@ -132,8 +139,10 @@ export class PostController {
   @ApiOkResponse({ type: Boolean })
   @Delete('delete/:id')
   remove(@Req() req: Request, @Param('id') id: string): Promise<Boolean> {
-    if (!req.session.userId) throw new HttpException('Not authenticated', 401);
+    const userId = req.session.userId;
 
-    return this.postService.deletePost(+id, req.session.userId);
+    if (!userId) throw new HttpException('Not authenticated', 401);
+
+    return this.postService.deletePost(+id, userId);
   }
 }

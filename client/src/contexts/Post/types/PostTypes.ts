@@ -27,7 +27,7 @@ export type PaginatedPost = {
 
 export type PostAndInteractions = {
   post: Post;
-  interactions: Interactions;
+  interactions: Interactions | null;
 };
 
 export type Post = {

@@ -2,7 +2,7 @@ import React from "react";
 import { Link } from "react-router-dom";
 import {
   usePost,
-  clearCache,
+  clearPostsCache,
   fetchPaginatedPosts,
 } from "../../contexts/Post/actions/PostAction";
 import {
@@ -22,7 +22,7 @@ const UserInfo: React.FC<UserInfoProps> = ({}) => {
   const { socketDispatch, setUncheckedAmount } = useSocket();
 
   const logoutAndClearCache = () => {
-    clearCache(postDispatch);
+    clearPostsCache(postDispatch);
     clearNotifications(socketDispatch);
     setUncheckedAmount(0);
     logout(userDispatch);

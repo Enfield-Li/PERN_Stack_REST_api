@@ -26,6 +26,7 @@ const EditPost: React.FC<EditPostProps> = ({}) => {
   return (
     <Formik
       validationSchema={validationSchema}
+      // no good
       initialValues={{
         title: postState.currentPost?.post.title
           ? postState.currentPost?.post.title

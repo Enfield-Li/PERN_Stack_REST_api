@@ -65,6 +65,10 @@ const CommentCard: React.FC<CommentCardProps> = ({ comment, postId }) => {
     : ` View ${comment.replyAmount} replies`;
 
   return (
+    // <div className="row">
+    //   <div className="col-11">asdfklhasklfhasjkfj</div>
+    //   <div className="col-1">al;dfjaldjilo;</div>
+    // </div>
     <div
       className="d-flex justify-content-between my-2"
       onMouseOver={(e) => setIsMouseHover(true)}

@@ -10,17 +10,16 @@ interface PostCardProps {
 }
 
 const PostCard: React.FC<PostCardProps> = ({ postAndInteraction }) => {
-  const [isHover, setIsHover] = useState(false);
+  const [isMouseHover, setIsMouseHover] = useState(false);
 
   return (
     <div
       className="card my-3 "
-      key={postAndInteraction.post.id}
       onMouseOver={(e) => {
-        setIsHover(true);
+        setIsMouseHover(true);
       }}
       onMouseLeave={(e) => {
-        setIsHover(false);
+        setIsMouseHover(false);
       }}
     >
       <div className="card-body">

@@ -13,6 +13,13 @@ export default function SocketReducer(
   action: SocketActionType
 ) {
   switch (action.type) {
+    case CLEAR_NOTIFICATIONS: {
+      return {
+        ...state,
+        notifications: [],
+      };
+    }
+
     case SET_INTERACTIVES: {
       return {
         ...state,
@@ -24,13 +31,6 @@ export default function SocketReducer(
       return {
         ...state,
         notifications: [action.payload, ...state.notifications],
-      };
-    }
-
-    case CLEAR_NOTIFICATIONS: {
-      return {
-        ...state,
-        notifications: [],
       };
     }
 
