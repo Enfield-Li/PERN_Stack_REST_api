@@ -64,13 +64,15 @@ export class SocketGateway
 
   @SubscribeMessage('Login')
   login(@MessageBody() userId: number, @Req() socket: Socket) {
-    if (userId) {
-      this.addNewUser(userId, socket.id);
-    }
-    // console.log('onlineUser: ', this.onlineUsers);
+    if (userId) this.addNewUser(userId, socket.id);
   }
 
-  @SubscribeMessage('sendChat')
+  @SubscribeMessage('Logout')
+  logout(@MessageBody() userId: number, @Req() socket: Socket) {
+    if (userId) this.removeUser(socket.id);
+  }
+
+  @SubscribeMessage('SendChat')
   chatting(@MessageBody() data: SendChat) {
     const { chat, reciverId, senderId, senderName } = data;
 

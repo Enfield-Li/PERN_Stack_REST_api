@@ -7,8 +7,9 @@ export interface ServerToClientEvents {
 export interface ClientToServerEvents {
   MsgToServer: (data: HelloWorld) => void;
   Login: (userId: number | undefined) => void;
+  Logout: (userId: number) => void;
   SendNotification: (data: SendNotification) => void;
-  sendChat: (data: SendChat) => void;
+  SendChat: (data: SendChat) => void;
 }
 
 interface InterServerEvents {

@@ -45,6 +45,14 @@ export const sendNotification = (
   socket?.emit("SendNotification", data);
 };
 
+export const loginSocket = (socket: SocketInitialType, userId?: number) => {
+  socket?.emit("Login", userId);
+};
+
+export const logoutSocket = (socket: SocketInitialType, userId?: number) => {
+  socket?.emit("Logout", userId);
+};
+
 export const receiveNotification = (
   socket: SocketInitialType,
   socketDispatch: React.Dispatch<SocketActionType>,

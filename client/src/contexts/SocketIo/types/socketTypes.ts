@@ -15,9 +15,10 @@ export interface ServerToClientEvents {
 
 export interface ClientToServerEvents {
   MsgToServer: (data: HelloWorld) => void;
-  Login: (userId: number | undefined) => void;
+  Login: (userId?: number) => void;
+  Logout: (userId?: number) => void;
   SendNotification: (data: SendNotification) => void;
-  sendChat: (data: SendChat) => void;
+  SendChat: (data: SendChat) => void;
 }
 
 export type SocketInitialType = Socket<

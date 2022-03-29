@@ -98,7 +98,7 @@ export class UserController {
   findOne(@Req() req: Request): Promise<UserRO> {
     const userId = req.session.userId;
 
-    if (!userId) throw new HttpException('Invalid credential', 401);
+    if (!userId) return;
 
     return this.userService.me(userId);
   }

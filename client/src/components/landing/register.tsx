@@ -5,12 +5,17 @@ import { registerUser, useUser } from "../../contexts/User/actions/UserAction";
 import FormWrapper from "../forms/FormWrapper";
 import InputWrapper from "../forms/InputWrapper";
 import * as Yup from "yup";
+import {
+  loginSocket,
+  useSocket,
+} from "../../contexts/SocketIo/actions/socketActions";
 
 interface RegisterProps {}
 
 const Register: React.FC<RegisterProps> = ({}) => {
-  const { userDispatch } = useUser();
+  const { userState, userDispatch } = useUser();
   const navigate = useNavigate();
+  const { socket } = useSocket();
 
   const validationSchema = Yup.object({
     username: Yup.string()
@@ -33,6 +38,8 @@ const Register: React.FC<RegisterProps> = ({}) => {
         }}
         onSubmit={async (values) => {
           await registerUser(userDispatch, values);
+          if (userState.user) loginSocket(socket, userState.user.id);
+
           navigate("/");
         }}
       >

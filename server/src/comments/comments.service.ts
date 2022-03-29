@@ -85,8 +85,6 @@ export class CommentsService {
       orderBy: { createdAt: 'desc' },
     });
 
-    console.log(res);
-
     return this.buildCommentROArr(res);
   }
 
@@ -156,7 +154,8 @@ export class CommentsService {
   private buildCommentRO(comment: CommentData): CommentRO {
     const commentRO: CommentRO = {
       ...comment,
-      commentInteractions: comment.commentInteractions[0],
+      commentInteractions:
+        comment.commentInteractions && comment.commentInteractions[0],
     };
 
     return commentRO;

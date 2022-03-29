@@ -9,6 +9,7 @@ import {
   useSocket,
   fetchInteractives,
   receiveNotification,
+  loginSocket,
 } from "../contexts/SocketIo/actions/socketActions";
 import { ReceiveNotification } from "../contexts/SocketIo/types/socketTypes";
 import { useUser, me } from "../contexts/User/actions/UserAction";
@@ -40,7 +41,7 @@ export function useInit() {
 
   // Create user instance in socket server
   useEffect(() => {
-    if (userState.user) socket?.emit("Login", userState.user?.id);
+    if (userState.user) loginSocket(socket, userState.user.id);
   }, [socket, userState.user]);
 
   // For invoking Toast notifications

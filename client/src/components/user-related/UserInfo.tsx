@@ -8,6 +8,7 @@ import {
 import {
   useSocket,
   clearNotifications,
+  logoutSocket,
 } from "../../contexts/SocketIo/actions/socketActions";
 import { useUser, logout } from "../../contexts/User/actions/UserAction";
 
@@ -19,9 +20,10 @@ const UserInfo: React.FC<UserInfoProps> = ({}) => {
   const { postDispatch } = usePost();
   const { userState, userDispatch } = useUser();
   const { user } = userState;
-  const { socketDispatch, setUncheckedAmount } = useSocket();
+  const { socketDispatch, setUncheckedAmount, socket } = useSocket();
 
   const logoutAndClearCache = () => {
+    logoutSocket(socket, user?.id);
     clearPostsCache(postDispatch);
     clearNotifications(socketDispatch);
     setUncheckedAmount(0);
