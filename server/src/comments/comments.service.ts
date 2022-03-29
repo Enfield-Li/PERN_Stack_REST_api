@@ -117,13 +117,22 @@ export class CommentsService {
     id: number,
     updateCommentDto: UpdateCommentDto,
     userId: number,
-  ): Promise<CommentRO> {
+  ): Promise<Boolean> {
     const originalComment = await this.prismaService.comments.findUnique({
       where: { id },
     });
     if (originalComment.userId !== userId) return null;
 
     const { comment_text } = updateCommentDto;
+
+    await this.prismaService.comments.update({
+      where: { id },
+      data: {
+        comment_text,
+      },
+    });
+
+    return true;
   }
 
   async deleteComment(id: number, userId: number): Promise<boolean> {

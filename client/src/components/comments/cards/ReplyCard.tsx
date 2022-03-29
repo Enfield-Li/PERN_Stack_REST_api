@@ -104,6 +104,7 @@ const ReplyCard: React.FC<ReplyCardProps> = ({
                 setReplyInputState={setReplyInputState}
                 replyToUsername={reply.user.username}
                 replyInputState={replyInputState}
+                commentOrReply={reply}
               />
             </>
           )}

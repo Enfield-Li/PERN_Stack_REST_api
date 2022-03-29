@@ -1,5 +1,12 @@
 import React from "react";
-import { voteComment } from "../../../../contexts/Comments/actions/commentAction";
+import {
+  useComment,
+  voteComment,
+} from "../../../../contexts/Comments/actions/commentAction";
+import {
+  Comment,
+  Reply,
+} from "../../../../contexts/Comments/types/CommentTypes";
 import CreateComment from "../../create-edit/CreateComment";
 
 interface CommentAndInteractionsProps {
@@ -9,6 +16,7 @@ interface CommentAndInteractionsProps {
   setReplyInputState: React.Dispatch<React.SetStateAction<boolean>>;
   replyInputState: boolean;
   parentCommentId: number;
+  commentOrReply: Comment | Reply;
   replyToUsername?: string;
 }
 
@@ -20,24 +28,40 @@ const CommentAndInteractions: React.FC<CommentAndInteractionsProps> = ({
   setReplyInputState,
   replyInputState,
   replyToUsername,
+  commentOrReply,
 }) => {
+  const { commentDispatch } = useComment();
+
+  // Decide thumbs background color
+  const voteStatus = commentOrReply.commentInteractions?.voteStatus;
+  const upvoteBG = voteStatus === true ? "text-info" : "";
+  const downvoteBG = voteStatus === false ? "text-info" : "";
+
+  const voteCommentClick = (voteValue: boolean) => {
+    voteComment(commentOrReply.id, voteValue, commentDispatch);
+  };
+
   return (
     <div>
-      {/* Thumbs */}
-      <i
-        className="bi bi-hand-thumbs-up"
-        role="button"
-        onClick={() => {
-          voteComment(parentCommentId, true);
-        }}
-      ></i>{}
-      <i
-        className="bi bi-hand-thumbs-down mx-3"
-        role="button"
-        onClick={() => {
-          voteComment(parentCommentId, false);
-        }}
-      ></i>
+      {/* Thumbs up */}
+      <span className={`${upvoteBG}`}>
+        <i
+          className={`bi bi-hand-thumbs-up me-1`}
+          role="button"
+          onClick={() => voteCommentClick(true)}
+        ></i>
+        {commentOrReply.commentInteractions?.upvoteAmount}
+      </span>
+
+      {/* Thumbs down */}
+      <span className={`mx-3 ${downvoteBG}`}>
+        <i
+          className={`bi bi-hand-thumbs-down me-1`}
+          role="button"
+          onClick={() => voteCommentClick(false)}
+        ></i>
+        {commentOrReply.commentInteractions?.downvoteAmount}
+      </span>
 
       {/* Reply button */}
       <span

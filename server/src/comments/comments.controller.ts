@@ -62,13 +62,13 @@ export class CommentsController {
     return this.commentsService.findAllReplies(+id, findReplyDto, userId);
   }
 
-  @Patch('/updateComment/:id')
-  @ApiCreatedResponse({ type: CommentRO })
+  @Patch('/editComment/:id')
+  @ApiCreatedResponse({ type: Boolean })
   async update(
     @Param('id') id: string,
     @Body() updateCommentDto: UpdateCommentDto,
     @Req() req: Request,
-  ): Promise<CommentRO> {
+  ): Promise<Boolean> {
     const userId = req.session.userId;
 
     if (!userId) throw new HttpException('Not authenticated', 401);

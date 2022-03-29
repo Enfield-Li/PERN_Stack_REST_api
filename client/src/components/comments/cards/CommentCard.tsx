@@ -110,6 +110,7 @@ const CommentCard: React.FC<CommentCardProps> = ({ comment, postId }) => {
                   isReply={false}
                   setReplyInputState={setReplyInputState}
                   replyInputState={replyInputState}
+                  commentOrReply={comment}
                 />
               </>
             )}

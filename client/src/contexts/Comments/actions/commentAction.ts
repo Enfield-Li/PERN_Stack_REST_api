@@ -111,7 +111,7 @@ export const editCommentOrReply = async (
   parentCommentId?: number
 ) => {
   await axios.patch(
-    `http://localhost:3119/comments/updateComment/${currentCommentOrReplyId}`,
+    `http://localhost:3119/comments/editComment/${currentCommentOrReplyId}`,
     { comment_text },
     { withCredentials: true }
   );
@@ -122,7 +122,11 @@ export const editCommentOrReply = async (
   });
 };
 
-export const voteComment = async (commentId: number, voteValue: boolean) => {
+export const voteComment = async (
+  commentId: number,
+  voteValue: boolean,
+  dispatch: React.Dispatch<CommentActionType>
+) => {
   const res = await axios.get(
     `http://localhost:3119/interactions/interact/comment/${commentId}?voteValue=${voteValue}`,
     { withCredentials: true }

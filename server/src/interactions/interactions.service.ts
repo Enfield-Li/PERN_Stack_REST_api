@@ -93,7 +93,7 @@ export class InteractionsService {
           commentId: commentId,
           userId,
           upvoteAmount: voteValue ? 1 : undefined,
-          downvoteAmount: voteValue ? 1 : undefined,
+          downvoteAmount: !voteValue ? 1 : undefined,
         },
       });
     }
