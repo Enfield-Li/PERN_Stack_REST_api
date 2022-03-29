@@ -19,6 +19,11 @@ export default function commentReducer(
     }
 
     case CREATE_COMMENT: {
+      const comment = action.payload;
+
+      comment.currentReplies = [];
+      comment.replies = [];
+
       return { ...state, comments: [action.payload, ...state.comments] };
     }
 
@@ -41,8 +46,7 @@ export default function commentReducer(
         draftState.comments.forEach((comment) => {
           if (comment.id === parentCommentId) {
             // When data exist, push the new reply
-            if (comment.replies.length)
-              comment.replies = [...comment.replies, reply];
+            if (comment.replies) comment.replies = [...comment.replies, reply];
 
             // User current gen reply
             comment.currentReplies.push(reply);

@@ -271,7 +271,7 @@ export class PostService {
 
       postAndInteractions[i] = {
         post: posts[i],
-        interactions: posts[i].interactions[0],
+        interactions: posts[i].interactions && posts[i].interactions[0],
       };
 
       delete posts[i].interactions;

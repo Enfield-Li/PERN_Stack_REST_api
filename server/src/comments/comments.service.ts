@@ -2,10 +2,12 @@ import { Injectable } from '@nestjs/common';
 import { PrismaService } from 'src/config/prisma.service';
 import {
   CommentData,
+  CommentDataArr,
   CommentRO,
   CreateCommentOrReplyDto,
   FindReplyDto,
   ReplyData,
+  ReplyDataArr,
   ReplyRO,
 } from './dto/create-comment.dto';
 import { UpdateCommentDto } from './dto/update-comment.dto';
@@ -18,7 +20,7 @@ export class CommentsService {
     createCommentDto: CreateCommentOrReplyDto,
     userId: number,
     postId: number,
-  ) {
+  ): Promise<CommentRO | ReplyRO> {
     const { comment_text, replyToUserId, parentCommentId } = createCommentDto;
 
     // If it's a reply
@@ -33,7 +35,12 @@ export class CommentsService {
             create: { replyToUserId },
           },
         },
-        include: { user: { select: { username: true } } },
+        include: {
+          user: { select: { username: true } },
+          parentComment: {
+            include: { user: { select: { username: true, id: true } } },
+          },
+        },
       });
 
       const addOneToParentAmount = this.prismaService.comments.update({
@@ -46,7 +53,7 @@ export class CommentsService {
         addOneToParentAmount,
       ]);
 
-      return res[0];
+      return this.buildReplyRO(res[0]);
     }
 
     const createCommentOrReply = this.prismaService.comments.create({
@@ -80,7 +87,7 @@ export class CommentsService {
 
     console.log(res);
 
-    return this.buildCommentRO(res);
+    return this.buildCommentROArr(res);
   }
 
   async findAllReplies(
@@ -90,17 +97,6 @@ export class CommentsService {
   ): Promise<ReplyRO[]> {
     const { parentCommentId } = findReplyDto;
 
-    // https://stackoverflow.com/questions/8779918/postgres-multiple-joins
-    // const data = await this.prismaService.$queryRaw<rawReply>`select
-    //   comments.*, comments."replyToUserId", comments."userId",
-    //       "replyToUsername".username as "replyToUsername", "user".username,
-    //   from comments
-    //       join "user" as "replyToUsername" on "replyToUsername".id = comments."replyToUserId"
-    //       join "user" on "user".id = comments."userId"
-    //   where comments."postId" = ${postId} and comments."parentCommentId" = ${parentCommentId};
-    // `;
-
-    // return this.buildReplyRO(data);
     const res = await this.prismaService.comments.findMany({
       where: { postId, parentCommentId },
       include: {
@@ -110,11 +106,13 @@ export class CommentsService {
           },
         },
         commentInteractions: userId ? { where: { userId } } : false,
-        parentComment: { include: { user: { select: { username: true } } } },
+        parentComment: {
+          include: { user: { select: { username: true, id: true } } },
+        },
       },
     });
 
-    return this.buildReplyRO(res);
+    return this.buildReplyROArr(res);
   }
 
   async editComment(
@@ -141,16 +139,13 @@ export class CommentsService {
     return true;
   }
 
-  private buildCommentRO(data: CommentData): CommentRO[] {
+  private buildCommentROArr(data: CommentDataArr): CommentRO[] {
     const commentRO: CommentRO[] = [];
 
     for (let i = 0; i < data.length; i++) {
       const comment = data[i];
 
-      const res: CommentRO = {
-        ...comment,
-        commentInteractions: comment.commentInteractions[0],
-      };
+      const res = this.buildCommentRO(comment);
 
       commentRO.push(res);
     }
@@ -158,20 +153,39 @@ export class CommentsService {
     return commentRO;
   }
 
-  private buildReplyRO(data: ReplyData): ReplyRO[] {
+  private buildCommentRO(comment: CommentData): CommentRO {
+    const commentRO: CommentRO = {
+      ...comment,
+      commentInteractions: comment.commentInteractions[0],
+    };
+
+    return commentRO;
+  }
+
+  private buildReplyROArr(data: ReplyDataArr): ReplyRO[] {
     const replyRO: ReplyRO[] = [];
 
     for (let i = 0; i < data.length; i++) {
       const reply = data[i];
 
-      const res: ReplyRO = {
-        ...reply,
-        commentInteractions: reply.commentInteractions[0],
-        parentComment: { username: reply.parentComment[0].user.username },
-      };
+      const res = this.buildReplyRO(reply);
 
       replyRO.push(res);
     }
+
+    return replyRO;
+  }
+
+  private buildReplyRO(reply: ReplyData): ReplyRO {
+    const replyRO: ReplyRO = {
+      ...reply,
+      commentInteractions:
+        reply.commentInteractions && reply.commentInteractions[0],
+      parentComment: {
+        userId: reply.parentComment[0].user.id,
+        username: reply.parentComment[0].user.username,
+      },
+    };
 
     return replyRO;
   }

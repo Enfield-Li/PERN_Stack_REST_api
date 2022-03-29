@@ -42,28 +42,34 @@ export class CommentRO {
   commentInteractions?: commentInteractions;
 }
 
-export type CommentData = (comments & {
-  user: {
-    username: string;
-  };
-  commentInteractions: commentInteractions[];
-})[];
-
 export class ReplyRO extends CommentRO {
   @ApiProperty()
   parentComment: {
     username: string;
+    userId: number;
   };
 }
 
-export type ReplyData = (comments & {
+export type CommentDataArr = CommentData[];
+
+export type ReplyDataArr = ReplyData[];
+
+export type CommentData = comments & {
   user: {
     username: string;
   };
-  commentInteractions: commentInteractions[];
+  commentInteractions?: commentInteractions[];
+};
+
+export type ReplyData = comments & {
+  user: {
+    username: string;
+  };
   parentComment: (commentReplyToUser & {
     user: {
       username: string;
+      id: number;
     };
   })[];
-})[];
+  commentInteractions?: commentInteractions[];
+};

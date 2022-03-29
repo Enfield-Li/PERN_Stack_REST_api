@@ -66,8 +66,6 @@ const CreateComment: React.FC<CreateCommentProps> = ({
             comment_text,
             parentCommentId,
             replyToUserId,
-            isReply,
-            replyToUsername,
           },
           commentDispatch
         );

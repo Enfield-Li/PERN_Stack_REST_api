@@ -23,16 +23,22 @@ export type Comment = {
   updatedAt: Date;
   comment_text: string;
   replyAmount: number;
-  replyToUserId: number | null;
   parentCommentId: number | null;
   userId: number;
   postId: number;
   user: { username: string };
-  replies: Reply[];
-  replyToUser?: { username: string };
-  isReply: boolean;
-  currentReplies: Reply[];
   commentInteractions?: commentInteractions;
+  replies: Replies;
+  currentReplies: Replies;
+};
+
+export type Replies = Reply[];
+
+export type Reply = Comment & {
+  parentComment: {
+    username: string;
+    userId: number;
+  };
 };
 
 type commentInteractions = {
@@ -46,36 +52,17 @@ type commentInteractions = {
   userId: number;
 };
 
-export type Replies = Reply[];
 export type RepliesForCommentId = {
   replies: Replies;
   parentCommentId: number;
 };
 
-export type Reply = {
-  id: number;
-  createdAt: Date;
-  updatedAt: Date;
-  comment_text: string;
-  replyAmount: number;
-  replyToUserId: number | null;
-  parentCommentId: number | null;
-  userId: number;
-  postId: number;
-  user: { username: string };
-  replyToUser: { username: string };
-  isReply: boolean;
-  commentInteractions?: commentInteractions[];
-};
-
 export type RepliesParentCommentId = { parentCommentId: number };
 
 export type CreateCommentOrReplyType = {
-  isReply: boolean;
   comment_text: string;
   parentCommentId?: number;
   replyToUserId?: number;
-  replyToUsername?: string;
 };
 
 export type FindRepliesCondition = {

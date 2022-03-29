@@ -70,7 +70,7 @@ export const createCommentOrReply = async (
   commentOrReply: CreateCommentOrReplyType,
   dispatch: React.Dispatch<CommentActionType>
 ) => {
-  const { parentCommentId, replyToUserId, replyToUsername } = commentOrReply;
+  const { parentCommentId, replyToUserId } = commentOrReply;
 
   // Create comment
   if (!parentCommentId && !replyToUserId) {
@@ -93,8 +93,6 @@ export const createCommentOrReply = async (
       commentOrReply,
       { withCredentials: true }
     );
-
-    if (replyToUsername) res.data.replyToUser = { username: replyToUsername };
 
     dispatch({
       type: CREATE_REPLY,

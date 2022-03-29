@@ -81,15 +81,15 @@ const ReplyCard: React.FC<ReplyCardProps> = ({
             <>
               {/* Comment body */}
               <div>
-                {reply.isReply && (
+                {reply.parentComment.userId !== parentComment.userId && (
                   <span
                     className="text-primary"
                     onClick={() =>
-                      navigate(`/user-profile/${reply.replyToUserId}`)
+                      navigate(`/user-profile/${reply.parentCommentId}`)
                     }
                     role="button"
                   >
-                    @{reply.replyToUser?.username}{" "}
+                    @{reply.parentComment.username}{" "}
                   </span>
                 )}
                 {reply.comment_text}
