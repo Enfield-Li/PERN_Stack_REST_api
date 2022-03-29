@@ -7,6 +7,7 @@ import {
   EDIT_CURRENT_COMMENT_OR_REPLY,
   FETCH_COMMENTS,
   FETCH_REPLIES,
+  VOTE_COMMENT,
 } from "../../constant";
 import CommentContext from "../CommentContext";
 import {
@@ -132,7 +133,10 @@ export const voteComment = async (
     { withCredentials: true }
   );
 
-  console.log(res);
+  dispatch({
+    type: VOTE_COMMENT,
+    payload: { commentId, voteValue },
+  });
 };
 
 export const deleteCommentOrReply = async (

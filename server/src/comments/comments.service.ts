@@ -34,12 +34,16 @@ export class CommentsService {
           parentComment: {
             create: { replyToUserId },
           },
+          commentInteractions: {
+            create: { userId, upvoteAmount: 1, voteStatus: true },
+          },
         },
         include: {
           user: { select: { username: true } },
           parentComment: {
             include: { user: { select: { username: true, id: true } } },
           },
+          commentInteractions: true,
         },
       });
 
@@ -56,16 +60,22 @@ export class CommentsService {
       return this.buildReplyRO(res[0]);
     }
 
-    const createCommentOrReply = this.prismaService.comments.create({
+    const createComment = await this.prismaService.comments.create({
       data: {
         postId,
         userId,
         comment_text,
+        commentInteractions: {
+          create: { userId, upvoteAmount: 1, voteStatus: true },
+        },
       },
-      include: { user: { select: { username: true } } },
+      include: {
+        user: { select: { username: true } },
+        commentInteractions: true,
+      },
     });
 
-    return createCommentOrReply;
+    return this.buildCommentRO(createComment);
   }
 
   async findAllComments(postId: number, userId: number): Promise<CommentRO[]> {

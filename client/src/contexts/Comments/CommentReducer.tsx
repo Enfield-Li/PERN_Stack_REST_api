@@ -5,6 +5,7 @@ import {
   EDIT_CURRENT_COMMENT_OR_REPLY,
   FETCH_COMMENTS,
   FETCH_REPLIES,
+  VOTE_COMMENT,
 } from "../constant";
 import { CommentActionType, CommentState } from "./types/CommentTypes";
 import produce from "immer";
@@ -16,6 +17,47 @@ export default function commentReducer(
   switch (action.type) {
     case FETCH_COMMENTS: {
       return { ...state, comments: action.payload };
+    }
+
+    case VOTE_COMMENT: {
+      const { commentId, voteValue } = action.payload;
+
+      return produce(state, (draftState) => {
+        draftState.comments.forEach((comment) => {
+          const commentInteractions = comment.commentInteractions;
+
+          if (comment.id === commentId && commentInteractions) {
+            // equal voteValue
+            if (commentInteractions.voteStatus === voteValue) {
+              commentInteractions.voteStatus = null;
+              voteValue === true
+                ? commentInteractions.upvoteAmount--
+                : commentInteractions.downvoteAmount--;
+            }
+
+            // null
+            else if (commentInteractions.voteStatus === null) {
+              commentInteractions.voteStatus = voteValue;
+              voteValue === true
+                ? commentInteractions.upvoteAmount++
+                : commentInteractions.downvoteAmount++;
+            }
+
+            // third
+            else if (
+              commentInteractions.voteStatus !== null &&
+              commentInteractions.voteStatus !== voteValue
+            ) {
+              commentInteractions.voteStatus = voteValue;
+              voteValue === true
+                ? commentInteractions.downvoteAmount-- &&
+                  commentInteractions.upvoteAmount++
+                : commentInteractions.upvoteAmount-- &&
+                  commentInteractions.downvoteAmount++;
+            }
+          }
+        });
+      });
     }
 
     case CREATE_COMMENT: {

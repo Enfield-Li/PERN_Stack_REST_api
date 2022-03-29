@@ -5,6 +5,7 @@ import {
   EDIT_CURRENT_COMMENT_OR_REPLY,
   FETCH_COMMENTS,
   FETCH_REPLIES,
+  VOTE_COMMENT,
 } from "../../constant";
 
 export const commentInitialState: CommentState = {
@@ -86,6 +87,7 @@ export type CommentActionType =
   | CreateComment
   | CreateReply
   | FetchReplies
+  | VoteComment
   | EditCurrentComment;
 
 type FetchComments = {
@@ -116,4 +118,9 @@ type CreateReply = {
 type EditCurrentComment = {
   type: typeof EDIT_CURRENT_COMMENT_OR_REPLY;
   payload: CurrentComment;
+};
+
+type VoteComment = {
+  type: typeof VOTE_COMMENT;
+  payload: { commentId: number; voteValue: boolean };
 };
