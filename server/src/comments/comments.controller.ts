@@ -17,7 +17,6 @@ import {
   CreateCommentOrReplyDto,
   CommentRO,
   FindReplyDto,
-  ReplyRO,
 } from './dto/create-comment.dto';
 import { UpdateCommentDto } from './dto/update-comment.dto';
 
@@ -32,7 +31,7 @@ export class CommentsController {
     @Body() createCommentDto: CreateCommentOrReplyDto,
     @Req() req: Request,
     @Param('id') id: string,
-  ): Promise<CommentRO> {
+  ) {
     const userId = req.session.userId;
     if (!userId) throw new HttpException('Not authenticated', 401);
 
@@ -45,22 +44,22 @@ export class CommentsController {
 
   @ApiCreatedResponse({ type: [CommentRO] })
   @Get('/fetchComments/:id')
-  findComments(
-    @Param('id') id: string,
-    @Req() req: Request,
-  ): Promise<CommentRO[]> {
+  findComments(@Param('id') id: string, @Req() req: Request) {
     const userId = req.session.userId;
 
     return this.commentsService.findAllComments(+id, userId);
   }
 
-  @ApiCreatedResponse({ type: [ReplyRO] })
+  @ApiCreatedResponse({ type: [CommentRO] })
   @Put('/fetchReplies/:id')
   findAllReplies(
     @Param('id') id: string,
     @Body() findReplyDto: FindReplyDto,
-  ): Promise<ReplyRO[]> {
-    return this.commentsService.findAllReplies(+id, findReplyDto);
+    @Req() req: Request,
+  ) {
+    const userId = req.session.userId;
+
+    return this.commentsService.findAllReplies(+id, findReplyDto, userId);
   }
 
   @Patch('/updateComment/:id')

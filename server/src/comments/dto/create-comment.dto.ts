@@ -1,15 +1,22 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { commentInteractions, comments } from '@prisma/client';
+import {
+  commentInteractions,
+  commentReplyToUser,
+  comments,
+} from '@prisma/client';
 
 export class CreateCommentOrReplyDto {
   @ApiProperty()
   comment_text: string;
-  @ApiProperty()
-  isReply: boolean;
   @ApiProperty({ nullable: true })
   parentCommentId?: number;
   @ApiProperty({ nullable: true })
   replyToUserId?: number;
+}
+
+export class FindReplyDto {
+  @ApiProperty()
+  parentCommentId: number;
 }
 
 export class CommentRO {
@@ -24,11 +31,7 @@ export class CommentRO {
   @ApiProperty()
   replyAmount: number;
   @ApiProperty({ nullable: true })
-  replyToUserId: number | null;
-  @ApiProperty({ nullable: true })
   parentCommentId: number | null;
-  @ApiProperty()
-  isReply: boolean;
   @ApiProperty()
   userId: number;
   @ApiProperty()
@@ -39,45 +42,28 @@ export class CommentRO {
   commentInteractions?: commentInteractions;
 }
 
-export class ReplyRO {
-  @ApiProperty()
-  id: number;
-  @ApiProperty()
-  createdAt: Date;
-  @ApiProperty()
-  updatedAt: Date;
-  @ApiProperty()
-  comment_text: string;
-  @ApiProperty()
-  replyAmount: number;
-  @ApiProperty()
-  isReply: boolean;
-  @ApiProperty({ nullable: true })
-  replyToUserId: number | null;
-  @ApiProperty({ nullable: true })
-  parentCommentId: number | null;
-  @ApiProperty()
-  userId: number;
-  @ApiProperty()
-  postId: number;
-  @ApiProperty()
-  replyToUser: { username: string };
-  @ApiProperty()
-  user: { username: string };
-}
-
-export class FindReplyDto {
-  @ApiProperty()
-  parentCommentId: number;
-}
-
-export type rawReply = (comments & { username: string } & {
-  replyToUsername: string;
-})[];
-
-export type rawComment = (comments & {
+export type CommentData = (comments & {
   user: {
     username: string;
   };
   commentInteractions: commentInteractions[];
+})[];
+
+export class ReplyRO extends CommentRO {
+  @ApiProperty()
+  parentComment: {
+    username: string;
+  };
+}
+
+export type ReplyData = (comments & {
+  user: {
+    username: string;
+  };
+  commentInteractions: commentInteractions[];
+  parentComment: (commentReplyToUser & {
+    user: {
+      username: string;
+    };
+  })[];
 })[];

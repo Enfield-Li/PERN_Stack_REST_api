@@ -1,12 +1,12 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from 'src/config/prisma.service';
 import {
+  CommentData,
   CommentRO,
   CreateCommentOrReplyDto,
-  rawReply,
   FindReplyDto,
+  ReplyData,
   ReplyRO,
-  rawComment,
 } from './dto/create-comment.dto';
 import { UpdateCommentDto } from './dto/update-comment.dto';
 
@@ -18,36 +18,45 @@ export class CommentsService {
     createCommentDto: CreateCommentOrReplyDto,
     userId: number,
     postId: number,
-  ): Promise<CommentRO> {
-    const { comment_text, replyToUserId, parentCommentId, isReply } =
-      createCommentDto;
-
-    const createCommentOrReply = this.prismaService.comments.create({
-      data: {
-        postId,
-        userId,
-        comment_text,
-        replyToUserId,
-        parentCommentId,
-        isReply,
-      },
-      include: { user: { select: { username: true } } },
-    });
+  ) {
+    const { comment_text, replyToUserId, parentCommentId } = createCommentDto;
 
     // If it's a reply
     if (parentCommentId && replyToUserId) {
+      const createReply = this.prismaService.comments.create({
+        data: {
+          comment_text,
+          userId,
+          postId,
+          parentCommentId,
+          parentComment: {
+            create: { replyToUserId },
+          },
+        },
+        include: { user: { select: { username: true } } },
+      });
+
       const addOneToParentAmount = this.prismaService.comments.update({
         where: { id: parentCommentId },
         data: { replyAmount: { increment: 1 } },
       });
 
       const res = await this.prismaService.$transaction([
-        createCommentOrReply,
+        createReply,
         addOneToParentAmount,
       ]);
 
       return res[0];
     }
+
+    const createCommentOrReply = this.prismaService.comments.create({
+      data: {
+        postId,
+        userId,
+        comment_text,
+      },
+      include: { user: { select: { username: true } } },
+    });
 
     return createCommentOrReply;
   }
@@ -56,10 +65,7 @@ export class CommentsService {
     const res = await this.prismaService.comments.findMany({
       where: {
         postId,
-        OR: [
-          { parentCommentId: { equals: null } },
-          { replyToUserId: { equals: null } },
-        ],
+        parentCommentId: null,
       },
       include: {
         user: {
@@ -72,26 +78,43 @@ export class CommentsService {
       orderBy: { createdAt: 'desc' },
     });
 
+    console.log(res);
+
     return this.buildCommentRO(res);
   }
 
   async findAllReplies(
     postId: number,
     findReplyDto: FindReplyDto,
+    userId: number,
   ): Promise<ReplyRO[]> {
     const { parentCommentId } = findReplyDto;
 
     // https://stackoverflow.com/questions/8779918/postgres-multiple-joins
-    const data = await this.prismaService.$queryRaw<rawReply>`select 
-      comments.*, comments."replyToUserId", comments."userId", 
-          "replyToUsername".username as "replyToUsername", "user".username,   
-      from comments 
-          join "user" as "replyToUsername" on "replyToUsername".id = comments."replyToUserId" 
-          join "user" on "user".id = comments."userId"
-      where comments."postId" = ${postId} and comments."parentCommentId" = ${parentCommentId};
-    `;
+    // const data = await this.prismaService.$queryRaw<rawReply>`select
+    //   comments.*, comments."replyToUserId", comments."userId",
+    //       "replyToUsername".username as "replyToUsername", "user".username,
+    //   from comments
+    //       join "user" as "replyToUsername" on "replyToUsername".id = comments."replyToUserId"
+    //       join "user" on "user".id = comments."userId"
+    //   where comments."postId" = ${postId} and comments."parentCommentId" = ${parentCommentId};
+    // `;
 
-    return this.buildReplyRO(data);
+    // return this.buildReplyRO(data);
+    const res = await this.prismaService.comments.findMany({
+      where: { postId, parentCommentId },
+      include: {
+        user: {
+          select: {
+            username: true,
+          },
+        },
+        commentInteractions: userId ? { where: { userId } } : false,
+        parentComment: { include: { user: { select: { username: true } } } },
+      },
+    });
+
+    return this.buildReplyRO(res);
   }
 
   async editComment(
@@ -105,12 +128,6 @@ export class CommentsService {
     if (originalComment.userId !== userId) return null;
 
     const { comment_text } = updateCommentDto;
-
-    return this.prismaService.comments.update({
-      where: { id },
-      data: { comment_text },
-      include: { user: { select: { username: true } } },
-    });
   }
 
   async deleteComment(id: number, userId: number): Promise<boolean> {
@@ -124,40 +141,38 @@ export class CommentsService {
     return true;
   }
 
-  private buildReplyRO(input: rawReply): ReplyRO[] {
-    const res: ReplyRO[] = [];
+  private buildCommentRO(data: CommentData): CommentRO[] {
+    const commentRO: CommentRO[] = [];
 
-    for (let i = 0; i < input.length; i++) {
-      const inputItem = input[i];
-      const commentOrReplyRO = {
-        ...inputItem,
-        user: { username: inputItem.username },
-        replyToUser: { username: inputItem.replyToUsername },
+    for (let i = 0; i < data.length; i++) {
+      const comment = data[i];
+
+      const res: CommentRO = {
+        ...comment,
+        commentInteractions: comment.commentInteractions[0],
       };
 
-      delete commentOrReplyRO.username;
-      delete commentOrReplyRO.replyToUsername;
-
-      res.push(commentOrReplyRO);
+      commentRO.push(res);
     }
 
-    return res;
+    return commentRO;
   }
 
-  private buildCommentRO(input: rawComment): CommentRO[] {
-    const res: CommentRO[] = [];
+  private buildReplyRO(data: ReplyData): ReplyRO[] {
+    const replyRO: ReplyRO[] = [];
 
-    for (let i = 0; i < input.length; i++) {
-      const inputItem = input[i];
+    for (let i = 0; i < data.length; i++) {
+      const reply = data[i];
 
-      const commentRO = {
-        ...inputItem,
-        commentInteractions: inputItem.commentInteractions[0],
+      const res: ReplyRO = {
+        ...reply,
+        commentInteractions: reply.commentInteractions[0],
+        parentComment: { username: reply.parentComment[0].user.username },
       };
 
-      res.push(commentRO);
+      replyRO.push(res);
     }
 
-    return res;
+    return replyRO;
   }
 }
