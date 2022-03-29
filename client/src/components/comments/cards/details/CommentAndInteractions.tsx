@@ -38,7 +38,15 @@ const CommentAndInteractions: React.FC<CommentAndInteractionsProps> = ({
   const downvoteBG = voteStatus === false ? "text-info" : "";
 
   const voteCommentClick = (voteValue: boolean) => {
-    voteComment(commentOrReply.id, voteValue, commentDispatch);
+    voteComment(
+      {
+        commentId: commentOrReply.id,
+        voteValue,
+        isComment: !isReply,
+        parentCommentId,
+      },
+      commentDispatch
+    );
   };
 
   return (
@@ -50,7 +58,7 @@ const CommentAndInteractions: React.FC<CommentAndInteractionsProps> = ({
           role="button"
           onClick={() => voteCommentClick(true)}
         ></i>
-        {commentOrReply.commentInteractions?.upvoteAmount}
+        {commentOrReply.upvoteAmount}
       </span>
 
       {/* Thumbs down */}
@@ -60,7 +68,7 @@ const CommentAndInteractions: React.FC<CommentAndInteractionsProps> = ({
           role="button"
           onClick={() => voteCommentClick(false)}
         ></i>
-        {commentOrReply.commentInteractions?.downvoteAmount}
+        {commentOrReply.downvoteAmount}
       </span>
 
       {/* Reply button */}

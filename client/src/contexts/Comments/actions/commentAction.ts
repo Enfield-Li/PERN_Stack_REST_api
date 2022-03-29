@@ -18,6 +18,7 @@ import {
   FindRepliesCondition,
   Replies,
   Reply,
+  VoteCommentParams,
 } from "../types/CommentTypes";
 
 export const useComment = () => {
@@ -40,6 +41,15 @@ export const fetchComments = async (
   for (let i = 0; i < data.length; i++) {
     let comment = data[i];
     if (!comment.replies) comment.replies = [];
+    if (!comment.commentInteractions)
+      comment.commentInteractions = {
+        id: 0,
+        createdAt: new Date("2020-4-4"),
+        updatedAt: new Date("2020-4-4"),
+        commentId: 0,
+        userId: 0,
+        voteStatus: null,
+      };
     comment.currentReplies = [];
   }
 
@@ -56,6 +66,21 @@ export const fetchReplies = async (
     findReplies,
     { withCredentials: true }
   );
+  console.log(res.data);
+
+  const data = res.data;
+  for (let i = 0; i < data.length; i++) {
+    let comment = data[i];
+    if (!comment.commentInteractions)
+      comment.commentInteractions = {
+        id: 0,
+        createdAt: new Date("2020-4-4"),
+        updatedAt: new Date("2020-4-4"),
+        commentId: 0,
+        userId: 0,
+        voteStatus: null,
+      };
+  }
 
   dispatch({
     type: FETCH_REPLIES,
@@ -124,10 +149,11 @@ export const editCommentOrReply = async (
 };
 
 export const voteComment = async (
-  commentId: number,
-  voteValue: boolean,
+  voteCommentParams: VoteCommentParams,
   dispatch: React.Dispatch<CommentActionType>
 ) => {
+  const { commentId, voteValue } = voteCommentParams;
+
   const res = await axios.get(
     `http://localhost:3119/interactions/interact/comment/${commentId}?voteValue=${voteValue}`,
     { withCredentials: true }
@@ -135,7 +161,7 @@ export const voteComment = async (
 
   dispatch({
     type: VOTE_COMMENT,
-    payload: { commentId, voteValue },
+    payload: voteCommentParams,
   });
 };
 

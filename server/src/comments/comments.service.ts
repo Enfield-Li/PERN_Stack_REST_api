@@ -34,8 +34,9 @@ export class CommentsService {
           parentComment: {
             create: { replyToUserId },
           },
+          upvoteAmount: 1,
           commentInteractions: {
-            create: { userId, upvoteAmount: 1, voteStatus: true },
+            create: { userId, voteStatus: true },
           },
         },
         include: {
@@ -65,8 +66,9 @@ export class CommentsService {
         postId,
         userId,
         comment_text,
+        upvoteAmount: 1,
         commentInteractions: {
-          create: { userId, upvoteAmount: 1, voteStatus: true },
+          create: { userId, voteStatus: true },
         },
       },
       include: {

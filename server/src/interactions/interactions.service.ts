@@ -87,51 +87,103 @@ export class InteractionsService {
 
     // Create new vote for comment
     if (!votesOnComment) {
-      await this.prismaService.commentInteractions.create({
+      const createInteraction = this.prismaService.commentInteractions.create({
         data: {
           voteStatus: voteValue,
           commentId: commentId,
           userId,
-          upvoteAmount: voteValue ? 1 : undefined,
-          downvoteAmount: !voteValue ? 1 : undefined,
         },
       });
+
+      const updateCommentVoteAmount = this.prismaService.comments.update({
+        where: { id: commentId },
+        data: {
+          upvoteAmount: voteValue ? { increment: 1 } : undefined,
+          downvoteAmount: !voteValue ? { increment: 1 } : undefined,
+        },
+      });
+
+      await this.prismaService.$transaction([
+        createInteraction,
+        updateCommentVoteAmount,
+      ]);
+
+      return true;
     }
 
     // Vote cacelled before
     else if (votesOnComment.voteStatus === null) {
-      await this.prismaService.commentInteractions.update({
+      const createInteraction = this.prismaService.commentInteractions.update({
         where: { userId_commentId: { userId, commentId } },
         data: {
-          upvoteAmount: voteValue ? { increment: 1 } : undefined,
-          downvoteAmount: !voteValue ? { increment: 1 } : undefined,
           voteStatus: voteValue ? true : false,
         },
       });
+
+      const updateCommentVoteAmount = this.prismaService.comments.update({
+        where: { id: commentId },
+        data: {
+          upvoteAmount: voteValue ? { increment: 1 } : undefined,
+          downvoteAmount: !voteValue ? { increment: 1 } : undefined,
+        },
+      });
+
+      await this.prismaService.$transaction([
+        createInteraction,
+        updateCommentVoteAmount,
+      ]);
+
+      return true;
     }
 
     // Cancel vote
     else if (votesOnComment.voteStatus === voteValue) {
-      await this.prismaService.commentInteractions.update({
+      const createInteraction = this.prismaService.commentInteractions.update({
         where: { userId_commentId: { userId, commentId } },
         data: {
           voteStatus: null,
-          downvoteAmount: !voteValue ? { decrement: 1 } : undefined,
-          upvoteAmount: voteValue ? { decrement: 1 } : undefined,
         },
       });
+
+      const updateCommentVoteAmount = this.prismaService.comments.update({
+        where: { id: commentId },
+        data: {
+          upvoteAmount: voteValue ? { decrement: 1 } : undefined,
+          downvoteAmount: !voteValue ? { decrement: 1 } : undefined,
+        },
+      });
+
+      await this.prismaService.$transaction([
+        createInteraction,
+        updateCommentVoteAmount,
+      ]);
+
+      return true;
     }
 
     // Change vote
     else if (votesOnComment.voteStatus !== voteValue) {
-      await this.prismaService.commentInteractions.update({
+      const createInteraction = this.prismaService.commentInteractions.update({
         where: { userId_commentId: { userId, commentId } },
         data: {
           voteStatus: voteValue,
-          downvoteAmount: !voteValue ? { increment: 1 } : { decrement: 1 },
-          upvoteAmount: voteValue ? { increment: 1 } : { decrement: 1 },
         },
       });
+
+      const updateCommentVoteAmount = this.prismaService.comments.update({
+        where: { id: commentId },
+        data: {
+          upvoteAmount: voteValue ? { increment: 1 } : { decrement: 1 },
+          downvoteAmount: !voteValue ? { increment: 1 } : { decrement: 1 },
+        },
+      });
+
+      await this.prismaService.$transaction([
+        createInteraction,
+        updateCommentVoteAmount,
+      ]);
+
+      return true;
     }
 
     return true;
@@ -163,6 +215,7 @@ export class InteractionsService {
             },
           },
         });
+        return true;
       }
 
       // user has not voted before
@@ -183,6 +236,7 @@ export class InteractionsService {
               },
             },
           });
+          return true;
         }
 
         // user has voted before and want to undo vote
@@ -204,6 +258,7 @@ export class InteractionsService {
               },
             },
           });
+          return true;
         }
 
         // user has voted before and want to change vote
@@ -225,6 +280,7 @@ export class InteractionsService {
               },
             },
           });
+          return true;
         }
       }
     }
@@ -245,6 +301,7 @@ export class InteractionsService {
             },
           },
         });
+        return true;
       }
 
       // user has not laughd before
@@ -265,6 +322,7 @@ export class InteractionsService {
               },
             },
           });
+          return true;
         }
 
         // user has laughd before and want to undo laugh
@@ -286,6 +344,7 @@ export class InteractionsService {
               },
             },
           });
+          return true;
         }
 
         // user has laughd before and want to change laugh
@@ -307,6 +366,7 @@ export class InteractionsService {
               },
             },
           });
+          return true;
         }
       }
     }
@@ -327,6 +387,7 @@ export class InteractionsService {
             },
           },
         });
+        return true;
       }
 
       // user has not liked before
@@ -347,6 +408,7 @@ export class InteractionsService {
               },
             },
           });
+          return true;
         }
 
         // user has liked before and want to undo like
@@ -368,6 +430,7 @@ export class InteractionsService {
               },
             },
           });
+          return true;
         }
 
         // user has liked before and want to change like
@@ -389,6 +452,7 @@ export class InteractionsService {
               },
             },
           });
+          return true;
         }
       }
     }
@@ -409,6 +473,7 @@ export class InteractionsService {
             },
           },
         });
+        return true;
       }
 
       // user has not confusedd before
@@ -429,6 +494,7 @@ export class InteractionsService {
               },
             },
           });
+          return true;
         }
 
         // user has confusedd before and want to undo confused
@@ -450,6 +516,7 @@ export class InteractionsService {
               },
             },
           });
+          return true;
         }
 
         // user has confusedd before and want to change confused
@@ -471,6 +538,7 @@ export class InteractionsService {
               },
             },
           });
+          return true;
         }
       }
     }

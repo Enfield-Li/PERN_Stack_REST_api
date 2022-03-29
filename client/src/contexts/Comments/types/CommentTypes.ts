@@ -27,6 +27,8 @@ export type Comment = {
   parentCommentId: number | null;
   userId: number;
   postId: number;
+  upvoteAmount: number;
+  downvoteAmount: number;
   user: { username: string };
   commentInteractions?: commentInteractions;
   replies: Replies;
@@ -47,8 +49,6 @@ type commentInteractions = {
   createdAt: Date;
   updatedAt: Date;
   voteStatus: boolean | null;
-  upvoteAmount: number;
-  downvoteAmount: number;
   commentId: number;
   userId: number;
 };
@@ -122,5 +122,12 @@ type EditCurrentComment = {
 
 type VoteComment = {
   type: typeof VOTE_COMMENT;
-  payload: { commentId: number; voteValue: boolean };
+  payload: VoteCommentParams;
+};
+
+export type VoteCommentParams = {
+  commentId: number;
+  voteValue: boolean;
+  isComment: boolean;
+  parentCommentId?: number;
 };

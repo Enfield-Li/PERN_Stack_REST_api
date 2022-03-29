@@ -37,6 +37,10 @@ export class CommentRO {
   @ApiProperty()
   postId: number;
   @ApiProperty()
+  upvoteAmount: number;
+  @ApiProperty()
+  downvoteAmount: number;
+  @ApiProperty()
   user: { username: string };
   @ApiProperty()
   commentInteractions?: commentInteractions;

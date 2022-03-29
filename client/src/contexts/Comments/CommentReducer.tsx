@@ -20,41 +20,118 @@ export default function commentReducer(
     }
 
     case VOTE_COMMENT: {
-      const { commentId, voteValue } = action.payload;
+      const { commentId, voteValue, isComment, parentCommentId } =
+        action.payload;
+
+      if (isComment)
+        return produce(state, (draftState) => {
+          draftState.comments.forEach((comment) => {
+            const interactions = comment.commentInteractions;
+
+            // Repeteation
+            if (comment.id === commentId && interactions) {
+              // Cancel vote
+              if (interactions.voteStatus === voteValue) {
+                interactions.voteStatus = null;
+                voteValue === true
+                  ? comment.upvoteAmount--
+                  : comment.downvoteAmount--;
+              }
+
+              // Cast vote
+              else if (interactions.voteStatus === null) {
+                interactions.voteStatus = voteValue;
+                voteValue === true
+                  ? comment.upvoteAmount++
+                  : comment.downvoteAmount++;
+              }
+
+              // Change vote
+              else if (
+                interactions.voteStatus !== null &&
+                interactions.voteStatus !== voteValue
+              ) {
+                interactions.voteStatus = voteValue;
+                voteValue === true
+                  ? comment.downvoteAmount-- && comment.upvoteAmount++
+                  : comment.upvoteAmount-- && comment.downvoteAmount++;
+              }
+            }
+          });
+        });
 
       return produce(state, (draftState) => {
         draftState.comments.forEach((comment) => {
-          const commentInteractions = comment.commentInteractions;
+          if (comment.id === parentCommentId) {
+            // Update current replies
+            if (comment.currentReplies.length) {
+              comment.currentReplies.forEach((reply) => {
+                const interactions = reply.commentInteractions;
 
-          if (comment.id === commentId && commentInteractions) {
-            // equal voteValue
-            if (commentInteractions.voteStatus === voteValue) {
-              commentInteractions.voteStatus = null;
-              voteValue === true
-                ? commentInteractions.upvoteAmount--
-                : commentInteractions.downvoteAmount--;
+                if (reply.id === commentId && interactions) {
+                  // Cancel vote
+                  if (interactions.voteStatus === voteValue) {
+                    interactions.voteStatus = null;
+                    voteValue === true
+                      ? reply.upvoteAmount--
+                      : reply.downvoteAmount--;
+                  }
+
+                  // Cast vote
+                  else if (interactions.voteStatus === null) {
+                    interactions.voteStatus = voteValue;
+                    voteValue === true
+                      ? reply.upvoteAmount++
+                      : reply.downvoteAmount++;
+                  }
+
+                  // Change vote
+                  else if (
+                    interactions.voteStatus !== null &&
+                    interactions.voteStatus !== voteValue
+                  ) {
+                    interactions.voteStatus = voteValue;
+                    voteValue === true
+                      ? reply.downvoteAmount-- && reply.upvoteAmount++
+                      : reply.upvoteAmount-- && reply.downvoteAmount++;
+                  }
+                }
+              });
             }
 
-            // null
-            else if (commentInteractions.voteStatus === null) {
-              commentInteractions.voteStatus = voteValue;
-              voteValue === true
-                ? commentInteractions.upvoteAmount++
-                : commentInteractions.downvoteAmount++;
-            }
+            comment.replies.forEach((reply) => {
+              const interactions = reply.commentInteractions;
 
-            // third
-            else if (
-              commentInteractions.voteStatus !== null &&
-              commentInteractions.voteStatus !== voteValue
-            ) {
-              commentInteractions.voteStatus = voteValue;
-              voteValue === true
-                ? commentInteractions.downvoteAmount-- &&
-                  commentInteractions.upvoteAmount++
-                : commentInteractions.upvoteAmount-- &&
-                  commentInteractions.downvoteAmount++;
-            }
+              // Repeteation
+              if (reply.id === commentId && interactions) {
+                // Cancel vote
+                if (interactions.voteStatus === voteValue) {
+                  interactions.voteStatus = null;
+                  voteValue === true
+                    ? reply.upvoteAmount--
+                    : reply.downvoteAmount--;
+                }
+
+                // Cast vote
+                else if (interactions.voteStatus === null) {
+                  interactions.voteStatus = voteValue;
+                  voteValue === true
+                    ? reply.upvoteAmount++
+                    : reply.downvoteAmount++;
+                }
+
+                // Change vote
+                else if (
+                  interactions.voteStatus !== null &&
+                  interactions.voteStatus !== voteValue
+                ) {
+                  interactions.voteStatus = voteValue;
+                  voteValue === true
+                    ? reply.downvoteAmount-- && reply.upvoteAmount++
+                    : reply.upvoteAmount-- && reply.downvoteAmount++;
+                }
+              }
+            });
           }
         });
       });
