@@ -92,8 +92,8 @@ model commentInteractions {
   checked    Boolean   @default(false)
   commentId  Int
   userId     Int
-  user       user      @relation(fields: [userId], references: [id])
-  comments   comments? @relation(fields: [commentId], references: [id])
+  user       user      @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: NoAction)
+  comments   comments? @relation(fields: [commentId], references: [id], onDelete: Cascade, onUpdate: NoAction)
 
   @@unique([userId, commentId])
 }

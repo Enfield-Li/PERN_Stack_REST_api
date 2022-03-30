@@ -12,6 +12,51 @@ import { UpdatePostDto } from './dto/update-post.dto';
 export class PostService {
   constructor(private readonly prismaService: PrismaService) {}
 
+  async searchPosts(
+    keyword: string,
+    take: number,
+    userId: number,
+    skipTimes: number,
+  ): Promise<PaginatedPost> {
+    const takeLimit = Math.min(25, take);
+    const takeLimitPlusOne = takeLimit + 1;
+
+    const posts = await this.prismaService.post.findMany({
+      // Sort condition
+      where: {
+        OR: [
+          { title: { search: keyword, mode: 'insensitive' } },
+          { content: { search: keyword, mode: 'insensitive' } },
+        ],
+      },
+      take: takeLimitPlusOne,
+      orderBy: {
+        _relevance: {
+          search: keyword,
+          fields: ['content', 'title'],
+          sort: 'desc',
+        },
+      },
+      skip: skipTimes ? takeLimitPlusOne * skipTimes : undefined,
+
+      // Include fields
+      include: {
+        user: { select: { username: true } },
+        interactions: userId ? { where: { userId } } : false,
+      },
+    });
+
+    const hasMore = posts.length === takeLimitPlusOne;
+
+    const postAndInteractions = await this.processPostWithInteractions(
+      hasMore,
+      posts,
+      keyword,
+    );
+
+    return { hasMore, postAndInteractions };
+  }
+
   async createPost(
     createPostDto: CreatePostDto,
     userId: number,
@@ -260,6 +305,7 @@ export class PostService {
         username: string;
       };
     })[],
+    keyword?: string,
   ): Promise<PostAndInteraction[]> {
     // make sure return full list if hasMore === false
     const fullLength = hasMore ? posts.length - 1 : posts.length;
@@ -267,7 +313,11 @@ export class PostService {
 
     for (let i = 0; i < fullLength; i++) {
       // send snippets numbering 49
-      posts[i].content = posts[i].content.slice(0, 50);
+      if (keyword) {
+        posts[i].content = this.getContentArea(keyword, posts[i].content);
+      } else {
+        posts[i].content = posts[i].content.slice(0, 50);
+      }
 
       postAndInteractions[i] = {
         post: posts[i],
@@ -278,5 +328,19 @@ export class PostService {
     }
 
     return postAndInteractions;
+  }
+
+  // Match the word in between paragraphs
+  private getContentArea(keyword: string, content: string) {
+    // https://stackoverflow.com/questions/2295657/return-positions-of-a-regex-match-in-javascript
+    const match = RegExp(keyword).exec(content);
+
+    // Cut through from the start
+    if (keyword.length <= 10) {
+      return content.slice(0, match.index + 50 - keyword.length);
+    }
+
+    // Cut through the middle
+    return content.slice(match.index - 10, match.index + 40 - keyword.length);
   }
 }

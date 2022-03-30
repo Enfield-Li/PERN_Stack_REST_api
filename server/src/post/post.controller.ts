@@ -30,6 +30,31 @@ import {
 export class PostController {
   constructor(private readonly postService: PostService) {}
 
+  @ApiQuery({
+    name: 'take',
+    required: false,
+  })
+  @ApiQuery({
+    name: 'keyword',
+    required: true,
+  })
+  @ApiQuery({
+    name: 'skipTimes',
+    required: false,
+    type: Number,
+  })
+  @Get('search-post')
+  async searchPosts(
+    @Query('keyword') keyword: string,
+    @Query('take') take: string = '10',
+    @Req() req: Request,
+    @Query('skipTimes') skipTimes?: string,
+  ) {
+    const userId = req.session.userId;
+
+    return this.postService.searchPosts(keyword, +take, userId, +skipTimes);
+  }
+
   @Post('create-post')
   @ApiCreatedResponse({ type: PostAndInteraction })
   async create(

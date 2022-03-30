@@ -170,10 +170,10 @@ export const deleteCommentOrReply = async (
   dispatch: React.Dispatch<CommentActionType>,
   parentCommentId?: number
 ) => {
-  // await axios.delete(
-  //   `http://localhost:3119/comments/deleteComment/${currentCommentOrReplyId}`,
-  //   { withCredentials: true }
-  // );
+  await axios.delete(
+    `http://localhost:3119/comments/deleteComment/${currentCommentOrReplyId}`,
+    { withCredentials: true }
+  );
 
   dispatch({
     type: DELETE_COMMENTS_OR_REPLY,
