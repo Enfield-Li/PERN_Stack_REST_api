@@ -327,6 +327,7 @@ export class PostService {
     // https://stackoverflow.com/questions/2295657/return-positions-of-a-regex-match-in-javascript
     const match = RegExp(keyword).exec(content);
 
+    if (!match) return;
     // Cut through from the start
     if (match.index <= 10) {
       return content.slice(0, match.index + 50 - keyword.length);
