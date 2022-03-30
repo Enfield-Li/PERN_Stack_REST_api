@@ -17,7 +17,7 @@ export class PostService {
     take: number,
     userId: number,
     skipTimes: number,
-  ): Promise<PaginatedPost> {
+  ): Promise<post[]> {
     const takeLimit = Math.min(25, take);
     const takeLimitPlusOne = takeLimit + 1;
 
@@ -38,23 +38,13 @@ export class PostService {
         },
       },
       skip: skipTimes ? takeLimitPlusOne * skipTimes : undefined,
-
-      // Include fields
-      include: {
-        user: { select: { username: true } },
-        interactions: userId ? { where: { userId } } : false,
-      },
+      include: { user: { select: { id: true, username: true } } },
     });
 
-    const hasMore = posts.length === takeLimitPlusOne;
+    // Process the content
+    this.postsSearchWithContent(posts, keyword);
 
-    const postAndInteractions = await this.processPostWithInteractions(
-      hasMore,
-      posts,
-      keyword,
-    );
-
-    return { hasMore, postAndInteractions };
+    return posts.slice(0, posts.length - 1);
   }
 
   async createPost(
@@ -313,11 +303,7 @@ export class PostService {
 
     for (let i = 0; i < fullLength; i++) {
       // send snippets numbering 49
-      if (keyword) {
-        posts[i].content = this.getContentArea(keyword, posts[i].content);
-      } else {
-        posts[i].content = posts[i].content.slice(0, 50);
-      }
+      posts[i].content = posts[i].content.slice(0, 50);
 
       postAndInteractions[i] = {
         post: posts[i],
@@ -330,14 +316,24 @@ export class PostService {
     return postAndInteractions;
   }
 
+  private postsSearchWithContent(posts: post[], keyword: string) {
+    posts.forEach((post) => {
+      post.content = this.getContentArea(keyword, post.content);
+    });
+  }
+
   // Match the word in between paragraphs
   private getContentArea(keyword: string, content: string) {
     // https://stackoverflow.com/questions/2295657/return-positions-of-a-regex-match-in-javascript
     const match = RegExp(keyword).exec(content);
 
     // Cut through from the start
-    if (keyword.length <= 10) {
+    if (match.index <= 10) {
       return content.slice(0, match.index + 50 - keyword.length);
+    }
+
+    if (match.index + 40 >= content.length) {
+      return content.slice(content.length - 50, content.length);
     }
 
     // Cut through the middle

@@ -1,7 +1,6 @@
 import { useField } from "formik";
 import React, { InputHTMLAttributes } from "react";
 import { Link } from "react-router-dom";
-import { number } from "yup/lib/locale";
 
 export type InputWrapperProps = InputHTMLAttributes<HTMLInputElement> & {
   name: string;

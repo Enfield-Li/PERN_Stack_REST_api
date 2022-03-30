@@ -8,6 +8,7 @@ import {
   CONFUSE_POST,
   LAUGHE_POST,
   LIKE_POST,
+  POSTS_IN_SEARCH,
 } from "../../constant";
 import axios, { AxiosResponse } from "axios";
 import {
@@ -18,6 +19,7 @@ import {
   VotingTypes,
   PostSorting,
   SortPostWithTop,
+  Post,
 } from "../types/PostTypes";
 import PostContext from "../PostContext";
 import { useContext } from "react";
@@ -31,6 +33,21 @@ export const usePost = () => {
 
   return { postState: state, postDispatch: dispatch, sortPost, setSortPost };
 };
+
+export async function searchPosts(
+  keyword: string,
+  dispatch: React.Dispatch<PostActionType>,
+  take: number = 5
+) {
+  const res = await axios.get<Post[]>(
+    `http://localhost:3119/post/search-post?keyword=${keyword}&take=${take}`
+  );
+
+  dispatch({
+    type: POSTS_IN_SEARCH,
+    payload: res.data,
+  });
+}
 
 export async function interactWithPost(
   dispatch: React.Dispatch<PostActionType>,

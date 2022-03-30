@@ -6,6 +6,7 @@ import {
   usePost,
 } from "../contexts/Post/actions/PostAction";
 import { useUser } from "../contexts/User/actions/UserAction";
+import SearchPosts from "./activities/searchPosts/SearchPosts";
 import UserInfo from "./user-related/UserInfo";
 
 interface navbarProps {}
@@ -39,6 +40,8 @@ const Navbar: React.FC<navbarProps> = ({}) => {
           <span className="text-danger"> Reddit</span>
         </Link>
       </div>
+
+      <SearchPosts />
 
       <div className="d-flex align-items-center">
         {/* CreatePost */}

@@ -8,16 +8,19 @@ import {
   LIKE_POST,
   LAUGHE_POST,
   CONFUSE_POST,
+  POSTS_IN_SEARCH,
 } from "../../constant";
 
 export type PostState = {
   paginatedPosts: PaginatedPost;
   currentPost: PostAndInteractions | null;
+  postsInSearch: Post[];
 };
 
 export const postInitialState: PostState = {
   paginatedPosts: { hasMore: false, postAndInteractions: [] },
   currentPost: null,
+  postsInSearch: [],
 };
 
 export type PaginatedPost = {
@@ -80,6 +83,7 @@ export type PostActionType =
   | VotePost
   | LikePost
   | ConfusePost
+  | SearchPosts
   | LaughPost;
 
 type AddPost = {
@@ -124,4 +128,9 @@ type LaughPost = {
 type ConfusePost = {
   type: typeof CONFUSE_POST;
   payload: number;
+};
+
+type SearchPosts = {
+  type: typeof POSTS_IN_SEARCH;
+  payload: Post[];
 };

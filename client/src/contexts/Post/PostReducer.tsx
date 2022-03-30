@@ -8,6 +8,7 @@ import {
   CONFUSE_POST,
   LAUGHE_POST,
   LIKE_POST,
+  POSTS_IN_SEARCH,
 } from "../constant";
 import { PostActionType, PostState } from "./types/PostTypes";
 import produce from "immer";
@@ -21,6 +22,12 @@ export default function PostReducer(state: PostState, action: PostActionType) {
         draftState.paginatedPosts = { hasMore: false, postAndInteractions: [] };
 
         if (draftState.currentPost) draftState.currentPost.interactions = null;
+      });
+    }
+
+    case POSTS_IN_SEARCH: {
+      return produce(state, (draftState) => {
+        draftState.postsInSearch = action.payload;
       });
     }
 
