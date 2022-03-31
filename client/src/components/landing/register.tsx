@@ -36,8 +36,15 @@ const Register: React.FC<RegisterProps> = ({}) => {
           email: "",
           password: "",
         }}
-        onSubmit={async (values) => {
-          await registerUser(userDispatch, values);
+        onSubmit={async (values, { setErrors }) => {
+          const errorsRes = await registerUser(userDispatch, values);
+
+          if (errorsRes) {
+            setErrors({ email: "username or email already exist" });
+
+            return;
+          }
+
           if (userState.user) loginSocket(socket, userState.user.id);
 
           navigate("/");

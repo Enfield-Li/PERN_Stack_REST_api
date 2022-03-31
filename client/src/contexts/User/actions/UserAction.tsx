@@ -38,10 +38,15 @@ export async function registerUser(
     { withCredentials: true }
   );
 
-  dispatch({
-    type: LOGIN_USER,
-    payload: res.data.user,
-  });
+  if (res.data.user) {
+    dispatch({
+      type: LOGIN_USER,
+      payload: res.data.user,
+    });
+  } else if (res.data.errors) {
+    console.log(res.data.errors);
+    return res.data.errors;
+  }
 }
 
 export async function loginUser(
