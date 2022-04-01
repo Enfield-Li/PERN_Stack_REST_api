@@ -12,7 +12,7 @@ Stack：
     服务器：Nestjs / Express session + Redis-server (auth)；
     数据库：PostgreSQL / Prisma(ORM)。
 
-    注：Nestjs 传说是nodejs版Spring框架，实现细节也是MVC那一套体系，特性：依赖注入容器 模块化封装 可测试性 内置支持TypeScript 可基于 Express 或者 fastify
+    注：Nestjs 传说是Nodejs版Spring框架，实现细节也是MVC那一套体系，特性：依赖注入容器 模块化封装 可测试性 内置支持TypeScript 可基于 Express 或者 fastify
 
 现有功能：
 
