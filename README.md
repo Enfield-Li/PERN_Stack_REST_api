@@ -54,8 +54,8 @@ Stacks：
     3. cd server:
         1) 更改.env 文件， 使prisma和数据库建立连接
         2) npx prisma db push (将schema推到数据库)
-    4. cd.. 回到主文件夹
-    5. 后台运行 redis-server
+    4. 后台运行 redis-server
+    5. cd.. 回到主文件夹
     6. npm run dev
     7. enjoy :)
 
@@ -114,8 +114,8 @@ How to use?
     3. cd server:
         1) change .env and establish connection between Prisma and db
         2) npx prisma db push (push schema to db)
-    4. cd.. back to main
-    5. run redis-server in the background
+    4. run redis-server in the background
+    5. cd.. back to main
     6. npm run dev
     7. enjoy :)
 
