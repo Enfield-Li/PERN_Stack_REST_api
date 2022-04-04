@@ -1,5 +1,7 @@
 <h1>仿Reddit论坛 一个全栈 web app (REST api + SPA)</h1>
 
+    English description below ⏬⏬⏬
+
 作品描述：
 
     一个“缝合怪”论坛网站，功能仿照Reddit论坛、Youtube评论区样式、Github反应贴纸。
