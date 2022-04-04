@@ -55,8 +55,9 @@ Stacks：
         1) 更改.env 文件， 使prisma和数据库建立连接
         2) npx prisma db push (将schema推到数据库)
     4. cd.. 回到主文件夹
-    5. npm run dev
-    6. enjoy :)
+    5. 后台运行 redis-server
+    6. npm run dev
+    7. enjoy :)
 
 <a href="https://www.prisma.io/docs/getting-started/setup-prisma/start-from-scratch/relational-databases/connect-your-database-typescript-postgres">官方文档，用于连接数据库</a>
 
@@ -114,7 +115,8 @@ How to use?
         1) change .env and establish connection between Prisma and db
         2) npx prisma db push (push schema to db)
     4. cd.. back to main
-    5. npm run dev
-    6. enjoy :)
+    5. run redis-server in the background
+    6. npm run dev
+    7. enjoy :)
 
 <a href="https://www.prisma.io/docs/getting-started/setup-prisma/start-from-scratch/relational-databases/connect-your-database-typescript-postgres">Docs for connecting to db</a>
