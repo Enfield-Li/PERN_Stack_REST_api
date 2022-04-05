@@ -41,7 +41,7 @@ const SearchPosts: React.FC<SearchPostsProps> = ({}) => {
           onChange={(e) => setKeyword(e.target.value)}
           value={keyword}
           onBlur={() => {
-            setOpen("hide");
+            // setOpen("hide");
             setKeyword("");
           }}
         />
@@ -52,7 +52,7 @@ const SearchPosts: React.FC<SearchPostsProps> = ({}) => {
           style={{ width: 400, overflow: "scroll" }}
         >
           {postState.postsInSearch.map((post) => (
-            <PostItems key={post.id} post={post} keyword={keyword} />
+            <PostItems key={post.id} post={post} keyword={keyword} setOpen={setOpen} />
           ))}
         </ul>
       </div>

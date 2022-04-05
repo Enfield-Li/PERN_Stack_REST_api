@@ -27,7 +27,7 @@ const PostCardSection: React.FC<PostCardSectionProps> = ({
 
         {/* text */}
         <p className="card-text mt-1 text-muted fs-5">
-          {postAndInteractions.post.content}
+          {postAndInteractions.post.content}...
         </p>
       </Link>
       <InteractionDisplay

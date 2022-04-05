@@ -32,6 +32,11 @@ const CreatePostArea: React.FC<searchBarProps> = ({}) => {
           className=" form-control nput-group-text mx-3"
           placeholder="Create post"
           onClick={() => {
+            if (!user) {
+              navigate("/login");
+              return;
+            }
+
             navigate("/create-post");
           }}
         ></input>
@@ -40,6 +45,11 @@ const CreatePostArea: React.FC<searchBarProps> = ({}) => {
         <i
           className="bi bi-image fs-3 me-2"
           onClick={() => {
+            if (!user) {
+              navigate("/login");
+              return;
+            }
+
             navigate("/create-post");
           }}
           role="button"
@@ -49,6 +59,11 @@ const CreatePostArea: React.FC<searchBarProps> = ({}) => {
         <i
           className="bi bi-link-45deg fs-2"
           onClick={() => {
+            if (!user) {
+              navigate("/login");
+              return;
+            }
+
             navigate("/create-post");
           }}
           role="button"

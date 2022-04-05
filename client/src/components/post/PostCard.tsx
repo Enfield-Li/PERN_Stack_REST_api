@@ -40,13 +40,10 @@ const PostCard: React.FC<PostCardProps> = ({ postAndInteraction }) => {
           </div>
 
           {/* right */}
-          {
-            //   isHover &&
-            <EditSection
-              postAndInteractions={postAndInteraction}
-              isNotMain={false}
-            />
-          }
+          <EditSection
+            postAndInteractions={postAndInteraction}
+            isNotMain={false}
+          />
         </div>
       </div>
     </div>

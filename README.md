@@ -33,7 +33,7 @@ Stacks：
         4. 首页pagination：
             筛选项 “best、hot、new” 使用基于cursor的分页，显示最近时间的帖子，用户向下滑动无限滑动加载更多帖子，默认10个；
 
-            筛选项 “top” 使用基于offset的分页，子选项有“半年内、一年内、两年内”；
+            筛选项 “top” 使用基于offset的分页，子选项有“半年内、一年内、所有时间”；
 
         5. 用户主页：
             显示用户过往发布的帖子，以及用户的帖子数量、用户注册日期，分页采用同样的cursor分页形式，也是显示最近时间帖子；
@@ -94,7 +94,7 @@ Features:
     4. Pagination:
         Filter criteria "best, hot, new" utilize cursor based pagination, showing latest posts, user can scroll infinitly to load more, 10 at a time;
 
-        Filter criteria "top" with half-year, one-years, two-years options, utilize off-set based pagination;
+        Filter criteria "top" with half-year, one-years, all-time options, utilize off-set based pagination;
 
     5. User's profile page:
         Showing user's paginated posts, user's post amount, register data. Pagination is cursor based, showing the latest posts as well;
