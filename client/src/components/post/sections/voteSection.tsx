@@ -41,21 +41,21 @@ const VoteSection: React.FC<VoteSectionProps> = ({
     }
 
     // Emit notification
-    // sendNotification(socket, {
-    //   postId,
-    //   reciverId: post.userId,
-    //   senderId: user.id,
-    //   value: voteValue,
-    //   senderName: user.username,
-    //   type: "vote",
-    // });
+    sendNotification(socket, {
+      postId,
+      reciverId: post.userId,
+      senderId: user.id,
+      value: voteValue,
+      senderName: user.username,
+      type: "vote",
+    });
 
     if (isInProfile) {
       interactWithPostFromUserProfile(userDispatch, postId, voteValue, "vote");
       return;
     }
 
-    // interactWithPost(postDispatch, postId, voteValue, "vote");
+    interactWithPost(postDispatch, postId, voteValue, "vote");
   };
 
   return (

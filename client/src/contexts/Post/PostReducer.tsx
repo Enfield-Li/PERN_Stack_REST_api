@@ -32,7 +32,7 @@ export default function PostReducer(state: PostState, action: PostActionType) {
     }
 
     case FETCH_PAGINATED_POSTS: {
-      console.log("fetch posts")
+      console.log("fetch posts");
       return produce(state, (draftState) => {
         const { hasMore, postAndInteractions } = action.payload;
         const paginatedPosts = draftState.paginatedPosts;
@@ -52,11 +52,9 @@ export default function PostReducer(state: PostState, action: PostActionType) {
       return produce(state, (draftState) => {
         const paginatedPosts = draftState.paginatedPosts;
 
-        paginatedPosts.postAndInteractions =
-          paginatedPosts.postAndInteractions.filter(
-            (postAndInteraction) =>
-              postAndInteraction.post.id !== action.payload
-          );
+        paginatedPosts.postAndInteractions.forEach(
+          (postAndInteraction) => postAndInteraction.post.id !== action.payload
+        );
       });
     }
 
@@ -88,28 +86,25 @@ export default function PostReducer(state: PostState, action: PostActionType) {
           return;
         }
 
-        paginatedPosts.postAndInteractions =
-          paginatedPosts.postAndInteractions.filter((postAndInteraction) => {
-            if (
-              postAndInteraction.post.id === action.payload.id &&
-              postAndInteraction.interactions
-            ) {
-              const voteValue = action.payload.value;
-              const voteStatus = postAndInteraction.interactions.voteStatus;
-              const votePoints = postAndInteraction.post.votePoints;
+        paginatedPosts.postAndInteractions.forEach((postAndInteraction) => {
+          if (
+            postAndInteraction.post.id === action.payload.id &&
+            postAndInteraction.interactions
+          ) {
+            const voteValue = action.payload.value;
+            const voteStatus = postAndInteraction.interactions.voteStatus;
+            const votePoints = postAndInteraction.post.votePoints;
 
-              const { newVoteStatus, newVotePoints } = voteManipulation(
-                voteValue,
-                voteStatus,
-                votePoints
-              );
+            const { newVoteStatus, newVotePoints } = voteManipulation(
+              voteValue,
+              voteStatus,
+              votePoints
+            );
 
-              postAndInteraction.interactions.voteStatus = newVoteStatus;
-              postAndInteraction.post.votePoints = newVotePoints;
-            }
-
-            return postAndInteraction;
-          });
+            postAndInteraction.interactions.voteStatus = newVoteStatus;
+            postAndInteraction.post.votePoints = newVotePoints;
+          }
+        });
       });
     }
 
@@ -132,26 +127,23 @@ export default function PostReducer(state: PostState, action: PostActionType) {
           return;
         }
 
-        paginatedPosts.postAndInteractions =
-          paginatedPosts.postAndInteractions.filter((postAndInteraction) => {
-            if (
-              postAndInteraction.post.id === action.payload &&
-              postAndInteraction.interactions
-            ) {
-              const likeStatus = postAndInteraction.interactions.likeStatus;
-              const likePoints = postAndInteraction.post.likePoints;
+        paginatedPosts.postAndInteractions.forEach((postAndInteraction) => {
+          if (
+            postAndInteraction.post.id === action.payload &&
+            postAndInteraction.interactions
+          ) {
+            const likeStatus = postAndInteraction.interactions.likeStatus;
+            const likePoints = postAndInteraction.post.likePoints;
 
-              const { newStatus, newPoints } = interactionManipulation(
-                likeStatus,
-                likePoints
-              );
+            const { newStatus, newPoints } = interactionManipulation(
+              likeStatus,
+              likePoints
+            );
 
-              postAndInteraction.interactions.likeStatus = newStatus;
-              postAndInteraction.post.likePoints = newPoints;
-            }
-
-            return postAndInteraction.interactions;
-          });
+            postAndInteraction.interactions.likeStatus = newStatus;
+            postAndInteraction.post.likePoints = newPoints;
+          }
+        });
       });
     }
 
@@ -174,26 +166,23 @@ export default function PostReducer(state: PostState, action: PostActionType) {
           return;
         }
 
-        paginatedPosts.postAndInteractions =
-          paginatedPosts.postAndInteractions.filter((postAndInteraction) => {
-            if (
-              postAndInteraction.post.id === action.payload &&
-              postAndInteraction.interactions
-            ) {
-              const laughStatus = postAndInteraction.interactions.laughStatus;
-              const laughPoints = postAndInteraction.post.laughPoints;
+        paginatedPosts.postAndInteractions.forEach((postAndInteraction) => {
+          if (
+            postAndInteraction.post.id === action.payload &&
+            postAndInteraction.interactions
+          ) {
+            const laughStatus = postAndInteraction.interactions.laughStatus;
+            const laughPoints = postAndInteraction.post.laughPoints;
 
-              const { newStatus, newPoints } = interactionManipulation(
-                laughStatus,
-                laughPoints
-              );
+            const { newStatus, newPoints } = interactionManipulation(
+              laughStatus,
+              laughPoints
+            );
 
-              postAndInteraction.interactions.laughStatus = newStatus;
-              postAndInteraction.post.laughPoints = newPoints;
-            }
-
-            return postAndInteraction.interactions;
-          });
+            postAndInteraction.interactions.laughStatus = newStatus;
+            postAndInteraction.post.laughPoints = newPoints;
+          }
+        });
       });
     }
 
@@ -216,27 +205,24 @@ export default function PostReducer(state: PostState, action: PostActionType) {
           return;
         }
 
-        paginatedPosts.postAndInteractions =
-          paginatedPosts.postAndInteractions.filter((postAndInteraction) => {
-            if (
-              postAndInteraction.post.id === action.payload &&
-              postAndInteraction.interactions
-            ) {
-              const confusedStatus =
-                postAndInteraction.interactions.confusedStatus;
-              const confusedPoints = postAndInteraction.post.confusedPoints;
+        paginatedPosts.postAndInteractions.forEach((postAndInteraction) => {
+          if (
+            postAndInteraction.post.id === action.payload &&
+            postAndInteraction.interactions
+          ) {
+            const confusedStatus =
+              postAndInteraction.interactions.confusedStatus;
+            const confusedPoints = postAndInteraction.post.confusedPoints;
 
-              const { newStatus, newPoints } = interactionManipulation(
-                confusedStatus,
-                confusedPoints
-              );
+            const { newStatus, newPoints } = interactionManipulation(
+              confusedStatus,
+              confusedPoints
+            );
 
-              postAndInteraction.interactions.confusedStatus = newStatus;
-              postAndInteraction.post.confusedPoints = newPoints;
-            }
-
-            return postAndInteraction.interactions;
-          });
+            postAndInteraction.interactions.confusedStatus = newStatus;
+            postAndInteraction.post.confusedPoints = newPoints;
+          }
+        });
       });
     }
 
