@@ -1,10 +1,11 @@
 import { createContext } from "react";
-import { UserState, UserActionType } from "./types/UserTypes";
-import { userInitialState } from "./types/UserTypes";
+import { UserActionType, UserState } from "./types/UserTypes";
 
-const UserContext = createContext<{
+interface UserCtxType {
   state: UserState;
   dispatch: React.Dispatch<UserActionType>;
-}>({ state: userInitialState, dispatch: () => {} });
+}
+
+const UserContext = createContext<UserCtxType>({} as UserCtxType);
 
 export default UserContext;

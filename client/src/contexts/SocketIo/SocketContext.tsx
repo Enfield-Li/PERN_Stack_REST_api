@@ -1,25 +1,17 @@
 import { createContext } from "react";
 import {
-  SocketInitialType,
-  SocketActionType,
-  socketInitialState,
-  SocketInitialStateType,
+  SocketActionType, SocketInitialStateType, SocketInitialType
 } from "./types/socketTypes";
 
-const SocketContext = createContext<{
+interface SocketCtxType {
   socket: SocketInitialType;
   setSocket: React.Dispatch<React.SetStateAction<SocketInitialType>>;
   state: SocketInitialStateType;
   dispatch: React.Dispatch<SocketActionType>;
   uncheckedAmount: number;
   setUncheckedAmount: React.Dispatch<React.SetStateAction<number>>;
-}>({
-  socket: null,
-  setSocket: () => {},
-  state: socketInitialState,
-  dispatch: () => {},
-  uncheckedAmount: 0,
-  setUncheckedAmount: () => {},
-});
+}
+
+const SocketContext = createContext<SocketCtxType>({} as SocketCtxType);
 
 export default SocketContext;

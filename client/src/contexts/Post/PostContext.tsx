@@ -1,21 +1,16 @@
 import { createContext } from "react";
 import {
-  PostActionType,
-  postInitialState,
-  PostSorting,
-  PostState,
+  PostActionType, PostSorting,
+  PostState
 } from "./types/PostTypes";
 
-const PostContext = createContext<{
+interface PostCtxType {
   state: PostState;
   dispatch: React.Dispatch<PostActionType>;
   sortPost: PostSorting;
   setSortPost: React.Dispatch<React.SetStateAction<PostSorting>>;
-}>({
-  state: postInitialState,
-  dispatch: () => {},
-  sortPost: "best",
-  setSortPost: () => {},
-});
+}
+
+const PostContext = createContext<PostCtxType>({} as PostCtxType);
 
 export default PostContext;

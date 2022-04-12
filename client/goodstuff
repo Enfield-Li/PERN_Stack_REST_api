@@ -1,0 +1,50 @@
+
+interface IMarkedPlacesContext {
+  markedPlaces: Place[]
+  setMarkedPlaces: React.Dispatch<React.SetStateAction<Place[]>>
+  markPlaces: (places : Place[]) => Promise<void>
+}
+
+interface Props {
+  children: React.ReactNode
+}
+
+const MarkedPlacesContext = createContext<IMarkedPlacesContext>(
+  {} as IMarkedPlacesContext
+)
+
+export function MarkedPlacesContextProvider({ children }: Props) {
+  const [markedPlaces, setMarkedPlaces] = useState<Place[]>([])
+ 
+  const markPlaces = useCallback( async (places: Place[]) => {
+    const placesWithRatings : Place[] = await Promise.all(places.map(async (place) => {
+      const placeRating = await FirestorePlaceRatingService.getPlaceRating(place.placeId)
+      if (placeRating) {
+        return({
+          ...place, 
+          rating: placeRating.sumRating/placeRating.reviewCount,
+          reviewCount: placeRating.reviewCount 
+        })
+      } else {
+        return(place)
+      }
+    }))
+    setMarkedPlaces(placesWithRatings)
+  }, [])
+
+  return (
+    <MarkedPlacesContext.Provider
+      value={{
+        markedPlaces,
+        setMarkedPlaces,
+        markPlaces,
+      }}
+    >
+      {children}
+    </MarkedPlacesContext.Provider>
+  )
+}
+
+export function useMarkedPlaces() {
+  return useContext(MarkedPlacesContext)
+}

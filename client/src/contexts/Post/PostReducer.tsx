@@ -32,6 +32,7 @@ export default function PostReducer(state: PostState, action: PostActionType) {
     }
 
     case FETCH_PAGINATED_POSTS: {
+      console.log("fetch posts")
       return produce(state, (draftState) => {
         const { hasMore, postAndInteractions } = action.payload;
         const paginatedPosts = draftState.paginatedPosts;
