@@ -58,27 +58,24 @@ export default function UserReducer(state: UserState, action: UserActionType) {
         const userProfile = draftState.userProfile;
 
         if (userProfile) {
-          userProfile.userPaginatedPost.postAndInteractions =
-            userProfile.userPaginatedPost.postAndInteractions.filter(
-              (postAndInteraction) => {
-                if (postAndInteraction.post.id === action.payload.id) {
-                  const voteValue = action.payload.value;
-                  const voteStatus = postAndInteraction.interactions.voteStatus;
-                  const votePoints = postAndInteraction.post.votePoints;
+          userProfile.userPaginatedPost.postAndInteractions.forEach(
+            (postAndInteraction) => {
+              if (postAndInteraction.post.id === action.payload.id) {
+                const voteValue = action.payload.value;
+                const voteStatus = postAndInteraction.interactions.voteStatus;
+                const votePoints = postAndInteraction.post.votePoints;
 
-                  const { newVoteStatus, newVotePoints } = voteManipulation(
-                    voteValue,
-                    voteStatus,
-                    votePoints
-                  );
+                const { newVoteStatus, newVotePoints } = voteManipulation(
+                  voteValue,
+                  voteStatus,
+                  votePoints
+                );
 
-                  postAndInteraction.interactions.voteStatus = newVoteStatus;
-                  postAndInteraction.post.votePoints = newVotePoints;
-                }
-
-                return postAndInteraction;
+                postAndInteraction.interactions.voteStatus = newVoteStatus;
+                postAndInteraction.post.votePoints = newVotePoints;
               }
-            );
+            }
+          );
         }
       });
     }
@@ -88,25 +85,22 @@ export default function UserReducer(state: UserState, action: UserActionType) {
         const userProfile = draftState.userProfile;
 
         if (userProfile) {
-          userProfile.userPaginatedPost.postAndInteractions =
-            userProfile.userPaginatedPost.postAndInteractions.filter(
-              (postAndInteraction) => {
-                if (postAndInteraction.post.id === action.payload) {
-                  const likeStatus = postAndInteraction.interactions.likeStatus;
-                  const likePoints = postAndInteraction.post.likePoints;
+          userProfile.userPaginatedPost.postAndInteractions.forEach(
+            (postAndInteraction) => {
+              if (postAndInteraction.post.id === action.payload) {
+                const likeStatus = postAndInteraction.interactions.likeStatus;
+                const likePoints = postAndInteraction.post.likePoints;
 
-                  const { newStatus, newPoints } = interactionManipulation(
-                    likeStatus,
-                    likePoints
-                  );
+                const { newStatus, newPoints } = interactionManipulation(
+                  likeStatus,
+                  likePoints
+                );
 
-                  postAndInteraction.interactions.likeStatus = newStatus;
-                  postAndInteraction.post.likePoints = newPoints;
-                }
-
-                return postAndInteraction.interactions;
+                postAndInteraction.interactions.likeStatus = newStatus;
+                postAndInteraction.post.likePoints = newPoints;
               }
-            );
+            }
+          );
         }
       });
     }
@@ -116,26 +110,22 @@ export default function UserReducer(state: UserState, action: UserActionType) {
         const userProfile = draftState.userProfile;
 
         if (userProfile) {
-          userProfile.userPaginatedPost.postAndInteractions =
-            userProfile.userPaginatedPost.postAndInteractions.filter(
-              (postAndInteraction) => {
-                if (postAndInteraction.post.id === action.payload) {
-                  const laughStatus =
-                    postAndInteraction.interactions.laughStatus;
-                  const laughPoints = postAndInteraction.post.laughPoints;
+          userProfile.userPaginatedPost.postAndInteractions.forEach(
+            (postAndInteraction) => {
+              if (postAndInteraction.post.id === action.payload) {
+                const laughStatus = postAndInteraction.interactions.laughStatus;
+                const laughPoints = postAndInteraction.post.laughPoints;
 
-                  const { newStatus, newPoints } = interactionManipulation(
-                    laughStatus,
-                    laughPoints
-                  );
+                const { newStatus, newPoints } = interactionManipulation(
+                  laughStatus,
+                  laughPoints
+                );
 
-                  postAndInteraction.interactions.laughStatus = newStatus;
-                  postAndInteraction.post.laughPoints = newPoints;
-                }
-
-                return postAndInteraction.interactions;
+                postAndInteraction.interactions.laughStatus = newStatus;
+                postAndInteraction.post.laughPoints = newPoints;
               }
-            );
+            }
+          );
         }
       });
     }
@@ -145,26 +135,23 @@ export default function UserReducer(state: UserState, action: UserActionType) {
         const userProfile = draftState.userProfile;
 
         if (userProfile) {
-          userProfile.userPaginatedPost.postAndInteractions =
-            userProfile.userPaginatedPost.postAndInteractions.filter(
-              (postAndInteraction) => {
-                if (postAndInteraction.post.id === action.payload) {
-                  const confusedStatus =
-                    postAndInteraction.interactions.confusedStatus;
-                  const confusedPoints = postAndInteraction.post.confusedPoints;
+          userProfile.userPaginatedPost.postAndInteractions.forEach(
+            (postAndInteraction) => {
+              if (postAndInteraction.post.id === action.payload) {
+                const confusedStatus =
+                  postAndInteraction.interactions.confusedStatus;
+                const confusedPoints = postAndInteraction.post.confusedPoints;
 
-                  const { newStatus, newPoints } = interactionManipulation(
-                    confusedStatus,
-                    confusedPoints
-                  );
+                const { newStatus, newPoints } = interactionManipulation(
+                  confusedStatus,
+                  confusedPoints
+                );
 
-                  postAndInteraction.interactions.confusedStatus = newStatus;
-                  postAndInteraction.post.confusedPoints = newPoints;
-                }
-
-                return postAndInteraction.interactions;
+                postAndInteraction.interactions.confusedStatus = newStatus;
+                postAndInteraction.post.confusedPoints = newPoints;
               }
-            );
+            }
+          );
         }
       });
     }
