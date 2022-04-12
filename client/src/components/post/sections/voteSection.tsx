@@ -1,11 +1,19 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
-import { usePost, interactWithPost } from "../../../contexts/Post/actions/PostAction";
+import {
+  usePost,
+  interactWithPost,
+} from "../../../contexts/Post/actions/PostAction";
 import { PostAndInteractions } from "../../../contexts/Post/types/PostTypes";
-import { useSocket, sendNotification } from "../../../contexts/SocketIo/actions/socketActions";
-import { useUser, interactWithPostFromUserProfile } from "../../../contexts/User/actions/UserAction";
+import {
+  useSocket,
+  sendNotification,
+} from "../../../contexts/SocketIo/actions/socketActions";
+import {
+  useUser,
+  interactWithPostFromUserProfile,
+} from "../../../contexts/User/actions/UserAction";
 import { UserPostAndInteractions } from "../../../contexts/User/types/UserTypes";
-
 
 interface VoteSectionProps {
   postAndInteractions: PostAndInteractions | UserPostAndInteractions;
@@ -33,21 +41,21 @@ const VoteSection: React.FC<VoteSectionProps> = ({
     }
 
     // Emit notification
-    sendNotification(socket, {
-      postId,
-      reciverId: post.userId,
-      senderId: user.id,
-      value: voteValue,
-      senderName: user.username,
-      type: "vote",
-    });
+    // sendNotification(socket, {
+    //   postId,
+    //   reciverId: post.userId,
+    //   senderId: user.id,
+    //   value: voteValue,
+    //   senderName: user.username,
+    //   type: "vote",
+    // });
 
     if (isInProfile) {
       interactWithPostFromUserProfile(userDispatch, postId, voteValue, "vote");
       return;
     }
 
-    interactWithPost(postDispatch, postId, voteValue, "vote");
+    // interactWithPost(postDispatch, postId, voteValue, "vote");
   };
 
   return (

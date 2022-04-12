@@ -130,8 +130,9 @@ export async function interactWithPostFromUserProfile(
   value: boolean,
   field: VotingTypes
 ) {
+  console.log(id, value, field);
   await axios.get<boolean>(
-    `http://localhost:3119/post/interact/${id}?value=${value}&field=${field}`,
+    `http://localhost:3119/interactions/interact/post/${id}?value=${value}&field=${field}`,
     { withCredentials: true }
   );
 
