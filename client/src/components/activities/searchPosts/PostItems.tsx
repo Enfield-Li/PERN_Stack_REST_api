@@ -8,7 +8,7 @@ interface PostItemsProps {
   setOpen: React.Dispatch<React.SetStateAction<"hide" | "show">>;
 }
 
-const PostItems: React.FC<PostItemsProps> = ({ setOpen, post, keyword }) => {
+const PostItems: React.FC<PostItemsProps> = ({ setOpen, post }) => {
   const navigate = useNavigate();
 
   return (
@@ -16,6 +16,7 @@ const PostItems: React.FC<PostItemsProps> = ({ setOpen, post, keyword }) => {
       onClick={() => {
         setOpen("hide");
         navigate(`/post/${post.id}`);
+        navigate(0);
       }}
     >
       <a className="dropdown-item" href="#">

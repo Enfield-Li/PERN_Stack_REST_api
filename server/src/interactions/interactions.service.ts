@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { interactions } from '@prisma/client';
 import { PrismaService } from 'src/config/prisma.service';
-import { InteractionIds } from './dto/create-interaction.dto';
+import { InteractionIds, VoteFields } from './dto/create-interaction.dto';
 
 @Injectable()
 export class InteractionsService {
@@ -193,7 +193,7 @@ export class InteractionsService {
     postId: number,
     userId: number,
     value: boolean,
-    field: 'vote' | 'like' | 'laugh' | 'confused',
+    field: VoteFields,
   ): Promise<Boolean> {
     const interactions = await this.prismaService.interactions.findUnique({
       where: { userId_postId: { userId, postId } },

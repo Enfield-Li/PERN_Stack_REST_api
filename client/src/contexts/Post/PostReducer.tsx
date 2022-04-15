@@ -12,8 +12,8 @@ import {
 } from "../constant";
 import { PostActionType, PostState } from "./types/PostTypes";
 import produce from "immer";
-import { voteManipulation } from "../../utils/voteManipulation";
-import { interactionManipulation } from "../../utils/interactionManipulation";
+import { processVoteStatusAndPoints } from "../../utils/voteManipulation";
+import { prcessPostStatusAndPoints } from "../../utils/interactionManipulation";
 
 export default function PostReducer(state: PostState, action: PostActionType) {
   switch (action.type) {
@@ -32,7 +32,6 @@ export default function PostReducer(state: PostState, action: PostActionType) {
     }
 
     case FETCH_PAGINATED_POSTS: {
-      console.log("fetch posts");
       return produce(state, (draftState) => {
         const { hasMore, postAndInteractions } = action.payload;
         const paginatedPosts = draftState.paginatedPosts;
@@ -69,40 +68,16 @@ export default function PostReducer(state: PostState, action: PostActionType) {
       return produce(state, (draftState) => {
         const currentPost = draftState.currentPost;
         const paginatedPosts = draftState.paginatedPosts;
+        const voteValue = action.payload.value;
 
-        if (currentPost && currentPost.interactions) {
-          const voteValue = action.payload.value;
-          const voteStatus = currentPost.interactions.voteStatus;
-          const votePoints = currentPost.post.votePoints;
-
-          const { newVoteStatus, newVotePoints } = voteManipulation(
-            voteValue,
-            voteStatus,
-            votePoints
-          );
-
-          currentPost.interactions.voteStatus = newVoteStatus;
-          currentPost.post.votePoints = newVotePoints;
+        if (currentPost?.interactions) {
+          processVoteStatusAndPoints(currentPost, voteValue);
           return;
         }
 
         paginatedPosts.postAndInteractions.forEach((postAndInteraction) => {
-          if (
-            postAndInteraction.post.id === action.payload.id &&
-            postAndInteraction.interactions
-          ) {
-            const voteValue = action.payload.value;
-            const voteStatus = postAndInteraction.interactions.voteStatus;
-            const votePoints = postAndInteraction.post.votePoints;
-
-            const { newVoteStatus, newVotePoints } = voteManipulation(
-              voteValue,
-              voteStatus,
-              votePoints
-            );
-
-            postAndInteraction.interactions.voteStatus = newVoteStatus;
-            postAndInteraction.post.votePoints = newVotePoints;
+          if (postAndInteraction.post.id === action.payload.id) {
+            processVoteStatusAndPoints(postAndInteraction, voteValue);
           }
         });
       });
@@ -110,119 +85,52 @@ export default function PostReducer(state: PostState, action: PostActionType) {
 
     case LIKE_POST: {
       return produce(state, (draftState) => {
-        const currentPost = draftState.currentPost;
-        const paginatedPosts = draftState.paginatedPosts;
+        const id = action.payload;
 
-        if (currentPost && currentPost.interactions) {
-          const likeStatus = currentPost.interactions.likeStatus;
-          const likePoints = currentPost.post.likePoints;
-
-          const { newStatus, newPoints } = interactionManipulation(
-            likeStatus,
-            likePoints
-          );
-
-          currentPost.interactions.likeStatus = newStatus;
-          currentPost.post.likePoints = newPoints;
-          return;
+        if (draftState.currentPost) {
+          prcessPostStatusAndPoints(draftState.currentPost, "like");
         }
 
-        paginatedPosts.postAndInteractions.forEach((postAndInteraction) => {
-          if (
-            postAndInteraction.post.id === action.payload &&
-            postAndInteraction.interactions
-          ) {
-            const likeStatus = postAndInteraction.interactions.likeStatus;
-            const likePoints = postAndInteraction.post.likePoints;
-
-            const { newStatus, newPoints } = interactionManipulation(
-              likeStatus,
-              likePoints
-            );
-
-            postAndInteraction.interactions.likeStatus = newStatus;
-            postAndInteraction.post.likePoints = newPoints;
+        draftState.paginatedPosts.postAndInteractions.forEach(
+          (postAndInteraction) => {
+            if (postAndInteraction.post.id === id)
+              prcessPostStatusAndPoints(postAndInteraction, "like");
           }
-        });
+        );
       });
     }
 
     case LAUGHE_POST: {
       return produce(state, (draftState) => {
-        const currentPost = draftState.currentPost;
-        const paginatedPosts = draftState.paginatedPosts;
+        const id = action.payload;
 
-        if (currentPost && currentPost.interactions) {
-          const laughStatus = currentPost.interactions.laughStatus;
-          const laughPoints = currentPost.post.laughPoints;
-
-          const { newStatus, newPoints } = interactionManipulation(
-            laughStatus,
-            laughPoints
-          );
-
-          currentPost.interactions.laughStatus = newStatus;
-          currentPost.post.laughPoints = newPoints;
-          return;
+        if (draftState.currentPost) {
+          prcessPostStatusAndPoints(draftState.currentPost, "laugh");
         }
 
-        paginatedPosts.postAndInteractions.forEach((postAndInteraction) => {
-          if (
-            postAndInteraction.post.id === action.payload &&
-            postAndInteraction.interactions
-          ) {
-            const laughStatus = postAndInteraction.interactions.laughStatus;
-            const laughPoints = postAndInteraction.post.laughPoints;
-
-            const { newStatus, newPoints } = interactionManipulation(
-              laughStatus,
-              laughPoints
-            );
-
-            postAndInteraction.interactions.laughStatus = newStatus;
-            postAndInteraction.post.laughPoints = newPoints;
+        draftState.paginatedPosts.postAndInteractions.forEach(
+          (postAndInteraction) => {
+            if (postAndInteraction.post.id === id)
+              prcessPostStatusAndPoints(postAndInteraction, "laugh");
           }
-        });
+        );
       });
     }
 
     case CONFUSE_POST: {
       return produce(state, (draftState) => {
-        const currentPost = draftState.currentPost;
-        const paginatedPosts = draftState.paginatedPosts;
+        const id = action.payload;
 
-        if (currentPost && currentPost.interactions) {
-          const confusedStatus = currentPost.interactions.confusedStatus;
-          const confusedPoints = currentPost.post.confusedPoints;
-
-          const { newStatus, newPoints } = interactionManipulation(
-            confusedStatus,
-            confusedPoints
-          );
-
-          currentPost.interactions.confusedStatus = newStatus;
-          currentPost.post.confusedPoints = newPoints;
-          return;
+        if (draftState.currentPost) {
+          prcessPostStatusAndPoints(draftState.currentPost, "confused");
         }
 
-        paginatedPosts.postAndInteractions.forEach((postAndInteraction) => {
-          if (
-            postAndInteraction.post.id === action.payload &&
-            postAndInteraction.interactions
-          ) {
-            const confusedStatus =
-              postAndInteraction.interactions.confusedStatus;
-            const confusedPoints = postAndInteraction.post.confusedPoints;
-
-            const { newStatus, newPoints } = interactionManipulation(
-              confusedStatus,
-              confusedPoints
-            );
-
-            postAndInteraction.interactions.confusedStatus = newStatus;
-            postAndInteraction.post.confusedPoints = newPoints;
+        draftState.paginatedPosts.postAndInteractions.forEach(
+          (postAndInteraction) => {
+            if (postAndInteraction.post.id === id)
+              prcessPostStatusAndPoints(postAndInteraction, "confused");
           }
-        });
+        );
       });
     }
 
