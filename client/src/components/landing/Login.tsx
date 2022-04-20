@@ -16,7 +16,7 @@ interface LoginProps {}
 
 const Login: React.FC<LoginProps> = ({}) => {
   const { userDispatch } = useUser();
-  const { postDispatch } = usePost();
+  const { postDispatch, setSortPost } = usePost();
 
   const navigate = useNavigate();
 
@@ -42,6 +42,7 @@ const Login: React.FC<LoginProps> = ({}) => {
         } else {
           clearPostsCache(postDispatch);
           fetchPaginatedPosts(postDispatch);
+          setSortPost('best')
           navigate("/");
           return;
         }

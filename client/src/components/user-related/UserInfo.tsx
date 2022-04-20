@@ -17,7 +17,7 @@ import Notifications from "../activities/Notifications";
 interface UserInfoProps {}
 
 const UserInfo: React.FC<UserInfoProps> = ({}) => {
-  const { postDispatch } = usePost();
+  const { postDispatch, setSortPost } = usePost();
   const { userState, userDispatch } = useUser();
   const { user } = userState;
   const { socketDispatch, setUncheckedAmount, socket } = useSocket();
@@ -31,7 +31,8 @@ const UserInfo: React.FC<UserInfoProps> = ({}) => {
     setTimeout(() => {
       // Prevent fetch posts before clearing cache
       fetchPaginatedPosts(postDispatch);
-    }, 1);
+      setSortPost("best");
+    }, 0);
   };
 
   return (
