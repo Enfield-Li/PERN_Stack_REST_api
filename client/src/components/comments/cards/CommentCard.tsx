@@ -44,8 +44,8 @@ const CommentCard: React.FC<CommentCardProps> = ({ comment, postId }) => {
   });
 
   const fetchReplyBtn = () => {
-    // Fetch data only in close and doesn't fetch it before
-    if (!repliseState && !comment.replies.length) {
+    // Fetch data only in close state
+    if (!repliseState) {
       fetchReplies(
         postId,
         {
