@@ -1,6 +1,6 @@
 <h1>仿Reddit论坛 一个全栈 web app (REST api + SPA)</h1>
 
-    English description below ⏬⏬⏬
+    ⏬⏬⏬ English description below ⏬⏬⏬
 
 作品描述：
 
@@ -40,7 +40,6 @@ Stacks：
 
         6. 评论文章：
             仿照Youtube的“两层”评论区样式，用户可对文章进行评论，对其他用户的评论进行回复，以及对评论点赞的交互；
-
 
         7. 搜索文章：
             顶部搜索框，输入需要搜索的关键词，返还标题或内容相关的文章搜索结果。
