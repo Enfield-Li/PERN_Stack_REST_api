@@ -98,7 +98,7 @@ export class UserController {
   findOne(@Req() req: Request): Promise<UserRO> {
     const userId = req.session.userId;
 
-    if (!userId) return;
+    if (!userId) throw new HttpException('Nope', 401);
 
     return this.userService.me(userId);
   }

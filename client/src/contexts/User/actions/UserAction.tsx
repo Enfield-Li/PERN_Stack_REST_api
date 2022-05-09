@@ -1,4 +1,4 @@
-import axios, { AxiosResponse } from "axios";
+import axios, { AxiosError, AxiosResponse } from "axios";
 import { useContext } from "react";
 import { interactionNullCheckAndPopulateData } from "../../../utils/populateWithMockData";
 import {
@@ -70,14 +70,20 @@ export async function loginUser(
 }
 
 export async function me(dispatch: React.Dispatch<UserActionType>) {
-  const res = await axios.get<UserRO>("http://localhost:3119/user/me", {
-    withCredentials: true,
-  });
-
-  dispatch({
-    type: LOGIN_USER,
-    payload: res.data.user,
-  });
+  try {
+    
+    const res = await axios.get<UserRO>("http://localhost:3119/user/me", {
+      withCredentials: true,
+    });
+    
+    dispatch({
+      type: LOGIN_USER,
+      payload: res.data.user,
+    });
+  } catch (error ) {
+    // @ts-ignore
+    console.log(error.response);
+  }
 }
 
 export async function getUserInfo(id: number) {
