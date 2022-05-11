@@ -62,12 +62,12 @@ export class UserService {
     return user;
   }
 
-  async me(id: number): Promise<UserRO> {
+  async me(id: number): Promise<ResUser> {
     const user = await this.prismaService.user.findUnique({
       where: { id },
     });
 
-    return { user: this.buildResUser(user) };
+    return this.buildResUser(user); 
   }
 
   async fetchUserInfo(id: number, meId: number): Promise<ResUser> {

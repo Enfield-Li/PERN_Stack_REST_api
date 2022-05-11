@@ -72,13 +72,13 @@ export async function loginUser(
 export async function me(dispatch: React.Dispatch<UserActionType>) {
   try {
     
-    const res = await axios.get<UserRO>("http://localhost:3119/user/me", {
+    const res = await axios.get<User>("http://localhost:3119/user/me", {
       withCredentials: true,
     });
     
     dispatch({
       type: LOGIN_USER,
-      payload: res.data.user,
+      payload: res.data,
     });
   } catch (error ) {
     // @ts-ignore

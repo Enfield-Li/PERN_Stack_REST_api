@@ -95,7 +95,7 @@ export class UserController {
 
   @Get('/me')
   @ApiCreatedResponse({ type: UserRO })
-  findOne(@Req() req: Request): Promise<UserRO> {
+  findOne(@Req() req: Request): Promise<ResUser> {
     const userId = req.session.userId;
 
     if (!userId) throw new HttpException('Nope', 401);
