@@ -82,16 +82,19 @@ export class PostService {
       where: { id: userId },
     });
 
-    const createdPost = await this.prismaService.$transaction([
+    const res = await this.prismaService.$transaction([
       createPost,
       updateUserPostAmounts,
     ]);
 
     // refactor json data
-    const interactions = createdPost[0].interactions[0];
-    delete createdPost[0].interactions;
+    const createdPost = res[0];
+    const interactions = createdPost.interactions[0];
+    delete interactions.checked;
+    delete interactions.read;
+    delete createdPost.interactions;
 
-    return { post: createdPost[0], interactions };
+    return { post: createdPost, interactions };
   }
 
   async fetchPaginatedPost(

@@ -1,6 +1,6 @@
-import { Injectable } from '@nestjs/common';
-import { user } from '@prisma/client';
-import { PrismaService } from 'src/config/prisma.service';
+import { Injectable } from '@nestjs/common'
+import { user } from '@prisma/client'
+import { PrismaService } from 'src/config/prisma.service'
 import {
   CreateUserDto,
   LoginUserDto,
@@ -8,88 +8,88 @@ import {
   ResUser,
   UserRO,
   UserProfileRO,
-} from './dto/create-user.dto';
-import { UpdateUserDto } from './dto/update-user.dto';
-import { Request } from 'express';
-import { PostAndInteraction } from 'src/post/dto/create-post.dto';
+} from './dto/create-user.dto'
+import { UpdateUserDto } from './dto/update-user.dto'
+import { Request } from 'express'
+import { PostAndInteraction } from 'src/post/dto/create-post.dto'
 // import argon2 from 'argon2';
 
 @Injectable()
 export class UserService {
-  constructor(private readonly prismaService: PrismaService) {}
+  constructor (private readonly prismaService: PrismaService) {}
 
-  async createUser(
+  async createUser (
     userCreateInput: CreateUserDto,
     req: Request,
   ): Promise<UserRO> {
-    let { email, username, password } = userCreateInput;
+    let { email, username, password } = userCreateInput
     // password = await argon2.hash(password);
 
     try {
       const user = await this.prismaService.user.create({
         data: { email, username, password },
-      });
+      })
 
-      req.session.userId = user.id;
-      return { user: this.buildResUser(user) };
+      req.session.userId = user.id
+      return { user: this.buildResUser(user) }
     } catch {
-      return { errors: this.buildErrorRo('usernameOrEmail') };
+      return { errors: this.buildErrorRo('usernameOrEmail') }
     }
   }
 
-  async loginUser(loginUserDto: LoginUserDto, req: Request): Promise<UserRO> {
-    const { usernameOrEmail, password } = loginUserDto;
-    const user = await this.findUser(usernameOrEmail);
+  async loginUser (loginUserDto: LoginUserDto, req: Request): Promise<UserRO> {
+    const { usernameOrEmail, password } = loginUserDto
+    const user = await this.findUser(usernameOrEmail)
 
-    if (!user) return { errors: this.buildErrorRo('usernameOrEmail') };
+    if (!user) return { errors: this.buildErrorRo('usernameOrEmail') }
 
-    const passwordIsValid = user.password === password;
-    if (!passwordIsValid) return { errors: this.buildErrorRo('password') };
+    const passwordIsValid = user.password === password
+    if (!passwordIsValid) return { errors: this.buildErrorRo('password') }
 
-    req.session.userId = user.id;
-    return { user: this.buildResUser(user) };
+    req.session.userId = user.id
+    return { user: this.buildResUser(user) }
   }
 
-  private async findUser(usernameOrEmail: string): Promise<user> {
+  private async findUser (usernameOrEmail: string): Promise<user> {
     const user = usernameOrEmail.includes('@')
       ? await this.prismaService.user.findUnique({
           where: { email: usernameOrEmail },
         })
       : await this.prismaService.user.findUnique({
           where: { username: usernameOrEmail },
-        });
+        })
 
-    return user;
+    return user
   }
 
-  async me(id: number): Promise<ResUser> {
+  async me (id: number): Promise<ResUser> {
     const user = await this.prismaService.user.findUnique({
       where: { id },
-    });
+    })
 
-    return this.buildResUser(user); 
+    return this.buildResUser(user)
   }
 
-  async fetchUserInfo(id: number, meId: number): Promise<ResUser> {
+  async fetchUserInfo (id: number, meId: number): Promise<ResUser> {
     const user = await this.prismaService.user.findUnique({
       where: { id },
-    });
+    })
 
     if (!user) {
-      return null;
+      return null
     }
 
-    return this.buildResUser(user, meId);
+    return this.buildResUser(user, meId)
   }
 
-  async fetchProfile(
+  async fetchProfile (
     userId: number,
     meId: number,
     take: number,
     cursor?: Date,
   ): Promise<UserProfileRO> {
-    const takeLimit = Math.min(25, take);
-    const takeLimitPlusOne = takeLimit + 1;
+    const takeLimit = Math.min(25, take)
+    const takeLimitPlusOne = takeLimit + 1
 
     const userProfile = await this.prismaService.user.findUnique({
       where: { id: userId },
@@ -102,42 +102,52 @@ export class UserService {
           cursor: cursor ? { createdAt: cursor } : undefined,
         },
       },
-    });
+    })
 
-    const hasMore = userProfile.post.length === takeLimitPlusOne;
+    const hasMore = userProfile.post.length === takeLimitPlusOne
 
-    const postAndInteractions: PostAndInteraction[] = [];
+    const postAndInteractions: PostAndInteraction[] = []
 
     // return all posts if user does not have post left
     const fullLength = hasMore
       ? userProfile.post.length - 1
-      : userProfile.post.length;
+      : userProfile.post.length
 
     for (let i = 0; i < fullLength; i++) {
-      userProfile.post[i].content = userProfile.post[i].content.slice(0, 50);
+      userProfile.post[i].content = userProfile.post[i].content.slice(0, 50)
+
+      if (userProfile.post[i].interactions[0]) {
+        delete userProfile.post[i].interactions[0].checked
+        delete userProfile.post[i].interactions[0].read
+        delete userProfile.post[i].interactions[0].updatedAt
+        delete userProfile.post[i].interactions[0].createdAt
+        delete userProfile.post[i].interactions[0].userId
+        delete userProfile.post[i].interactions[0].postId
+      }
 
       postAndInteractions[i] = {
         post: userProfile.post[i],
         interactions: userProfile.post[i].interactions[0],
-      };
-      delete userProfile.post[i].interactions;
+      }
+
+      delete userProfile.post[i].interactions
     }
-    delete userProfile.post;
+    delete userProfile.post
 
     return {
       user: this.buildResUser(userProfile, meId),
       userPaginatedPost: { hasMore, postAndInteractions },
-    };
+    }
   }
 
-  async updateUser(id: number, updateUserDto: UpdateUserDto): Promise<UserRO> {
-    const user = await this.prismaService.user.findUnique({ where: { id } });
+  async updateUser (id: number, updateUserDto: UpdateUserDto): Promise<UserRO> {
+    const user = await this.prismaService.user.findUnique({ where: { id } })
 
-    const { username, email, password } = updateUserDto;
+    const { username, email, password } = updateUserDto
 
-    if (username) user.username = username;
-    if (email) user.email = email;
-    if (password) user.password = password;
+    if (username) user.username = username
+    if (email) user.email = email
+    if (password) user.password = password
 
     const returnedUser = await this.prismaService.user.update({
       where: { id },
@@ -146,27 +156,27 @@ export class UserService {
         email,
         password,
       },
-    });
+    })
 
-    return { user: this.buildResUser(returnedUser) };
+    return { user: this.buildResUser(returnedUser) }
   }
 
-  async deleteUser(id: number) {
-    await this.prismaService.user.delete({ where: { id } });
+  async deleteUser (id: number) {
+    await this.prismaService.user.delete({ where: { id } })
 
-    return true;
+    return true
   }
 
-  private buildResUser(user: user, meId?: number) {
-    let { username, createdAt, email, id, postAmounts } = user;
+  private buildResUser (user: user, meId?: number) {
+    let { username, createdAt, email, id, postAmounts } = user
 
     // Show email when user check it's own info
-    if (meId) email = meId === user.id ? email : null;
+    if (meId) email = meId === user.id ? email : null
 
-    return { createdAt, username, email, id, postAmounts };
+    return { createdAt, username, email, id, postAmounts }
   }
 
-  private buildErrorRo(field: string): ResUserError {
-    return { field: field, message: `Invalid ${field}` };
+  private buildErrorRo (field: string): ResUserError {
+    return { field: field, message: `Invalid ${field}` }
   }
 }

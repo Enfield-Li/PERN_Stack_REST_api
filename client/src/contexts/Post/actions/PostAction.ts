@@ -179,10 +179,9 @@ export const fetchSinglePost = async (
   );
 
   if (!res.data.interactions) {
-    const postId = res.data.post.id;
     const interactions = res.data.interactions;
 
-    const newInteractions = populateWithMockData(interactions, postId);
+    const newInteractions = populateWithMockData(interactions);
 
     res.data.interactions = newInteractions;
   }

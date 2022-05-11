@@ -56,9 +56,6 @@ export type Interactions = {
   likeStatus: boolean | null;
   laughStatus: boolean | null;
   confusedStatus: boolean | null;
-  createdAt: Date;
-  userId: number;
-  postId: number;
 };
 
 export type CreatePostType = {
