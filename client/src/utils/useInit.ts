@@ -28,8 +28,8 @@ export function useInit() {
     me(userDispatch);
     if (location.pathname === "/") fetchPaginatedPosts(postDispatch);
 
-    const connectSocket = io("http://localhost:3119");
-    setSocket(connectSocket);
+    // const connectSocket = io("http://localhost:3119");
+    // setSocket(connectSocket);
   }, []);
 
   // Once login, fetch user's interactivties

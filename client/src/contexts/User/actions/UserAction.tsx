@@ -53,6 +53,8 @@ export async function loginUser(
   dispatch: React.Dispatch<UserActionType>,
   userCredential: UserCredential
 ) {
+  console.log(userCredential);
+  
   const res = await axios.put<UserRO>(
     "http://localhost:3119/user/login",
     userCredential,

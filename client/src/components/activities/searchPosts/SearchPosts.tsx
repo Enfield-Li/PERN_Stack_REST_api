@@ -14,7 +14,7 @@ const SearchPosts: React.FC<SearchPostsProps> = ({}) => {
 
   useEffect(() => {
     const delayDebounceFn = setTimeout(() => {
-      searchPosts(keyword, postDispatch);
+      // searchPosts(keyword, postDispatch);
     }, 500);
 
     return () => clearTimeout(delayDebounceFn);
