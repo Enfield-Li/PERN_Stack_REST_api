@@ -40,7 +40,7 @@ const PostCreatorInfo: React.FC<PostCreatorInfoProps> = ({
 
   const hoverToFetchUserInfo = async () => {
     setTextDecoration(true);
-    const user = await getUserInfo(postAndInteractions.post.userId);
+    const user = await getUserInfo(postAndInteractions.post.user!.id);
     setCurrentUser(user);
   };
 
@@ -64,7 +64,7 @@ const PostCreatorInfo: React.FC<PostCreatorInfoProps> = ({
               }`}
             >
               <Link
-                to={`/user-profile/${postAndInteractions.post.userId}`}
+                to={`/user-profile/${postAndInteractions.post.user.id}`}
                 style={{ color: "black", textDecoration: "none" }}
                 role="button"
               >

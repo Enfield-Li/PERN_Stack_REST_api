@@ -54,7 +54,7 @@ export async function loginUser(
   userCredential: UserCredential
 ) {
   console.log(userCredential);
-  
+
   const res = await axios.put<UserRO>(
     "http://localhost:3119/user/login",
     userCredential,
@@ -73,16 +73,15 @@ export async function loginUser(
 
 export async function me(dispatch: React.Dispatch<UserActionType>) {
   try {
-    
     const res = await axios.get<User>("http://localhost:3119/user/me", {
       withCredentials: true,
     });
-    
+
     dispatch({
       type: LOGIN_USER,
       payload: res.data,
     });
-  } catch (error ) {
+  } catch (error) {
     // @ts-ignore
     console.log(error.response);
   }
@@ -95,6 +94,7 @@ export async function getUserInfo(id: number) {
       withCredentials: true,
     }
   );
+  console.log(res.data);
 
   return res.data;
 }

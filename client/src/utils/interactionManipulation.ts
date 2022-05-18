@@ -21,7 +21,6 @@ export const interactionManipulation = (
   return { newStatus: interactionStatus, newPoints: interactionPoints };
 };
 
-// https://stackoverflow.com/questions/71872370/how-to-update-object-data-based-on-string-input-in-typescript
 const pointsTable = {
   like: "likePoints",
   laugh: "laughPoints",

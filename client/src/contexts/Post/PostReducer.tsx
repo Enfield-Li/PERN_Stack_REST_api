@@ -51,9 +51,11 @@ export default function PostReducer(state: PostState, action: PostActionType) {
       return produce(state, (draftState) => {
         const paginatedPosts = draftState.paginatedPosts;
 
-        paginatedPosts.postAndInteractions.forEach(
-          (postAndInteraction) => postAndInteraction.post.id !== action.payload
-        );
+        paginatedPosts.postAndInteractions =
+          paginatedPosts.postAndInteractions.filter(
+            (postAndInteraction) =>
+              postAndInteraction.post.id !== action.payload
+          );
       });
     }
 
