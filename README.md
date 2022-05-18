@@ -1,4 +1,4 @@
-<h1>仿Reddit论坛 一个全栈 web app (REST api + SPA)</h1>
+# 仿Reddit论坛 一个全栈 web 应用 (REST api + SPA)
 
     ⏬⏬⏬ English description below ⏬⏬⏬
 
@@ -6,7 +6,7 @@
 
     一个“缝合怪”论坛网站，功能仿照Reddit论坛、Youtube评论区样式、Github反应贴纸。
 
-Stacks：
+技术栈：
 
     语言：Typescript；
     前端：Reactjs / React Context api (state管理) / Boostrap 5 (css)；
@@ -58,9 +58,9 @@ Stacks：
     6. npm run dev
     7. enjoy :)
 
-<a href="https://www.prisma.io/docs/getting-started/setup-prisma/start-from-scratch/relational-databases/connect-your-database-typescript-postgres">官方文档，用于连接数据库</a>
+[官方文档，用于连接数据库](https://www.prisma.io/docs/getting-started/setup-prisma/start-from-scratch/relational-databases/connect-your-database-typescript-postgres)
 
-<h1>A Reddit-mock full stack web app (REST api + SPA)</h1>
+# A Reddit-mock full stack web app (REST api + SPA)
 
 Description:
 
@@ -118,4 +118,4 @@ How to use?
     6. npm run dev
     7. enjoy :)
 
-<a href="https://www.prisma.io/docs/getting-started/setup-prisma/start-from-scratch/relational-databases/connect-your-database-typescript-postgres">Docs for connecting to db</a>
+[Docs for connecting to db](https://www.prisma.io/docs/getting-started/setup-prisma/start-from-scratch/relational-databases/connect-your-database-typescript-postgres)
