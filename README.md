@@ -2,11 +2,11 @@
 
     ⏬⏬⏬ English description below ⏬⏬⏬
 
-作品描述：
+#### 作品描述：
 
     一个“缝合怪”论坛网站，功能仿照Reddit论坛、Youtube评论区样式、Github反应贴纸。
 
-技术栈：
+#### 技术栈：
 
     语言：Typescript；
     前端：Reactjs / React Context api (state管理) / Boostrap 5 (css)；
@@ -14,7 +14,7 @@
     服务器：Nestjs / Express session + Redis-server (auth)；
     数据库：PostgreSQL / Prisma(ORM)。
 
-现有功能：
+#### 现有功能：
 
     用户注册，登录（可通过用户名或邮箱），发布、删除、编辑帖子，给帖子投票、添加对帖子的反应，查看用户主页，加载更多分页，根据best, hot, new, top 四种类型筛选首页显示的帖子类型。
 
@@ -42,29 +42,13 @@
         7. 搜索文章：
             顶部搜索框，输入需要搜索的关键词，返还标题或内容相关的文章搜索结果。
 
-如何使用？
-
-    1. cd 进入文件
-        npm install
-    2. 再分别进入server 和 client:
-        npm install
-    3. cd server:
-        1) 更改.env 文件， 使prisma和数据库建立连接
-        2) npx prisma db push (将schema推到数据库)
-    4. 后台运行 redis-server
-    5. cd.. 回到主文件夹
-    6. npm run dev
-    7. enjoy :)
-
-[官方文档，用于连接数据库](https://www.prisma.io/docs/getting-started/setup-prisma/start-from-scratch/relational-databases/connect-your-database-typescript-postgres)
-
 # A Reddit-mock full stack web app (REST api + SPA)
 
-Description:
+#### Description:
 
     A mock Reddit web app, with main features from Reddit, Youtube comment section, and Github reaction for comments.
 
-Stacks:
+#### Stacks:
 
     Language：Typescript;
     Frontend：Reactjs / React Context api (state management) / Boostrap 5 (css);
@@ -72,9 +56,7 @@ Stacks:
     Server：Nestjs / Express session + Redis-server (auth);
     Database：PostgreSQL / Prisma(ORM).
 
-    Ps: Nestjs is known for being a Spring framework in the Nodejs context, which employ the same MVC design pattern.
-
-Features:
+#### Features:
 
     User login, register, post CRUD, vote, add reactions to post, view user's profile page, post pagination, filter and display posts according to "best, hot, new, top" criteria.
 
@@ -101,19 +83,3 @@ Features:
 
     7. Search post:
         There's a search area on the navbar where user can perform full-text search for post, and get 5 posts info that matches the keyword;
-
-How to use?
-
-    1. cd enter to main
-        npm install
-    2. enter server and client folder respectively:
-        npm install
-    3. cd server:
-        1) change .env and establish connection between Prisma and db
-        2) npx prisma db push (push schema to db)
-    4. run redis-server in the background
-    5. cd.. back to main
-    6. npm run dev
-    7. enjoy :)
-
-[Docs for connecting to db](https://www.prisma.io/docs/getting-started/setup-prisma/start-from-scratch/relational-databases/connect-your-database-typescript-postgres)
